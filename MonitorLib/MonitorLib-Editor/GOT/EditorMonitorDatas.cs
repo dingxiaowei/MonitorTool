@@ -6,22 +6,6 @@ using UnityEngine.Profiling;
 
 namespace MonitorLib.GOT.Editor
 {
-    public class FunctionMonitorDatas
-    {
-        public int Index;
-        public long BeginTotalAllocatedMemory;
-        public long EndTotalAllocatedMemory;
-        public long DeltaAllocatedMemory;
-        public float BeginTime;
-        public float EndTime;
-        public float DeltaTime;
-
-        public override string ToString()
-        {
-            return $"Index:{Index} DeltaAllocatedMemory:{DeltaAllocatedMemory} DeltaTime:{DeltaTime}";
-        }
-    }
-
     public class AllFunctionDatas
     {
         public Dictionary<string, List<FunctionMonitorDatas>> ProfilerFunctionDatas;
@@ -71,7 +55,18 @@ namespace MonitorLib.GOT.Editor
             lastMethodProfileData.EndTime = Time.realtimeSinceStartup;
             lastMethodProfileData.DeltaTime = lastMethodProfileData.EndTime - lastMethodProfileData.BeginTime;
 
+            //需要屏蔽
             Debug.LogError($"{methodName}   " + lastMethodProfileData.ToString());
+        }
+
+        public static void BeginSample(string methodName)
+        {
+            Profiler.BeginSample(methodName);
+        }
+
+        public static void EndSample()
+        {
+            Profiler.EndSample();
         }
     }
 }

@@ -5,6 +5,7 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using UnityEngine;
 using MonitorLib.GOT.Editor;
+using MonitorLib.GOT;
 
 public static class InjectTool
 {

@@ -267,14 +267,23 @@
     <Compile Include="..\MonitorLib\GOT\DeviceInfo.cs">
       <Link>GOT\DeviceInfo.cs</Link>
     </Compile>
+    <Compile Include="..\MonitorLib\GOT\EnumDefine.cs">
+      <Link>GOT\EnumDefine.cs</Link>
+    </Compile>
     <Compile Include="..\MonitorLib\GOT\FileManager.cs">
       <Link>GOT\FileManager.cs</Link>
     </Compile>
     <Compile Include="..\MonitorLib\GOT\FileUploadManager.cs">
       <Link>GOT\FileUploadManager.cs</Link>
     </Compile>
+    <Compile Include="..\MonitorLib\GOT\FunctionMonitorDatas.cs">
+      <Link>GOT\FunctionMonitorDatas.cs</Link>
+    </Compile>
     <Compile Include="..\MonitorLib\GOT\LogManager.cs">
       <Link>GOT\LogManager.cs</Link>
+    </Compile>
+    <Compile Include="..\MonitorLib\GOT\MonitorAttributes.cs">
+      <Link>GOT\MonitorAttributes.cs</Link>
     </Compile>
     <Compile Include="..\MonitorLib\GOT\MonitorInfo.cs">
       <Link>GOT\MonitorInfo.cs</Link>

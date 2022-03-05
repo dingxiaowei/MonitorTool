@@ -1,9 +1,8 @@
+using MonitorLib.GOT;
 using MonitorLib.GOT.Editor;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -13,10 +12,22 @@ using UnityEngine;
 public class HookEditor
 {
     private const string AssemblyPath = "./Library/ScriptAssemblies/Assembly-CSharp.dll";
-    [MenuItem("Hook/注入代码")]
+    [MenuItem("Hook/所有函数性能分析")]
     public static void HookInject()
     {
-        AssemblyPostProcessorRun();
+        AssemblyPostProcessorRun(EAnalyzeType.ALLFUNC);
+    }
+
+    [MenuItem("Hook/特性[ProfilerSample]性能分析")]
+    public static void HookProfilerSampleInject()
+    {
+        AssemblyPostProcessorRun(EAnalyzeType.PROFILESAMPLE);
+    }
+
+    [MenuItem("Hook/特性[FunctionAnalysis]函数性能分析")]
+    public static void HookFunctionAnalysisInject()
+    {
+        AssemblyPostProcessorRun(EAnalyzeType.DEFINEFUNC);
     }
 
     [MenuItem("Hook/输出结果")]
@@ -26,7 +37,7 @@ public class HookEditor
     }
 
     [PostProcessScene] //打包的时候回自动调用下面的注入方法
-    static void AssemblyPostProcessorRun()
+    static void AssemblyPostProcessorRun(EAnalyzeType analyzeType)
     {
         try
         {
@@ -44,13 +55,52 @@ public class HookEditor
                 Debug.LogError(string.Format("InjectTool Inject Load assembly failed: {0}", AssemblyPath));
                 return;
             }
-            if (HookEditor.ProcessAssembly(assembly))
+            switch (analyzeType)
             {
-                assembly.Write(AssemblyPath, new WriterParameters { WriteSymbols = true });
-            }
-            else
-            {
-                Debug.LogError(Path.GetFileName(AssemblyPath) + "无法被正确处理");
+                case EAnalyzeType.ALLFUNC:
+                    {
+                        if (HookEditor.ProcessAssembly(assembly))
+                        {
+                            assembly.Write(AssemblyPath, new WriterParameters { WriteSymbols = true });
+                        }
+                        else
+                        {
+                            Debug.LogError(Path.GetFileName(AssemblyPath) + "所有函数注册无法被正确注入");
+                        }
+                    }
+                    break;
+                case EAnalyzeType.PROFILESAMPLE:
+                    {
+                        //if (HookEditor.ProcessAssemblyByAttributeWithOneParam(assembly, typeof(ProfilerSampleWithDefineNameAttribute)))
+                        //{
+
+                        //}
+                        //else
+                        //{
+                        //    Debug.Log(Path.GetFileName(AssemblyPath) + "没有找到Profiler.BeginSample有参数自定义特性方法");
+                        //}
+                        if (HookEditor.ProcessAssemblyByAttributeWithoutParam(assembly, typeof(ProfilerSampleAttribute)))
+                        {
+                            assembly.Write(AssemblyPath, new WriterParameters { WriteSymbols = true });
+                        }
+                        else
+                        {
+                            Debug.Log(Path.GetFileName(AssemblyPath) + "没有找到Profiler.BeginSample无参数自定义特性方法");
+                        }
+                    }
+                    break;
+                case EAnalyzeType.DEFINEFUNC:
+                    {
+                        if (HookEditor.ProcessAssemblyByAttributeWithoutParam(assembly, typeof(FunctionAnalysisAttribute)))
+                        {
+                            assembly.Write(AssemblyPath, new WriterParameters { WriteSymbols = true });
+                        }
+                        else
+                        {
+                            Debug.Log(Path.GetFileName(AssemblyPath) + "没有找到带有自定义特性函数方法");
+                        }
+                    }
+                    break;
             }
         }
         catch (Exception e)
@@ -107,4 +157,140 @@ public class HookEditor
         }
         return hasProcessed;
     }
+
+    private static bool ProcessAssemblyByAttributeWithoutParam(AssemblyDefinition assembly, Type attributeType)
+    {
+        bool hasProcessed = false;
+        var profilerSampleType = typeof(ProfilerSampleAttribute);
+        var functionAnalysisType = typeof(FunctionAnalysisAttribute);
+        if ((attributeType != profilerSampleType) && (attributeType != functionAnalysisType))
+            return hasProcessed;
+        var needInjectAttr = attributeType.FullName;
+        foreach (var module in assembly.Modules)
+        {
+            foreach (var type in module.Types)
+            {
+                if (type.IsAbstract || type.IsInterface)//过滤抽象类和接口
+                    continue;
+                
+                foreach (var method in type.Methods)
+                {
+                    //过滤构造函数
+                    if (method.Name == ".ctor" || method.Name == ".cctor") //或者method.IsConstructor
+                        continue;
+                    //过滤抽象方法、虚函数、get、set方法
+                    if (method.IsAbstract || method.IsVirtual || method.IsGetter || method.IsSetter)
+                        continue;
+                    //如果注入代码失败，可以打开下面的输出看看卡在了那个方法上。
+                    //Debug.Log(method.Name + "======= " + type.Name + "======= " + type.BaseType.GenericParameters +" ===== "+ module.Name);
+                    bool needInject = method.CustomAttributes.Any(typeAttribute => typeAttribute.AttributeType.FullName == needInjectAttr);
+                    if (!needInject)
+                    {
+                        continue;
+                    }
+
+                    var Begin = module.ImportReference(typeof(UnityEngine.Profiling.Profiler).GetMethod("BeginSample", new[] { typeof(string) }));
+                    var End = module.ImportReference(typeof(UnityEngine.Profiling.Profiler).GetMethod("EndSample"));
+
+                    if (attributeType == functionAnalysisType)
+                    {
+                        Begin = module.ImportReference(typeof(HookUtil).GetMethod("Begin", new[] { typeof(string) }));
+                        End = module.ImportReference(typeof(HookUtil).GetMethod("End", new[] { typeof(string) }));
+                    }
+
+                    ILProcessor ilProcessor = method.Body.GetILProcessor();
+
+                    Instruction first = method.Body.Instructions[0];
+                    ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Ldstr, type.FullName + "." + method.Name));
+                    ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Call, Begin));
+
+                    //解决方法中直接 return 后无法统计的bug 
+                    //https://lostechies.com/gabrielschenker/2009/11/26/writing-a-profiler-for-silverlight-applications-part-1/
+
+                    Instruction last = method.Body.Instructions[method.Body.Instructions.Count - 1];
+                    Instruction lastInstruction = Instruction.Create(OpCodes.Call, End);
+                    if (attributeType == functionAnalysisType)
+                    {
+                        ilProcessor.InsertBefore(last, Instruction.Create(OpCodes.Ldstr, type.FullName + "." + method.Name));
+                    }
+                    ilProcessor.InsertBefore(last, lastInstruction);
+
+                    var jumpInstructions = method.Body.Instructions.Cast<Instruction>().Where(i => i.Operand == lastInstruction);
+                    foreach (var jump in jumpInstructions)
+                    {
+                        jump.Operand = lastInstruction;
+                    }
+                    hasProcessed = true;
+                }
+            }
+        }
+        return hasProcessed;
+    }
+
+    //private static bool ProcessAssemblyByAttributeWithOneParam(AssemblyDefinition assembly, Type attributeType)
+    //{
+    //    bool hasProcessed = false;
+    //    var profilerSampleWithDefineNameType = typeof(ProfilerSampleWithDefineNameAttribute); //这里把不是一个参数特性的排除
+    //    if (attributeType != profilerSampleWithDefineNameType)
+    //        return hasProcessed;
+
+    //    foreach (var module in assembly.Modules)
+    //    {
+    //        foreach (var type in module.Types)
+    //        {
+    //            if (type.IsAbstract || type.IsInterface)//过滤抽象类和接口
+    //                continue;
+    //            var needInjectAttr = attributeType.FullName;
+    //            bool needInject = type.CustomAttributes.Any(typeAttribute => profilerSampleWithDefineNameType.FullName == needInjectAttr); //这里如果添加一个参数特性类型则也需要判断
+    //            if (!needInject)
+    //            {
+    //                continue;
+    //            }
+
+    //            foreach (var method in type.Methods)
+    //            {
+
+    //                //过滤构造函数
+    //                if (method.Name == ".ctor" || method.Name == ".cctor") //或者method.IsConstructor
+    //                    continue;
+    //                //过滤抽象方法、虚函数、get、set方法
+    //                if (method.IsAbstract || method.IsVirtual || method.IsGetter || method.IsSetter)
+    //                    continue;
+    //                //如果注入代码失败，可以打开下面的输出看看卡在了那个方法上。
+    //                //Debug.Log(method.Name + "======= " + type.Name + "======= " + type.BaseType.GenericParameters +" ===== "+ module.Name);
+    //                if (method.HasCustomAttributes)
+    //                {
+    //                    var attributes = method.CustomAttributes;
+    //                    foreach (var attr in attributes)
+    //                    {
+
+    //                    }
+    //                }
+    //                var Begin = module.ImportReference(typeof(HookUtil).GetMethod("BeginSample", new[] { typeof(string) }));
+    //                var End = module.ImportReference(typeof(HookUtil).GetMethod("EndSample"));
+    //                ILProcessor ilProcessor = method.Body.GetILProcessor();
+
+    //                Instruction first = method.Body.Instructions[0];
+
+    //                ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Ldstr, type.FullName + "." + method.Name)); //TODO:要换成特性的值
+    //                ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Call, Begin));
+
+    //                //解决方法中直接 return 后无法统计的bug 
+    //                //https://lostechies.com/gabrielschenker/2009/11/26/writing-a-profiler-for-silverlight-applications-part-1/
+
+    //                Instruction last = method.Body.Instructions[method.Body.Instructions.Count - 1];
+    //                Instruction lastInstruction = Instruction.Create(OpCodes.Call, End);
+    //                ilProcessor.InsertBefore(last, lastInstruction);
+
+    //                var jumpInstructions = method.Body.Instructions.Cast<Instruction>().Where(i => i.Operand == lastInstruction);
+    //                foreach (var jump in jumpInstructions)
+    //                {
+    //                    jump.Operand = lastInstruction;
+    //                }
+    //                hasProcessed = true;
+    //            }
+    //        }
+    //    }
+    //    return hasProcessed;
+    //}
 }

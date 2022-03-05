@@ -292,9 +292,12 @@
   <ItemGroup>
     <Compile Include="GOT\Config.cs" />
     <Compile Include="GOT\DeviceInfo.cs" />
+    <Compile Include="GOT\EnumDefine.cs" />
     <Compile Include="GOT\FileManager.cs" />
     <Compile Include="GOT\FileUploadManager.cs" />
+    <Compile Include="GOT\FunctionMonitorDatas.cs" />
     <Compile Include="GOT\LogManager.cs" />
+    <Compile Include="GOT\MonitorAttributes.cs" />
     <Compile Include="GOT\MonitorInfo.cs" />
     <Compile Include="GOT\ShareDatas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

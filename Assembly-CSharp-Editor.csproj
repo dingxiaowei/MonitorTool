@@ -58,8 +58,8 @@
   <ItemGroup>
     <Compile Include="Assets\Editor\InjectTool.cs" />
     <Compile Include="Assets\ThirdParty\Unity-Logs-Viewer-master\Reporter\Editor\ReporterEditor.cs" />
-    <Compile Include="Assets\Editor\MenuItem.cs" />
     <Compile Include="Assets\Editor\HookEditor.cs" />
+    <Compile Include="Assets\Editor\MenuItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
