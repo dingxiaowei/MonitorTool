@@ -283,9 +283,6 @@
     <Reference Include="UnityEditor.UnityConnectModule">
       <HintPath>C:\Program Files\Unity2020\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
     </Reference>
-    <Reference Include="MonitorLib">
-      <HintPath>Assets\Lib\EditorDll\MonitorLib.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>Assets\Plugins\Cecil\Mono.Cecil.dll</HintPath>
     </Reference>
@@ -294,6 +291,9 @@
     </Reference>
     <Reference Include="Mono.Cecil.Mdb">
       <HintPath>Assets\Plugins\Cecil\Mono.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="MonitorLib">
+      <HintPath>Assets\Lib\EditorDll\MonitorLib.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>C:\Program Files\Unity2020\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>

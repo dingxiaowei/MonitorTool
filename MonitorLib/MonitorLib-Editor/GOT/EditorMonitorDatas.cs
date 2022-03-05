@@ -22,6 +22,11 @@ namespace MonitorLib.GOT.Editor
         }
     }
 
+    public class AllFunctionDatas
+    {
+        public Dictionary<string, List<FunctionMonitorDatas>> ProfilerFunctionDatas;
+    }
+
     public static class HookUtil
     {
         static Dictionary<string, List<FunctionMonitorDatas>> profilersDatas = new Dictionary<string, List<FunctionMonitorDatas>>();
@@ -66,7 +71,7 @@ namespace MonitorLib.GOT.Editor
             lastMethodProfileData.EndTime = Time.realtimeSinceStartup;
             lastMethodProfileData.DeltaTime = lastMethodProfileData.EndTime - lastMethodProfileData.BeginTime;
 
-            Debug.LogError(lastMethodProfileData.ToString());
+            Debug.LogError($"{methodName}   " + lastMethodProfileData.ToString());
         }
     }
 }

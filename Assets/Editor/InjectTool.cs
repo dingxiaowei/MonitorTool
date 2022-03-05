@@ -6,10 +6,6 @@ using Mono.Cecil.Cil;
 using UnityEngine;
 using MonitorLib.GOT.Editor;
 
-public class TestInjectAttribute : Attribute
-{
-}
-
 public static class InjectTool
 {
     private const string AssemblyPath = "./Library/ScriptAssemblies/Assembly-CSharp.dll";
