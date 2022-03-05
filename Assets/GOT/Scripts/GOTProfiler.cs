@@ -1,3 +1,4 @@
+using MonitorLib.GOT;
 using System;
 using System.IO;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class GOTProfiler : MonoBehaviour
 {
     [Header("是否监控日志")]
     public bool EnableLog = false;
+    [Header("是否采集帧图")]
+    public bool EnableFrameTexture = false;
     public Text UploadTips;
     public Text ReportUrl;
     string btnMsg = "开始监控";
@@ -33,7 +36,7 @@ public class GOTProfiler : MonoBehaviour
 
     private int m_IgnoreFrameCount = 10;
 
-    CyberUtilLib.GOT.MonitorInfos monitorInfos = null;
+    MonitorInfos monitorInfos = null;
 
     private float m_Accumulator = 0;
     private int m_Frames = 0;
@@ -52,11 +55,11 @@ public class GOTProfiler : MonoBehaviour
         {
             if (res)
             {
-                Debug.Log(CyberUtilLib.GOT.Config.Monitoring);
+                Debug.Log(Config.Monitoring);
                 m_frameIndex = 0;
-                CyberUtilLib.GOT.ShareDatas.StartTime = DateTime.Now;
-                m_StartTime = CyberUtilLib.GOT.ShareDatas.StartTime.ToString().Replace(" ", "_").Replace("/", "_").Replace(":", "_");
-                CyberUtilLib.GOT.ShareDatas.StartTimeStr = m_StartTime;
+                ShareDatas.StartTime = DateTime.Now;
+                m_StartTime = ShareDatas.StartTime.ToString().Replace(" ", "_").Replace("/", "_").Replace(":", "_");
+                ShareDatas.StartTimeStr = m_StartTime;
 
                 logFilePath = $"{Application.persistentDataPath}/log_{m_StartTime}.txt";
                 deviceFilePath = $"{Application.persistentDataPath}/device_{m_StartTime}.txt";
@@ -64,8 +67,8 @@ public class GOTProfiler : MonoBehaviour
                 monitorFilePath = $"{Application.persistentDataPath}/monitor_{m_StartTime}.txt";
                 if (EnableLog)
                 {
-                    CyberUtilLib.GOT.LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
-                    Application.logMessageReceived += CyberUtilLib.GOT.LogManager.LogToFile;
+                    LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
+                    Application.logMessageReceived += LogManager.LogToFile;
                 }
                 m_TickTime = 0;
                 InvokeRepeating("Tick", 1.0f, 1.0f);
@@ -85,19 +88,19 @@ public class GOTProfiler : MonoBehaviour
             }
             else
             {
-                Debug.Log(CyberUtilLib.GOT.Config.MonitorStop);
+                Debug.Log(Config.MonitorStop);
 
-                CyberUtilLib.GOT.ShareDatas.EndTime = DateTime.Now;
+                ShareDatas.EndTime = DateTime.Now;
 
-                string testTime = CyberUtilLib.GOT.ShareDatas.GetTestTime();
+                string testTime = ShareDatas.GetTestTime();
                 //上传测试时间
-                CyberUtilLib.GOT.FileManager.WriteToFile(testFilePath, $"应用名：{Application.productName}&nbsp&nbsp&nbsp包名：{Application.identifier}&nbsp&nbsp&nbsp测试系统：{Application.platform}&nbsp&nbsp&nbsp版本号：{Application.version}&nbsp&nbsp&nbsp本次测试时长:{testTime}");
+                FileManager.WriteToFile(testFilePath, $"应用名：{Application.productName}&nbsp&nbsp&nbsp包名：{Application.identifier}&nbsp&nbsp&nbsp测试系统：{Application.platform}&nbsp&nbsp&nbsp版本号：{Application.version}&nbsp&nbsp&nbsp本次测试时长:{testTime}");
                 UploadFile(testFilePath);
 
                 if (EnableLog)
                 {
-                    Application.logMessageReceived -= CyberUtilLib.GOT.LogManager.LogToFile;
-                    CyberUtilLib.GOT.LogManager.CloseLogFile();
+                    Application.logMessageReceived -= LogManager.LogToFile;
+                    LogManager.CloseLogFile();
                 }
 
                 CancelInvoke("Tick");
@@ -105,9 +108,9 @@ public class GOTProfiler : MonoBehaviour
 
                 if (EnableLog)
                 {
-                    CyberUtilLib.GOT.FileManager.ReplaceContent(logFilePath, "[Log]", "<font color=\"#0000FF\">[Log]</font>");
-                    CyberUtilLib.GOT.FileManager.ReplaceContent(logFilePath, "[Error]", "<font color=\"#FF0000\">[Error]</font>");
-                    CyberUtilLib.GOT.FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
+                    FileManager.ReplaceContent(logFilePath, "[Log]", "<font color=\"#0000FF\">[Log]</font>");
+                    FileManager.ReplaceContent(logFilePath, "[Error]", "<font color=\"#FF0000\">[Error]</font>");
+                    FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
                     UploadFile(logFilePath);
                 }
 
@@ -116,7 +119,7 @@ public class GOTProfiler : MonoBehaviour
                 {
                     UploadReportHtml(m_StartTime);
                     ReportUrl.gameObject.SetActive(true);
-                    var url = string.Format(CyberUtilLib.GOT.ShareDatas.ReportUrl, m_StartTime);
+                    var url = string.Format(ShareDatas.ReportUrl, m_StartTime);
                     ReportUrl.text = $"<a href={url}>[{url}]</a>";
                 }
             }
@@ -129,13 +132,13 @@ public class GOTProfiler : MonoBehaviour
     {
         var url = "";
         if (!EnableLog)
-            url = $"http://{CyberUtilLib.GOT.Config.IP}/ReportTempleteWithoutLog.html";
+            url = $"http://{Config.IP}/ReportTempleteWithoutLog.html";
         else
-            url = $"http://{CyberUtilLib.GOT.Config.IP}/ReportTemplete.html";
+            url = $"http://{Config.IP}/ReportTemplete.html";
         using (var webRequest = UnityWebRequest.Get(url))
         {
             yield return webRequest.SendWebRequest();
-            if (webRequest.isHttpError)
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError)
             {
                 Debug.LogError(webRequest.error);
             }
@@ -147,7 +150,7 @@ public class GOTProfiler : MonoBehaviour
                     templetePath = $"{Application.persistentDataPath}/ReportTemplete.html";
                 else
                     templetePath = $"{Application.persistentDataPath}/ReportTempleteWithoutLog.html";
-                if (CyberUtilLib.GOT.FileManager.WriteBytesToFile(templetePath, fileHandler.data))
+                if (FileManager.WriteBytesToFile(templetePath, fileHandler.data))
                 {
                     Debug.Log("模板文件下载成功");
                 }
@@ -162,7 +165,7 @@ public class GOTProfiler : MonoBehaviour
 
     void StartMonitor()
     {
-        monitorInfos = new CyberUtilLib.GOT.MonitorInfos();
+        monitorInfos = new MonitorInfos();
     }
 
     void StopMonitor()
@@ -172,7 +175,7 @@ public class GOTProfiler : MonoBehaviour
             monitorInfos.MonitorInfoList.RemoveAt(monitorInfos.MonitorInfoList.Count - 1);
         }
 
-        var monitorToFile = CyberUtilLib.GOT.FileManager.WriteToFile(monitorFilePath, JsonUtility.ToJson(monitorInfos));
+        var monitorToFile = FileManager.WriteToFile(monitorFilePath, JsonUtility.ToJson(monitorInfos));
         if (monitorToFile)
         {
             UploadFile(monitorFilePath);
@@ -187,15 +190,15 @@ public class GOTProfiler : MonoBehaviour
         else
             File.Copy(Application.persistentDataPath + "/ReportTempleteWithoutLog.html", newPath, true);
         if (EnableLog)
-            CyberUtilLib.GOT.FileManager.ReplaceContent(newPath, $"{time}", "{0}", "{1}", "{2}", "{3}", "{4}");
+            FileManager.ReplaceContent(newPath, $"{time}", "{0}", "{1}", "{2}", "{3}", "{4}");
         else
-            CyberUtilLib.GOT.FileManager.ReplaceContent(newPath, $"{time}", "{0}", "{1}", "{3}", "{4}");
+            FileManager.ReplaceContent(newPath, $"{time}", "{0}", "{1}", "{3}", "{4}");
         UploadFile(newPath);
     }
 
     void UploadFile(string filePath)
     {
-        CyberUtilLib.GOT.FileUploadManager.UploadFile(filePath, (sender, e) =>
+        FileUploadManager.UploadFile(filePath, (sender, e) =>
         {
             Debug.Log("Uploading Progreess: " + e.ProgressPercentage);
             if (e.ProgressPercentage > 0 && e.ProgressPercentage < 100)
@@ -226,7 +229,7 @@ public class GOTProfiler : MonoBehaviour
 
     void GetSystemInfo()
     {
-        CyberUtilLib.GOT.DeviceInfo deviceInfo = new CyberUtilLib.GOT.DeviceInfo()
+        DeviceInfo deviceInfo = new DeviceInfo()
         {
             UnityVersion = Application.unityVersion,
             DeviceModel = SystemInfo.deviceModel,
@@ -247,7 +250,7 @@ public class GOTProfiler : MonoBehaviour
             ScreenWidth = Screen.width
         };
 
-        var deviceInfoToFile = CyberUtilLib.GOT.FileManager.WriteToFile(deviceFilePath, JsonUtility.ToJson(deviceInfo));
+        var deviceInfoToFile = FileManager.WriteToFile(deviceFilePath, JsonUtility.ToJson(deviceInfo));
         if (deviceInfoToFile)
         {
             UploadFile(deviceFilePath);
@@ -259,12 +262,12 @@ public class GOTProfiler : MonoBehaviour
         if (GUI.Button(new Rect(150, 350, 200, 100), btnMsg))
         {
             btnMonitor = !btnMonitor;
-            btnMsg = btnMonitor ? CyberUtilLib.GOT.Config.Monitoring : CyberUtilLib.GOT.Config.MonitorBegin;
+            btnMsg = btnMonitor ? Config.Monitoring : Config.MonitorBegin;
             if (MonitorCallback != null)
                 MonitorCallback.Invoke(btnMonitor);
         }
         if (btnMonitor)
-            btnMsg = $"{CyberUtilLib.GOT.Config.Monitoring}{m_TickTime}s";
+            btnMsg = $"{Config.Monitoring}{m_TickTime}s";
         GUI.Label(new Rect(Screen.width / 2, 0, 100, 100), "FPS:" + m_FPS);
     }
 
@@ -286,14 +289,18 @@ public class GOTProfiler : MonoBehaviour
             ++m_frameIndex;
             if (m_frameIndex > m_IgnoreFrameCount)
             {
-                var monitorInfo = new CyberUtilLib.GOT.MonitorInfo() { FrameIndex = m_frameIndex - m_IgnoreFrameCount, BatteryLevel = SystemInfo.batteryLevel, MemorySize = 0, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
+                var monitorInfo = new MonitorInfo() { FrameIndex = m_frameIndex - m_IgnoreFrameCount, BatteryLevel = SystemInfo.batteryLevel, MemorySize = 0, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
                 monitorInfos.MonitorInfoList.Add(monitorInfo);
+                if (EnableFrameTexture)
+                {
+                    ScreenCapture.CaptureScreenshot($"{Application.persistentDataPath}/img_{m_StartTime}_{m_frameIndex - m_IgnoreFrameCount}.png");
+                }
             }
         }
     }
 
     void OnDestroy()
     {
-        CyberUtilLib.GOT.LogManager.CloseLogFile();
+        LogManager.CloseLogFile();
     }
 }

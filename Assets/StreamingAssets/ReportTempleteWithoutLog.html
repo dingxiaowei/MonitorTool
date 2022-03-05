@@ -378,6 +378,9 @@
 				var monitorMemoryChart = echarts.init(document.getElementById("MonitorMemory"));
 				//指定图表的配置项和数据
 				var memoryOption={
+					tooltip: {
+						trigger: 'axis'
+					},
 					//标题
 					title:{
 					  text:'内存使用报表'
