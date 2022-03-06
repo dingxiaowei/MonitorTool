@@ -61,6 +61,11 @@ public class GOTProfiler : MonoBehaviour
                 m_StartTime = ShareDatas.StartTime.ToString().Replace(" ", "_").Replace("/", "_").Replace(":", "_");
                 ShareDatas.StartTimeStr = m_StartTime;
 
+                if (EnableFrameTexture)
+                {
+                    CreateDir();
+                }
+
                 logFilePath = $"{Application.persistentDataPath}/log_{m_StartTime}.txt";
                 deviceFilePath = $"{Application.persistentDataPath}/device_{m_StartTime}.txt";
                 testFilePath = $"{Application.persistentDataPath}/test_{m_StartTime}.txt";
@@ -128,6 +133,16 @@ public class GOTProfiler : MonoBehaviour
         StartCoroutine(DownloadReportTemplete());
     }
 
+    void CreateDir()
+    {
+        var dirPath = $"{Application.persistentDataPath}/{m_StartTime}/";
+        if (Directory.Exists(dirPath))
+        {
+            Directory.Delete(dirPath, true);
+        }
+        Directory.CreateDirectory(dirPath);
+    }
+
     System.Collections.IEnumerator DownloadReportTemplete()
     {
         var url = "";
@@ -138,7 +153,7 @@ public class GOTProfiler : MonoBehaviour
         using (var webRequest = UnityWebRequest.Get(url))
         {
             yield return webRequest.SendWebRequest();
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError)
+            if (webRequest.isHttpError)
             {
                 Debug.LogError(webRequest.error);
             }
@@ -293,7 +308,7 @@ public class GOTProfiler : MonoBehaviour
                 monitorInfos.MonitorInfoList.Add(monitorInfo);
                 if (EnableFrameTexture)
                 {
-                    ScreenCapture.CaptureScreenshot($"{Application.persistentDataPath}/img_{m_StartTime}_{m_frameIndex - m_IgnoreFrameCount}.png");
+                    ScreenCapture.CaptureScreenshot($"{Application.persistentDataPath}/{m_StartTime}/img_{m_StartTime}_{m_frameIndex - m_IgnoreFrameCount}.png");
                 }
             }
         }

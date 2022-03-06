@@ -13,7 +13,7 @@ namespace MonitorLib.GOT
             {
                 return;
             }
-            var client = new System.Net.WebClient();
+            var client = new WebClient();
             var uri = new Uri(FTPHost + new FileInfo(filePath).Name);
             client.UploadProgressChanged += new UploadProgressChangedEventHandler(OnFileUploadProgressChanged);
             client.UploadFileCompleted += new UploadFileCompletedEventHandler(OnFileUploadCompleted);
