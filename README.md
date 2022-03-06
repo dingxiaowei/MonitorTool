@@ -66,5 +66,11 @@ http://124.223.54.98/report_2022_1_21_14_33_30.html
 ## 工程仓库
 https://codehub-g.huawei.com/d00605132/MonitorTool/home
 
+## feature
+* 支持的Lua的性能检测
+* 支持全程帧图显示
+* 支持overdraw帧图显示
+* 支持代码规范性检测
+
 ## 备注
 如果还需要支持其他性能报表，欢迎讨论添加
