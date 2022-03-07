@@ -4,16 +4,11 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.Profiling;
 
-namespace MonitorLib.GOT.Editor
+namespace MonitorLib.GOT
 {
-    public class AllFunctionDatas
-    {
-        public Dictionary<string, List<FunctionMonitorDatas>> ProfilerFunctionDatas;
-    }
-
     public static class HookUtil
     {
-        static Dictionary<string, List<FunctionMonitorDatas>> profilersDatas = new Dictionary<string, List<FunctionMonitorDatas>>();
+        public static Dictionary<string, List<FunctionMonitorDatas>> ProfilersDatas = new Dictionary<string, List<FunctionMonitorDatas>>();
         static Thread mainThread = Thread.CurrentThread;
         public static void Begin(string methodName)
         {
@@ -27,9 +22,9 @@ namespace MonitorLib.GOT.Editor
                 BeginTotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(),
                 BeginTime = Time.realtimeSinceStartup
             };
-            if (profilersDatas.ContainsKey(methodName))
+            if (ProfilersDatas.ContainsKey(methodName))
             {
-                var datas = profilersDatas[methodName];
+                var datas = ProfilersDatas[methodName];
                 data.Index = datas.Count + 1;
                 datas.Add(data);
             }
@@ -38,25 +33,25 @@ namespace MonitorLib.GOT.Editor
                 var methodProfileDatas = new List<FunctionMonitorDatas>();
                 data.Index = 1;
                 methodProfileDatas.Add(data);
-                profilersDatas.Add(methodName, methodProfileDatas);
+                ProfilersDatas.Add(methodName, methodProfileDatas);
             }
         }
 
         public static void End(string methodName)
         {
-            if (!profilersDatas.ContainsKey(methodName))
+            if (!ProfilersDatas.ContainsKey(methodName))
             {
                 Debug.LogError($"没有注册方法{methodName}");
                 return;
             }
-            var lastMethodProfileData = profilersDatas[methodName].Last();
+            var lastMethodProfileData = ProfilersDatas[methodName].Last();
             lastMethodProfileData.EndTotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong();
             lastMethodProfileData.DeltaAllocatedMemory = lastMethodProfileData.EndTotalAllocatedMemory - lastMethodProfileData.BeginTotalAllocatedMemory;
             lastMethodProfileData.EndTime = Time.realtimeSinceStartup;
             lastMethodProfileData.DeltaTime = lastMethodProfileData.EndTime - lastMethodProfileData.BeginTime;
 
             //需要屏蔽
-            Debug.LogError($"{methodName}   " + lastMethodProfileData.ToString());
+            //Debug.LogError($"{methodName}   " + lastMethodProfileData.ToString());
         }
 
         public static void BeginSample(string methodName)
@@ -67,6 +62,19 @@ namespace MonitorLib.GOT.Editor
         public static void EndSample()
         {
             Profiler.EndSample();
+        }
+
+        public static void PrintProfilerDatas()
+        {
+            Debug.Log("------------打印函数执行效率-----------------");
+            foreach (var pair in ProfilersDatas)
+            {
+                Debug.Log($"当前函数是:{pair.Key}");
+                foreach (var funcData in pair.Value)
+                {
+                    Debug.Log($"{funcData.ToString()}");
+                }
+            }
         }
     }
 }

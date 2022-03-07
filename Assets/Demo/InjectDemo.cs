@@ -2,6 +2,7 @@ using MonitorLib.GOT;
 using System;
 using UnityEngine;
 using UnityEngine.Profiling;
+using UnityEngine.UI;
 
 namespace TestModule
 {
@@ -25,6 +26,8 @@ namespace TestModule
 
     public class InjectDemo : MonoBehaviour
     {
+        public Button btn_ShowFuncAnalysicClick;
+
         [ProfilerSample]
         void Start()
         {
@@ -33,26 +36,39 @@ namespace TestModule
             //for (int i = 0; i < 3; i++)
             Test();
             TestDefine();
+
+            if (btn_ShowFuncAnalysicClick != null)
+            {
+                btn_ShowFuncAnalysicClick.onClick.AddListener(() =>
+                {
+#if ENABLE_ANALYSIS
+                    HookUtil.PrintProfilerDatas();
+#endif
+                });
+            }
         }
 
         [FunctionAnalysis]
-        //[ProfilerSample]
+        [ProfilerSample]
         public void Test()
         {
-            Profiler.BeginSample("****************");
             Debug.Log("开始循环100次");
             for (int i = 0; i < 100; i++)
             {
                 Debug.Log(i);
             }
             Debug.Log("结束循环100次");
-            Profiler.EndSample();
         }
         //[ProfilerSampleWithDefineName("-------自定义Sample命名")]
         [FunctionAnalysis]
+        [ProfilerSample]
         public void TestDefine()
         {
+            Profiler.BeginSample("****************");
             Debug.Log("检测带有特性的方法");
+            Profiler.EndSample();
         }
+
+
     }
 }

@@ -279,6 +279,9 @@
     <Compile Include="..\MonitorLib\GOT\FunctionMonitorDatas.cs">
       <Link>GOT\FunctionMonitorDatas.cs</Link>
     </Compile>
+    <Compile Include="..\MonitorLib\GOT\HookUtil.cs">
+      <Link>GOT\HookUtil.cs</Link>
+    </Compile>
     <Compile Include="..\MonitorLib\GOT\LogManager.cs">
       <Link>GOT\LogManager.cs</Link>
     </Compile>
@@ -291,7 +294,6 @@
     <Compile Include="..\MonitorLib\GOT\ShareDatas.cs">
       <Link>GOT\ShareDatas.cs</Link>
     </Compile>
-    <Compile Include="GOT\EditorMonitorDatas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -12,6 +12,10 @@ public class GOTProfiler : MonoBehaviour
     public bool EnableLog = false;
     [Header("是否采集帧图")]
     public bool EnableFrameTexture = false;
+#if ENABLE_ANALYSIS
+    [Header("是否采集函数性能")]
+    public bool EnableFunctionAnalysis = false;
+#endif
     public Text UploadTips;
     public Text ReportUrl;
     string btnMsg = "开始监控";
@@ -94,9 +98,7 @@ public class GOTProfiler : MonoBehaviour
             else
             {
                 Debug.Log(Config.MonitorStop);
-
                 ShareDatas.EndTime = DateTime.Now;
-
                 string testTime = ShareDatas.GetTestTime();
                 //上传测试时间
                 FileManager.WriteToFile(testFilePath, $"应用名：{Application.productName}&nbsp&nbsp&nbsp包名：{Application.identifier}&nbsp&nbsp&nbsp测试系统：{Application.platform}&nbsp&nbsp&nbsp版本号：{Application.version}&nbsp&nbsp&nbsp本次测试时长:{testTime}");
@@ -118,7 +120,9 @@ public class GOTProfiler : MonoBehaviour
                     FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
                     UploadFile(logFilePath);
                 }
-
+#if ENABLE_ANALYSIS
+                HookUtil.PrintProfilerDatas();
+#endif
                 StopMonitor();
                 if (ReportUrl != null)
                 {
@@ -153,7 +157,11 @@ public class GOTProfiler : MonoBehaviour
         using (var webRequest = UnityWebRequest.Get(url))
         {
             yield return webRequest.SendWebRequest();
+#if UNITY_2020
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError)
+#else
             if (webRequest.isHttpError)
+#endif
             {
                 Debug.LogError(webRequest.error);
             }
