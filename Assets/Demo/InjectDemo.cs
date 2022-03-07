@@ -35,7 +35,8 @@ namespace TestModule
             Debug.LogFormat("Inject Max: {0}", Inject.GetMax(6, 9));
             //for (int i = 0; i < 3; i++)
             Test();
-            TestDefine();
+            for (int i = 0; i < 3; i++)
+                TestDefine();
 
             if (btn_ShowFuncAnalysicClick != null)
             {
@@ -68,7 +69,5 @@ namespace TestModule
             Debug.Log("检测带有特性的方法");
             Profiler.EndSample();
         }
-
-
     }
 }

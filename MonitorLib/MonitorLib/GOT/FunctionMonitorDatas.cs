@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace MonitorLib.GOT
 {
@@ -16,7 +15,7 @@ namespace MonitorLib.GOT
 
         public override string ToString()
         {
-            return $"Index:{Index} DeltaAllocatedMemory:{DeltaAllocatedMemory}Byte DeltaTime:{DeltaTime}s";
+            return $"函数第{Index}次调用 开辟的内存:{ConverUtils.ByteConversionGBMBKB(DeltaAllocatedMemory)} 函数运行耗时:{DeltaTime * 1000}ms";
         }
     }
 }

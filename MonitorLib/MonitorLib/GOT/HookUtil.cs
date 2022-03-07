@@ -69,10 +69,25 @@ namespace MonitorLib.GOT
             Debug.Log("------------打印函数执行效率-----------------");
             foreach (var pair in ProfilersDatas)
             {
-                Debug.Log($"当前函数是:{pair.Key}");
-                foreach (var funcData in pair.Value)
+                Debug.Log($"当前函数是:{pair.Key}()");
+                if (pair.Value.Count == 1)
                 {
-                    Debug.Log($"{funcData.ToString()}");
+                    Debug.Log($"{pair.Value[0]}");
+                }
+                else
+                {
+                    int count = 0;
+                    long deltaTotalAllocMemory = 0;
+                    float deltaTotalTime = 0;
+                    foreach (var funcData in pair.Value)
+                    {
+                        Debug.Log($"{funcData.ToString()}");
+                        count++;
+                        deltaTotalAllocMemory += funcData.DeltaAllocatedMemory;
+                        deltaTotalTime += funcData.DeltaTime;
+                    }
+                    //计算一个平均值
+                    Debug.Log($"函数总共调用{count}次 平均开辟内存{ConverUtils.ByteConversionGBMBKB(deltaTotalAllocMemory / count)} 平均执行耗时:{deltaTotalTime / count * 1000}ms");
                 }
             }
         }
