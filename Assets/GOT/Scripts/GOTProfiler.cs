@@ -133,7 +133,7 @@ public class GOTProfiler : MonoBehaviour
                     HookUtil.PrintProfilerDatas();
 #endif
                 StopMonitor();
-                
+
                 if (ReportUrl != null)
                 {
                     UploadReportHtml(m_StartTime);

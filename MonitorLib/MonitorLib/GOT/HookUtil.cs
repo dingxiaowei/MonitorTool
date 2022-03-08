@@ -81,7 +81,7 @@ namespace MonitorLib.GOT
                     float deltaTotalTime = 0;
                     foreach (var funcData in pair.Value)
                     {
-                        //Debug.Log($"{funcData.ToString()}");
+                        Debug.Log($"{funcData.ToString()}");
                         count++;
                         deltaTotalAllocMemory += funcData.AverageAllocatedMemory;
                         deltaTotalTime += funcData.AverageTime;

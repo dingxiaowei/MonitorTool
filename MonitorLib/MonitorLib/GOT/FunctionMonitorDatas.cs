@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace MonitorLib.GOT
 {
     [Serializable]
-    public struct FunctionMonitorDatas
+    public class FunctionMonitorDatas
     {
         public int Index;
         public long BeginTotalAllocatedMemory;
@@ -21,7 +21,7 @@ namespace MonitorLib.GOT
     }
 
     [Serializable]
-    public struct FunctionMonitorFileDatas
+    public class FunctionMonitorFileDatas
     {
         /// <summary>
         /// 函数名
@@ -49,7 +49,7 @@ namespace MonitorLib.GOT
     }
 
     [Serializable]
-    public struct FunctionAnalysisDatas
+    public class FunctionAnalysisDatas
     {
         public List<FunctionMonitorFileDatas> FunctionAnalysDatas;
     }

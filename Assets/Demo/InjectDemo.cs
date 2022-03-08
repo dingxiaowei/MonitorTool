@@ -68,10 +68,6 @@ namespace TestModule
                     {
                         Debug.Log("--------没有函数性能监控数据---------");
                     }
-                    ////测试发送邮件
-                    //var datas = HookUtil.GetFunctionMonitorFileDatas();
-                    //var jsonDatas = JsonUtility.ToJson(datas);
-                    //EmailManager.Send(jsonDatas);
 #endif
                 });
             }
@@ -88,7 +84,7 @@ namespace TestModule
             }
             Debug.Log("结束循环100次");
         }
-        //[ProfilerSampleWithDefineName("-------自定义Sample命名")]
+        //[ProfilerSampleWithDefineName("-------自定义Sample命名,暂时还没支持")]
         [FunctionAnalysis]
         [ProfilerSample]
         public void TestDefine()
