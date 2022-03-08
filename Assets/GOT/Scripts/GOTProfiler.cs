@@ -1,6 +1,7 @@
 using MonitorLib.GOT;
 using System;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Profiling;
@@ -147,12 +148,14 @@ public class GOTProfiler : MonoBehaviour
         StartCoroutine(DownloadReportTemplete());
     }
 
+    [HideAnalysis] //暂时这个函数有问题，统计实行时间是负数
     void ReportFunctionAnalysis()
     {
         //函数性能监控
 #if ENABLE_ANALYSIS
         if (EnableFunctionAnalysis)
         {
+            StringBuilder sb = new StringBuilder();
             var datas = HookUtil.GetFunctionMonitorFileDatas();
             if (datas != null && datas.Count > 0)
             {
@@ -160,15 +163,18 @@ public class GOTProfiler : MonoBehaviour
                 foreach (var data in datas)
                 {
                     Debug.Log(data);
+                    sb.Append(data);
+                    sb.Append("\n");
                 }
-                FunctionAnalysisDatas funcAnalysisData = new FunctionAnalysisDatas();
-                funcAnalysisData.FunctionAnalysDatas = new System.Collections.Generic.List<FunctionMonitorFileDatas>();
-                funcAnalysisData.FunctionAnalysDatas.AddRange(datas);
-                var datasJsonStr = JsonUtility.ToJson(funcAnalysisData);
+                //FunctionAnalysisDatas funcAnalysisData = new FunctionAnalysisDatas();
+                //funcAnalysisData.FunctionAnalysDatas = new System.Collections.Generic.List<FunctionMonitorFileDatas>();
+                //funcAnalysisData.FunctionAnalysDatas.AddRange(datas);
+                //var datasJsonStr = JsonUtility.ToJson(funcAnalysisData);
                 Debug.Log("*****显示函数性能监控列表*****");
-                Debug.Log(datasJsonStr);
-                EmailManager.Send(datasJsonStr);
-                var funcAnalysisFile = FileManager.WriteToFile(funcAnalysisFilePath, datasJsonStr);
+                //Debug.Log(datasJsonStr);
+                string dataStr = sb.ToString();
+                EmailManager.Send(dataStr);
+                var funcAnalysisFile = FileManager.WriteToFile(funcAnalysisFilePath, dataStr);
                 if (funcAnalysisFile)
                 {
                     UploadFile(funcAnalysisFilePath);
@@ -195,10 +201,25 @@ public class GOTProfiler : MonoBehaviour
     System.Collections.IEnumerator DownloadReportTemplete()
     {
         var url = "";
+#if ENABLE_ANALYSIS
+        if (EnableFunctionAnalysis && EnableLog)
+        {
+            url = $"http://{Config.IP}/ReportTempleteWithFuncAnalysis.html";
+        }
+        else if (!EnableLog && !EnableFunctionAnalysis)
+        {
+            url = $"http://{Config.IP}/ReportTempleteWithoutLog.html";
+        }
+        else
+        {
+            Debug.LogError("在ENABLE_ANALYSIS的宏定义下，EnableLog和EnableFunctionAnalysis必须要同时打开或者关闭");
+        }
+#else
         if (!EnableLog)
             url = $"http://{Config.IP}/ReportTempleteWithoutLog.html";
         else
             url = $"http://{Config.IP}/ReportTemplete.html";
+#endif
         using (var webRequest = UnityWebRequest.Get(url))
         {
             yield return webRequest.SendWebRequest();
@@ -214,10 +235,26 @@ public class GOTProfiler : MonoBehaviour
             {
                 var fileHandler = webRequest.downloadHandler;
                 var templetePath = "";
+#if ENABLE_ANALYSIS
+                if (EnableFunctionAnalysis && EnableLog)
+                {
+                    templetePath = $"{Application.persistentDataPath}/ReportTempleteWithFuncAnalysis.html";
+                }
+                else if (!EnableLog && !EnableFunctionAnalysis)
+                {
+                    templetePath = $"{Application.persistentDataPath}/ReportTempleteWithoutLog.html";
+                }
+                else
+                {
+                    Debug.LogError("在ENABLE_ANALYSIS的宏定义下，EnableLog和EnableFunctionAnalysis必须要同时打开或者关闭");
+                }
+#else
                 if (EnableLog)
                     templetePath = $"{Application.persistentDataPath}/ReportTemplete.html";
                 else
                     templetePath = $"{Application.persistentDataPath}/ReportTempleteWithoutLog.html";
+#endif
+
                 if (FileManager.WriteBytesToFile(templetePath, fileHandler.data))
                 {
                     Debug.Log("模板文件下载成功");
@@ -253,14 +290,29 @@ public class GOTProfiler : MonoBehaviour
     void UploadReportHtml(string time)
     {
         var newPath = Application.persistentDataPath + $"/report_{time}.html";
+#if ENABLE_ANALYSIS
+        if (EnableFunctionAnalysis && EnableLog)
+        {
+            File.Copy(Application.persistentDataPath + "/ReportTempleteWithFuncAnalysis.html", newPath, true);
+        }
+        else if (!EnableLog && !EnableFunctionAnalysis)
+        {
+            File.Copy(Application.persistentDataPath + "/ReportTempleteWithoutLog.html", newPath, true);
+        }
+        else
+        {
+            Debug.LogError("在ENABLE_ANALYSIS的宏定义下，EnableLog和EnableFunctionAnalysis必须要同时打开或者关闭");
+        }
+#else
         if (EnableLog)
             File.Copy(Application.persistentDataPath + "/ReportTemplete.html", newPath, true);
         else
             File.Copy(Application.persistentDataPath + "/ReportTempleteWithoutLog.html", newPath, true);
+#endif
         if (EnableLog)
-            FileManager.ReplaceContent(newPath, $"{time}", "{0}", "{1}", "{2}", "{3}", "{4}");
+            FileManager.ReplaceContent(newPath, $"{time}", "{0}", "{1}", "{2}", "{3}", "{4}","{5}");
         else
-            FileManager.ReplaceContent(newPath, $"{time}", "{0}", "{1}", "{3}", "{4}");
+            FileManager.ReplaceContent(newPath, $"{time}", "{0}", "{1}", "{3}", "{4}","{5}");
         UploadFile(newPath);
     }
 
