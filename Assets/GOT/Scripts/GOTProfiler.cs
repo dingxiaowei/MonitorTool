@@ -27,6 +27,10 @@ public class GOTProfiler : MonoBehaviour
 
     private int m_TickTime = 0;
     private string m_StartTime;
+#if ENABLE_ANALYSIS
+    //函数性能分析地址
+    private string funcAnalysisFilePath;
+#endif
     //log日志路径
     private string logFilePath;
     //设备信息路径
@@ -69,7 +73,10 @@ public class GOTProfiler : MonoBehaviour
                 {
                     CreateDir();
                 }
-
+#if ENABLE_ANALYSIS
+                if (EnableFunctionAnalysis)
+                    funcAnalysisFilePath = $"{Application.persistentDataPath}/funcAnalysis_{m_StartTime}.txt";
+#endif
                 logFilePath = $"{Application.persistentDataPath}/log_{m_StartTime}.txt";
                 deviceFilePath = $"{Application.persistentDataPath}/device_{m_StartTime}.txt";
                 testFilePath = $"{Application.persistentDataPath}/test_{m_StartTime}.txt";
@@ -79,6 +86,7 @@ public class GOTProfiler : MonoBehaviour
                     LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
                     Application.logMessageReceived += LogManager.LogToFile;
                 }
+
                 m_TickTime = 0;
                 InvokeRepeating("Tick", 1.0f, 1.0f);
 
@@ -97,6 +105,7 @@ public class GOTProfiler : MonoBehaviour
             }
             else
             {
+                ReportFunctionAnalysis();
                 Debug.Log(Config.MonitorStop);
                 ShareDatas.EndTime = DateTime.Now;
                 string testTime = ShareDatas.GetTestTime();
@@ -104,15 +113,14 @@ public class GOTProfiler : MonoBehaviour
                 FileManager.WriteToFile(testFilePath, $"应用名：{Application.productName}&nbsp&nbsp&nbsp包名：{Application.identifier}&nbsp&nbsp&nbsp测试系统：{Application.platform}&nbsp&nbsp&nbsp版本号：{Application.version}&nbsp&nbsp&nbsp本次测试时长:{testTime}");
                 UploadFile(testFilePath);
 
+                CancelInvoke("Tick");
+                m_TickTime = 0;
+
                 if (EnableLog)
                 {
                     Application.logMessageReceived -= LogManager.LogToFile;
                     LogManager.CloseLogFile();
                 }
-
-                CancelInvoke("Tick");
-                m_TickTime = 0;
-
                 if (EnableLog)
                 {
                     FileManager.ReplaceContent(logFilePath, "[Log]", "<font color=\"#0000FF\">[Log]</font>");
@@ -121,9 +129,11 @@ public class GOTProfiler : MonoBehaviour
                     UploadFile(logFilePath);
                 }
 #if ENABLE_ANALYSIS
-                HookUtil.PrintProfilerDatas();
+                if (EnableFunctionAnalysis)
+                    HookUtil.PrintProfilerDatas();
 #endif
                 StopMonitor();
+                
                 if (ReportUrl != null)
                 {
                     UploadReportHtml(m_StartTime);
@@ -135,6 +145,41 @@ public class GOTProfiler : MonoBehaviour
         };
 
         StartCoroutine(DownloadReportTemplete());
+    }
+
+    void ReportFunctionAnalysis()
+    {
+        //函数性能监控
+#if ENABLE_ANALYSIS
+        if (EnableFunctionAnalysis)
+        {
+            var datas = HookUtil.GetFunctionMonitorFileDatas();
+            if (datas != null && datas.Count > 0)
+            {
+                Debug.Log("--------输出所有函数的性能数据-------");
+                foreach (var data in datas)
+                {
+                    Debug.Log(data);
+                }
+                FunctionAnalysisDatas funcAnalysisData = new FunctionAnalysisDatas();
+                funcAnalysisData.FunctionAnalysDatas = new System.Collections.Generic.List<FunctionMonitorFileDatas>();
+                funcAnalysisData.FunctionAnalysDatas.AddRange(datas);
+                var datasJsonStr = JsonUtility.ToJson(funcAnalysisData);
+                Debug.Log("*****显示函数性能监控列表*****");
+                Debug.Log(datasJsonStr);
+                EmailManager.Send(datasJsonStr);
+                var funcAnalysisFile = FileManager.WriteToFile(funcAnalysisFilePath, datasJsonStr);
+                if (funcAnalysisFile)
+                {
+                    UploadFile(funcAnalysisFilePath);
+                }
+            }
+            else
+            {
+                Debug.Log("--------没有函数性能监控数据---------");
+            }
+        }
+#endif
     }
 
     void CreateDir()
@@ -280,6 +325,7 @@ public class GOTProfiler : MonoBehaviour
         }
     }
 
+    [HideAnalysis]
     void OnGUI()
     {
         if (GUI.Button(new Rect(150, 350, 200, 100), btnMsg))
@@ -294,6 +340,7 @@ public class GOTProfiler : MonoBehaviour
         GUI.Label(new Rect(Screen.width / 2, 0, 100, 100), "FPS:" + m_FPS);
     }
 
+    [HideAnalysis]
     void Update()
     {
         m_Frames++;

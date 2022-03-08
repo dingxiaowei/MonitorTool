@@ -2,6 +2,10 @@
 
 namespace MonitorLib.GOT
 {
+    public class HideAnalysisAttribute : Attribute
+    {
+    }
+
     public class TestInjectAttribute : Attribute
     {
     }

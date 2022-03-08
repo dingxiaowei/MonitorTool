@@ -75,6 +75,7 @@ public class HookEditor
     private static bool ProcessAssembly(AssemblyDefinition assembly)
     {
         bool hasProcessed = false;
+        var hideAnalysisType = typeof(HideAnalysisAttribute).FullName;
         foreach (var module in assembly.Modules)
         {
             foreach (var type in module.Types)
@@ -89,6 +90,10 @@ public class HookEditor
                     //过滤抽象方法、虚函数、get、set方法
                     if (method.IsAbstract || method.IsVirtual || method.IsGetter || method.IsSetter)
                         continue;
+                    //过滤隐藏分析特性
+                    if (method.CustomAttributes.Any(typeAttribute => typeAttribute.AttributeType.FullName == hideAnalysisType))
+                        continue;
+                    
                     //如果注入代码失败，可以打开下面的输出看看卡在了那个方法上。
                     //Debug.Log(method.Name + "======= " + type.Name + "======= " + type.BaseType.GenericParameters +" ===== "+ module.Name);
                     var hookUtilBegin = module.ImportReference(typeof(HookUtil).GetMethod("Begin", new[] { typeof(string) }));
@@ -178,6 +183,7 @@ public class HookEditor
 
     private static bool ProcessAssemblyByAttributeWithoutParam(AssemblyDefinition assembly, Type attributeType)
     {
+        var hideAnalysisType = typeof(HideAnalysisAttribute).FullName;
         bool hasProcessed = false;
         var profilerSampleType = typeof(ProfilerSampleAttribute);
         var functionAnalysisType = typeof(FunctionAnalysisAttribute);
@@ -198,6 +204,9 @@ public class HookEditor
                         continue;
                     //过滤抽象方法、虚函数、get、set方法
                     if (method.IsAbstract || method.IsVirtual || method.IsGetter || method.IsSetter)
+                        continue;
+                    //过滤隐藏分析特性
+                    if (method.CustomAttributes.Any(typeAttribute => typeAttribute.AttributeType.FullName == hideAnalysisType))
                         continue;
                     //如果注入代码失败，可以打开下面的输出看看卡在了那个方法上。
                     //Debug.Log(method.Name + "======= " + type.Name + "======= " + type.BaseType.GenericParameters +" ===== "+ module.Name);

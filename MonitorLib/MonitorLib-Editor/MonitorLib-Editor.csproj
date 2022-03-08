@@ -294,6 +294,9 @@
     <Compile Include="..\MonitorLib\GOT\ShareDatas.cs">
       <Link>GOT\ShareDatas.cs</Link>
     </Compile>
+    <Compile Include="..\MonitorLib\GOT\Tools.cs">
+      <Link>GOT\Tools.cs</Link>
+    </Compile>
     <Compile Include="..\MonitorLib\GOT\Utils\ConverUtils.cs">
       <Link>GOT\Utils\ConverUtils.cs</Link>
     </Compile>

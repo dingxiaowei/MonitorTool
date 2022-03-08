@@ -19,6 +19,8 @@
 	<div id="MonitorBattery" style="width: 1500px;height: 600px;"></div>
 	<div id="MonitorMemory" style="width: 1500px;height: 600px;"></div>
 	<div id="MonotorProfiler" style="width: 1500px;height: 600px;"></div>
+	<h2>函数性能</h2>
+	<div id="FunctionAnalysis"></div>
 	<h2>Log信息</h2>
 	<div id="Log"></div>
     <script type="text/javascript">
@@ -57,6 +59,9 @@
                 txtDiv.innerHTML = innerText;
             }
         }
+		
+		
+		
 		let logUrl = "./log_{2}.txt";
 		let logRequest = new XMLHttpRequest();
         logRequest.open("get", logUrl);
@@ -70,7 +75,6 @@
                 logDiv.innerHTML = logInnerText;
             }
         }
-		
 		
 		<!-- var base = +new Date(2014, 9, 3); -->
 		<!-- var oneDay = 24 * 3600 * 1000; -->

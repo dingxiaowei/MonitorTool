@@ -46,9 +46,9 @@ namespace MonitorLib.GOT
             }
             var lastMethodProfileData = ProfilersDatas[methodName].Last();
             lastMethodProfileData.EndTotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong();
-            lastMethodProfileData.DeltaAllocatedMemory = lastMethodProfileData.EndTotalAllocatedMemory - lastMethodProfileData.BeginTotalAllocatedMemory;
+            lastMethodProfileData.AverageAllocatedMemory = lastMethodProfileData.EndTotalAllocatedMemory - lastMethodProfileData.BeginTotalAllocatedMemory;
             lastMethodProfileData.EndTime = Time.realtimeSinceStartup;
-            lastMethodProfileData.DeltaTime = lastMethodProfileData.EndTime - lastMethodProfileData.BeginTime;
+            lastMethodProfileData.AverageTime = lastMethodProfileData.EndTime - lastMethodProfileData.BeginTime;
 
             //需要屏蔽
             //Debug.LogError($"{methodName}   " + lastMethodProfileData.ToString());
@@ -81,15 +81,57 @@ namespace MonitorLib.GOT
                     float deltaTotalTime = 0;
                     foreach (var funcData in pair.Value)
                     {
-                        Debug.Log($"{funcData.ToString()}");
+                        //Debug.Log($"{funcData.ToString()}");
                         count++;
-                        deltaTotalAllocMemory += funcData.DeltaAllocatedMemory;
-                        deltaTotalTime += funcData.DeltaTime;
+                        deltaTotalAllocMemory += funcData.AverageAllocatedMemory;
+                        deltaTotalTime += funcData.AverageTime;
                     }
                     //计算一个平均值
                     Debug.Log($"函数总共调用{count}次 平均开辟内存{ConverUtils.ByteConversionGBMBKB(deltaTotalAllocMemory / count)} 平均执行耗时:{deltaTotalTime / count * 1000}ms");
                 }
             }
+        }
+
+        public static List<FunctionMonitorFileDatas> GetFunctionMonitorFileDatas()
+        {
+            List<FunctionMonitorFileDatas> datas = new List<FunctionMonitorFileDatas>();
+            foreach (var pair in ProfilersDatas)
+            {
+                if (pair.Value.Count == 1)
+                {
+                    datas.Add(new FunctionMonitorFileDatas()
+                    {
+                        FunctionName = $"{pair.Key}()",
+                        CallCount = 1,
+                        AverageAllocatedMemory = pair.Value[0].EndTotalAllocatedMemory - pair.Value[0].BeginTotalAllocatedMemory,
+                        AverageRunTime = pair.Value[0].EndTime - pair.Value[0].BeginTime,
+                        AverageAllocatedMemoryStr = ConverUtils.ByteConversionGBMBKB(pair.Value[0].EndTotalAllocatedMemory - pair.Value[0].BeginTotalAllocatedMemory),
+                        AverageRunTimeStr = $"{(pair.Value[0].EndTime - pair.Value[0].BeginTime) * 1000}ms"
+                    });
+                }
+                else
+                {
+                    int count = 0;
+                    long deltaTotalAllocMemory = 0;
+                    float deltaTotalTime = 0;
+                    foreach (var funcData in pair.Value)
+                    {
+                        count++;
+                        deltaTotalAllocMemory += funcData.AverageAllocatedMemory;
+                        deltaTotalTime += funcData.AverageTime;
+                    }
+                    datas.Add(new FunctionMonitorFileDatas()
+                    {
+                        FunctionName = $"{pair.Key}()",
+                        CallCount = count,
+                        AverageAllocatedMemory = deltaTotalAllocMemory / count,
+                        AverageRunTime = deltaTotalTime / count,
+                        AverageAllocatedMemoryStr = ConverUtils.ByteConversionGBMBKB(deltaTotalAllocMemory / count),
+                        AverageRunTimeStr = $"{deltaTotalTime / count * 1000}ms"
+                    });
+                }
+            }
+            return datas;
         }
     }
 }

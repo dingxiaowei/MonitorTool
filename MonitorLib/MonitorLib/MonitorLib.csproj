@@ -301,6 +301,7 @@
     <Compile Include="GOT\MonitorAttributes.cs" />
     <Compile Include="GOT\MonitorInfo.cs" />
     <Compile Include="GOT\ShareDatas.cs" />
+    <Compile Include="GOT\Tools.cs" />
     <Compile Include="GOT\Utils\ConverUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

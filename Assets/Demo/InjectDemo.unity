@@ -251,6 +251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btn_ShowFuncAnalysicClick: {fileID: 1645227057}
+  txt_Log: {fileID: 0}
 --- !u!20 &790333375
 Camera:
   m_ObjectHideFlags: 0
