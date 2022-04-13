@@ -18,4 +18,19 @@
         /// </summary>
         PROFILESAMPLE
     }
+
+    /// <summary>
+    /// 带有Begin和End函数的注入
+    /// </summary>
+    public enum EBeginEndType
+    {
+        /// <summary>
+        /// 打log
+        /// </summary>
+        LOG = 1,
+        /// <summary>
+        /// 性能分析
+        /// </summary>
+        ANALYZE
+    }
 }

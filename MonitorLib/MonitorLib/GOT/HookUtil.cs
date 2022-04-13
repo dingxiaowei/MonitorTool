@@ -64,6 +64,16 @@ namespace MonitorLib.GOT
             Profiler.EndSample();
         }
 
+        public static void BeginDebugLog(string methodName)
+        {
+            Debug.Log($"---Hook BeginDebugLog:{methodName}");
+        }
+
+        public static void EndDebugLog(string methodName)
+        {
+            Debug.Log($"---Hook EndDebugLog:{methodName}");
+        }
+
         public static void PrintProfilerDatas()
         {
             Debug.Log("------------打印函数执行效率-----------------");

@@ -30,6 +30,18 @@ public class HookEditor
         AssemblyPostProcessorRun(EAnalyzeType.DEFINEFUNC);
     }
 
+    [MenuItem("Hook/给所有函数打开始结束log")]
+    public static void HookLogAllFunction()
+    {
+        AssemblyPostProcessorHookLogRun();
+    }
+
+    [MenuItem("Hook/给所有函数(除了Update、OnGUI)打开始结束log")]
+    public static void HookLogAllFunctionExceptUpdate()
+    {
+        AssemblyPostProcessorHookLogRun("Update", "OnGUI");
+    }
+
     [MenuItem("Hook/输出结果")]
     public static void HookUtilsReport()
     {
@@ -72,6 +84,41 @@ public class HookEditor
         Debug.Log("注入成功");
     }
 
+    public static void AssemblyPostProcessorHookLogRun(params string[] methodsName)
+    {
+        try
+        {
+            if (Application.isPlaying || EditorApplication.isCompiling)
+            {
+                Debug.Log("You need stop play mode or wait compiling finished");
+                return;
+            }
+            EditorApplication.LockReloadAssemblies();
+            // 按路径读取程序集
+            var readerParameters = new ReaderParameters { ReadSymbols = false };
+            var assembly = AssemblyDefinition.ReadAssembly(AssemblyPath, readerParameters);
+            if (assembly == null)
+            {
+                Debug.LogError(string.Format("InjectTool Inject Load assembly failed: {0}", AssemblyPath));
+                return;
+            }
+            if (HookEditor.ProcessAssemblyHookLogExceptFunctions(assembly, methodsName))
+            {
+                assembly.Write(AssemblyPath, new WriterParameters { WriteSymbols = true });
+            }
+            else
+            {
+                Debug.LogError(Path.GetFileName(AssemblyPath) + "所有函数注册无法被正确注入");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+        }
+        EditorApplication.UnlockReloadAssemblies();
+        Debug.Log("注入成功");
+    }
+
     private static bool ProcessAssembly(AssemblyDefinition assembly)
     {
         bool hasProcessed = false;
@@ -93,7 +140,7 @@ public class HookEditor
                     //过滤隐藏分析特性
                     if (method.CustomAttributes.Any(typeAttribute => typeAttribute.AttributeType.FullName == hideAnalysisType))
                         continue;
-                    
+
                     //如果注入代码失败，可以打开下面的输出看看卡在了那个方法上。
                     //Debug.Log(method.Name + "======= " + type.Name + "======= " + type.BaseType.GenericParameters +" ===== "+ module.Name);
                     var hookUtilBegin = module.ImportReference(typeof(HookUtil).GetMethod("Begin", new[] { typeof(string) }));
@@ -241,6 +288,69 @@ public class HookEditor
                         ilProcessor.InsertBefore(last, Instruction.Create(OpCodes.Ldstr, type.FullName + "." + method.Name));
                     }
                     ilProcessor.InsertBefore(last, lastInstruction);
+
+                    var jumpInstructions = method.Body.Instructions.Cast<Instruction>().Where(i => i.Operand == lastInstruction);
+                    foreach (var jump in jumpInstructions)
+                    {
+                        jump.Operand = lastInstruction;
+                    }
+                    hasProcessed = true;
+                }
+            }
+        }
+        return hasProcessed;
+    }
+
+    /// <summary>
+    /// 给方法打log(用于排查卡死的情况)
+    /// </summary>
+    /// <param name="assembly"></param>
+    /// <param name="methodsName"></param>
+    /// <returns></returns>
+    private static bool ProcessAssemblyHookLogExceptFunctions(AssemblyDefinition assembly, params string[] methodsName)
+    {
+        bool hasProcessed = false;
+        foreach (var module in assembly.Modules)
+        {
+            foreach (var type in module.Types)
+            {
+                if (type.IsAbstract || type.IsInterface)//过滤抽象类和接口
+                    continue;
+
+                foreach (var method in type.Methods)
+                {
+                    //过滤构造函数
+                    if (method.Name == ".ctor" || method.Name == ".cctor") //或者method.IsConstructor
+                        continue;
+                    //过滤抽象方法、虚函数、get、set方法
+                    if (method.IsAbstract || method.IsVirtual || method.IsGetter || method.IsSetter)
+                        continue;
+
+                    if (methodsName.Contains(method.Name))
+                    {
+                        Debug.Log($"排除剔除的方法{method.FullName}");
+                        continue;
+                    }
+
+                    //如果注入代码失败，可以打开下面的输出看看卡在了那个方法上。
+                    //Debug.Log(method.Name + "======= " + type.Name + "======= " + type.BaseType.GenericParameters +" ===== "+ module.Name);
+
+                    var Begin = module.ImportReference(typeof(HookUtil).GetMethod("BeginDebugLog", new[] { typeof(string) }));
+                    var End = module.ImportReference(typeof(HookUtil).GetMethod("EndDebugLog", new[] { typeof(string) }));
+
+                    ILProcessor ilProcessor = method.Body.GetILProcessor();
+
+                    Instruction first = method.Body.Instructions[0];
+                    ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Ldstr, type.FullName + "." + method.Name));
+                    ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Call, Begin));
+
+                    //解决方法中直接 return 后无法统计的bug 
+                    //https://lostechies.com/gabrielschenker/2009/11/26/writing-a-profiler-for-silverlight-applications-part-1/
+
+                    Instruction last = method.Body.Instructions[method.Body.Instructions.Count - 1];
+                    Instruction lastInstruction = Instruction.Create(OpCodes.Ldstr, type.FullName + "." + method.Name);
+                    ilProcessor.InsertBefore(last, lastInstruction);
+                    ilProcessor.InsertBefore(last, Instruction.Create(OpCodes.Call, End));
 
                     var jumpInstructions = method.Body.Instructions.Cast<Instruction>().Where(i => i.Operand == lastInstruction);
                     foreach (var jump in jumpInstructions)

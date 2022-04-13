@@ -77,19 +77,19 @@ namespace TestModule
         [ProfilerSample]
         public void Test()
         {
-            Debug.Log("开始循环100次");
-            for (int i = 0; i < 100; i++)
-            {
-                Debug.Log(i);
-            }
-            Debug.Log("结束循环100次");
+            //Debug.Log("开始循环100次");
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    Debug.Log(i);
+            //}
+            //Debug.Log("结束循环100次");
         }
         //[ProfilerSampleWithDefineName("-------自定义Sample命名,暂时还没支持")]
         [FunctionAnalysis]
         [ProfilerSample]
         public void TestDefine()
         {
-            Profiler.BeginSample("****************");
+            Profiler.BeginSample("*************");
             Debug.Log("检测带有特性的方法");
             Profiler.EndSample();
         }
