@@ -8,6 +8,18 @@ namespace MonitorLib.GOT
     /// </summary>
     public class FileManager
     {
+        public static bool CreateDir(string dirPath)
+        {
+            if (string.IsNullOrEmpty(dirPath))
+                return false;
+            if (Directory.Exists(dirPath))
+            {
+                Directory.Delete(dirPath, true);
+            }
+            Directory.CreateDirectory(dirPath);
+            return true;
+        }
+
         public static bool WriteBytesToFile(string filePath, byte[] data)
         {
             if (string.IsNullOrEmpty(filePath))

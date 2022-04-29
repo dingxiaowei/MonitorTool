@@ -271,7 +271,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6106080596417621101}
-  - component: {fileID: 6106080596417621074}
+  - component: {fileID: 1579846843}
   m_Layer: 0
   m_Name: GOT
   m_TagString: Untagged
@@ -294,7 +294,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6106080596417621074
+--- !u!114 &1579846843
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -303,8 +303,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 6106080596417621075}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d1a1266e0f5a63488646f4a5e6100b5, type: 3}
+  m_Script: {fileID: 11500000, guid: cdaa7a6cbcc940b4fae84854d80d6f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnableLog: 0
+  EnableFrameTexture: 0
+  EnableFunctionAnalysis: 0
+  EnableCPUInfo: 1
+  CPUInfoFrame: 5
+  EnableBatteryInfo: 1
+  BatteryInfoFrame: 5
+  IgnoreFrameCount: 5
   UploadTips: {fileID: 1163358858}
   ReportUrl: {fileID: 822838250}

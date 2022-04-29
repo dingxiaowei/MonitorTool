@@ -1,9 +1,8 @@
 using MonitorLib.GOT;
 using System;
-using System.IO;
-using System.Text;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.Profiling;
 using UnityEngine.UI;
 
@@ -13,44 +12,40 @@ public class GOTProfiler : MonoBehaviour
     public bool EnableLog = false;
     [Header("是否采集帧图")]
     public bool EnableFrameTexture = false;
-#if ENABLE_ANALYSIS
     [Header("是否采集函数性能")]
     public bool EnableFunctionAnalysis = false;
-#endif
+    [Header("是否采集CPU温度")]
+    public bool EnableCPUInfo = true;
+    public int CPUInfoFrame = 5;
+    [Header("是否采集电池功耗")]
+    public bool EnableBatteryInfo = true;
+    public int BatteryInfoFrame = 5;
+    [Header("忽略前面的帧数")]
+    public int IgnoreFrameCount = 5;
+
     public Text UploadTips;
     public Text ReportUrl;
-    string btnMsg = "开始监控";
+    int m_FPS = 0;
+    int m_TickTime = 0;
+    string m_StartTime;
+    float m_Accumulator = 0;
+    int m_Frames = 0;
+    float m_TimeLeft;
+    float m_UpdateInterval = 0.5f;
     bool btnMonitor = false;
-
+    string btnMsg = "开始监控";
+    int m_frameIndex = 0;
     Action<bool> MonitorCallback;
-
-    private int m_FPS = 0;
-
-    private int m_TickTime = 0;
-    private string m_StartTime;
-#if ENABLE_ANALYSIS
-    //函数性能分析地址
-    private string funcAnalysisFilePath;
-#endif
-    //log日志路径
-    private string logFilePath;
-    //设备信息路径
-    private string deviceFilePath;
-    //测试信息路径
-    private string testFilePath;
-    //性能监控
-    private string monitorFilePath;
-
-    private int m_frameIndex = 0;
-
-    private int m_IgnoreFrameCount = 10;
-
     MonitorInfos monitorInfos = null;
-
-    private float m_Accumulator = 0;
-    private int m_Frames = 0;
-    private float m_TimeLeft;
-    private float m_UpdateInterval = 0.5f;
+    string funcAnalysisFilePath;
+    //log日志路径
+    string logFilePath;
+    //设备信息路径
+    string deviceFilePath;
+    //测试信息路径
+    string testFilePath;
+    //性能监控
+    string monitorFilePath;
 
     void Awake()
     {
@@ -66,19 +61,18 @@ public class GOTProfiler : MonoBehaviour
             {
                 Debug.Log(Config.Monitoring);
                 m_frameIndex = 0;
-                ShareDatas.StartTime = DateTime.Now;
+                ShareDatas.StartTime = DateTime.Now; //当前时间
                 m_StartTime = ShareDatas.StartTime.ToString().Replace(" ", "_").Replace("/", "_").Replace(":", "_");
                 ShareDatas.StartTimeStr = m_StartTime;
 
                 if (EnableFrameTexture)
                 {
-                    CreateDir();
+                    FileManager.CreateDir($"{Application.persistentDataPath}/{m_StartTime}/");
                 }
-#if ENABLE_ANALYSIS
                 if (EnableFunctionAnalysis)
                     funcAnalysisFilePath = $"{Application.persistentDataPath}/funcAnalysis_{m_StartTime}.txt";
-#endif
-                logFilePath = $"{Application.persistentDataPath}/log_{m_StartTime}.txt";
+                if (EnableLog)
+                    logFilePath = $"{Application.persistentDataPath}/log_{m_StartTime}.txt";
                 deviceFilePath = $"{Application.persistentDataPath}/device_{m_StartTime}.txt";
                 testFilePath = $"{Application.persistentDataPath}/test_{m_StartTime}.txt";
                 monitorFilePath = $"{Application.persistentDataPath}/monitor_{m_StartTime}.txt";
@@ -106,7 +100,6 @@ public class GOTProfiler : MonoBehaviour
             }
             else
             {
-                ReportFunctionAnalysis();
                 Debug.Log(Config.MonitorStop);
                 ShareDatas.EndTime = DateTime.Now;
                 string testTime = ShareDatas.GetTestTime();
@@ -129,143 +122,20 @@ public class GOTProfiler : MonoBehaviour
                     FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
                     UploadFile(logFilePath);
                 }
-#if ENABLE_ANALYSIS
+//#if ENABLE_ANALYSIS
                 if (EnableFunctionAnalysis)
-                    HookUtil.PrintProfilerDatas();
-#endif
+                    //HookUtil.PrintProfilerDatas();
+//#endif
                 StopMonitor();
 
                 if (ReportUrl != null)
                 {
-                    UploadReportHtml(m_StartTime);
                     ReportUrl.gameObject.SetActive(true);
                     var url = string.Format(ShareDatas.ReportUrl, m_StartTime);
                     ReportUrl.text = $"<a href={url}>[{url}]</a>";
                 }
             }
         };
-
-        StartCoroutine(DownloadReportTemplete());
-    }
-
-    [HideAnalysis] //暂时这个函数有问题，统计实行时间是负数
-    void ReportFunctionAnalysis()
-    {
-        //函数性能监控
-#if ENABLE_ANALYSIS
-        if (EnableFunctionAnalysis)
-        {
-            StringBuilder sb = new StringBuilder();
-            var datas = HookUtil.GetFunctionMonitorFileDatas();
-            if (datas != null && datas.Count > 0)
-            {
-                Debug.Log("--------输出所有函数的性能数据-------");
-                foreach (var data in datas)
-                {
-                    Debug.Log(data);
-                    sb.Append(data);
-                    sb.Append("\n");
-                }
-                //FunctionAnalysisDatas funcAnalysisData = new FunctionAnalysisDatas();
-                //funcAnalysisData.FunctionAnalysDatas = new System.Collections.Generic.List<FunctionMonitorFileDatas>();
-                //funcAnalysisData.FunctionAnalysDatas.AddRange(datas);
-                //var datasJsonStr = JsonUtility.ToJson(funcAnalysisData);
-                Debug.Log("*****显示函数性能监控列表*****");
-                //Debug.Log(datasJsonStr);
-                string dataStr = sb.ToString();
-                EmailManager.Send(dataStr);
-                var funcAnalysisFile = FileManager.WriteToFile(funcAnalysisFilePath, dataStr);
-                if (funcAnalysisFile)
-                {
-                    UploadFile(funcAnalysisFilePath);
-                }
-            }
-            else
-            {
-                Debug.Log("--------没有函数性能监控数据---------");
-            }
-        }
-#endif
-    }
-
-    void CreateDir()
-    {
-        var dirPath = $"{Application.persistentDataPath}/{m_StartTime}/";
-        if (Directory.Exists(dirPath))
-        {
-            Directory.Delete(dirPath, true);
-        }
-        Directory.CreateDirectory(dirPath);
-    }
-
-    System.Collections.IEnumerator DownloadReportTemplete()
-    {
-        var url = "";
-#if ENABLE_ANALYSIS
-        if (EnableFunctionAnalysis && EnableLog)
-        {
-            url = $"http://{Config.IP}/ReportTempleteWithFuncAnalysis.html";
-        }
-        else if (!EnableLog && !EnableFunctionAnalysis)
-        {
-            url = $"http://{Config.IP}/ReportTempleteWithoutLog.html";
-        }
-        else
-        {
-            Debug.LogError("在ENABLE_ANALYSIS的宏定义下，EnableLog和EnableFunctionAnalysis必须要同时打开或者关闭");
-        }
-#else
-        if (!EnableLog)
-            url = $"http://{Config.IP}/ReportTempleteWithoutLog.html";
-        else
-            url = $"http://{Config.IP}/ReportTemplete.html";
-#endif
-        using (var webRequest = UnityWebRequest.Get(url))
-        {
-            yield return webRequest.SendWebRequest();
-#if UNITY_2020
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError)
-#else
-            if (webRequest.isHttpError)
-#endif
-            {
-                Debug.LogError(webRequest.error);
-            }
-            else
-            {
-                var fileHandler = webRequest.downloadHandler;
-                var templetePath = "";
-#if ENABLE_ANALYSIS
-                if (EnableFunctionAnalysis && EnableLog)
-                {
-                    templetePath = $"{Application.persistentDataPath}/ReportTempleteWithFuncAnalysis.html";
-                }
-                else if (!EnableLog && !EnableFunctionAnalysis)
-                {
-                    templetePath = $"{Application.persistentDataPath}/ReportTempleteWithoutLog.html";
-                }
-                else
-                {
-                    Debug.LogError("在ENABLE_ANALYSIS的宏定义下，EnableLog和EnableFunctionAnalysis必须要同时打开或者关闭");
-                }
-#else
-                if (EnableLog)
-                    templetePath = $"{Application.persistentDataPath}/ReportTemplete.html";
-                else
-                    templetePath = $"{Application.persistentDataPath}/ReportTempleteWithoutLog.html";
-#endif
-
-                if (FileManager.WriteBytesToFile(templetePath, fileHandler.data))
-                {
-                    Debug.Log("模板文件下载成功");
-                }
-                else
-                {
-                    Debug.LogError("模板文件下载失败");
-                }
-            }
-        }
-        yield return null;
     }
 
     void StartMonitor()
@@ -287,33 +157,9 @@ public class GOTProfiler : MonoBehaviour
         }
     }
 
-    void UploadReportHtml(string time)
+    void Tick()
     {
-        var newPath = Application.persistentDataPath + $"/report_{time}.html";
-#if ENABLE_ANALYSIS
-        if (EnableFunctionAnalysis && EnableLog)
-        {
-            File.Copy(Application.persistentDataPath + "/ReportTempleteWithFuncAnalysis.html", newPath, true);
-        }
-        else if (!EnableLog && !EnableFunctionAnalysis)
-        {
-            File.Copy(Application.persistentDataPath + "/ReportTempleteWithoutLog.html", newPath, true);
-        }
-        else
-        {
-            Debug.LogError("在ENABLE_ANALYSIS的宏定义下，EnableLog和EnableFunctionAnalysis必须要同时打开或者关闭");
-        }
-#else
-        if (EnableLog)
-            File.Copy(Application.persistentDataPath + "/ReportTemplete.html", newPath, true);
-        else
-            File.Copy(Application.persistentDataPath + "/ReportTempleteWithoutLog.html", newPath, true);
-#endif
-        if (EnableLog)
-            FileManager.ReplaceContent(newPath, $"{time}", "{0}", "{1}", "{2}", "{3}", "{4}","{5}");
-        else
-            FileManager.ReplaceContent(newPath, $"{time}", "{0}", "{1}", "{3}", "{4}","{5}");
-        UploadFile(newPath);
+        m_TickTime++;
     }
 
     void UploadFile(string filePath)
@@ -340,41 +186,6 @@ public class GOTProfiler : MonoBehaviour
         {
             Debug.Log($"File Uploaded :{e.Result}");
         });
-    }
-
-    void Tick()
-    {
-        m_TickTime++;
-    }
-
-    void GetSystemInfo()
-    {
-        DeviceInfo deviceInfo = new DeviceInfo()
-        {
-            UnityVersion = Application.unityVersion,
-            DeviceModel = SystemInfo.deviceModel,
-            BatteryLevel = SystemInfo.batteryLevel,
-            DeviceName = SystemInfo.deviceName,
-            DeviceUniqueIdentifier = SystemInfo.deviceUniqueIdentifier,
-            GraphicsDeviceName = SystemInfo.graphicsDeviceName,
-            GraphicsDeviceVendor = SystemInfo.graphicsDeviceVendor,
-            GraphicsDeviceVersion = SystemInfo.graphicsDeviceVersion,
-            GraphicsMemorySize = SystemInfo.graphicsMemorySize,
-            OperatingSystem = SystemInfo.operatingSystem,
-            ProcessorCount = SystemInfo.processorCount,
-            ProcessorFrequency = SystemInfo.processorFrequency,
-            ProcessorType = SystemInfo.processorType,
-            SupportsShadows = SystemInfo.supportsShadows,
-            SystemMemorySize = SystemInfo.systemMemorySize,
-            ScreenHeight = Screen.height,
-            ScreenWidth = Screen.width
-        };
-
-        var deviceInfoToFile = FileManager.WriteToFile(deviceFilePath, JsonUtility.ToJson(deviceInfo));
-        if (deviceInfoToFile)
-        {
-            UploadFile(deviceFilePath);
-        }
     }
 
     [HideAnalysis]
@@ -409,20 +220,45 @@ public class GOTProfiler : MonoBehaviour
         if (btnMonitor)
         {
             ++m_frameIndex;
-            if (m_frameIndex > m_IgnoreFrameCount)
+            if (m_frameIndex > IgnoreFrameCount)
             {
-                var monitorInfo = new MonitorInfo() { FrameIndex = m_frameIndex - m_IgnoreFrameCount, BatteryLevel = SystemInfo.batteryLevel, MemorySize = 0, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
+                var monitorInfo = new MonitorInfo() { FrameIndex = m_frameIndex - IgnoreFrameCount, BatteryLevel = SystemInfo.batteryLevel, MemorySize = 0, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
                 monitorInfos.MonitorInfoList.Add(monitorInfo);
                 if (EnableFrameTexture)
                 {
-                    ScreenCapture.CaptureScreenshot($"{Application.persistentDataPath}/{m_StartTime}/img_{m_StartTime}_{m_frameIndex - m_IgnoreFrameCount}.png");
+                    ScreenCapture.CaptureScreenshot($"{Application.persistentDataPath}/{m_StartTime}/img_{m_StartTime}_{m_frameIndex - IgnoreFrameCount}.png");
                 }
             }
         }
     }
 
-    void OnDestroy()
+    void GetSystemInfo()
     {
-        LogManager.CloseLogFile();
+        DeviceInfo deviceInfo = new DeviceInfo()
+        {
+            UnityVersion = Application.unityVersion,
+            DeviceModel = SystemInfo.deviceModel,
+            BatteryLevel = SystemInfo.batteryLevel,
+            DeviceName = SystemInfo.deviceName,
+            DeviceUniqueIdentifier = SystemInfo.deviceUniqueIdentifier,
+            GraphicsDeviceName = SystemInfo.graphicsDeviceName,
+            GraphicsDeviceVendor = SystemInfo.graphicsDeviceVendor,
+            GraphicsDeviceVersion = SystemInfo.graphicsDeviceVersion,
+            GraphicsMemorySize = SystemInfo.graphicsMemorySize,
+            OperatingSystem = SystemInfo.operatingSystem,
+            ProcessorCount = SystemInfo.processorCount,
+            ProcessorFrequency = SystemInfo.processorFrequency,
+            ProcessorType = SystemInfo.processorType,
+            SupportsShadows = SystemInfo.supportsShadows,
+            SystemMemorySize = SystemInfo.systemMemorySize,
+            ScreenHeight = Screen.height,
+            ScreenWidth = Screen.width
+        };
+
+        var deviceInfoToFile = FileManager.WriteToFile(deviceFilePath, JsonUtility.ToJson(deviceInfo));
+        if (deviceInfoToFile)
+        {
+            UploadFile(deviceFilePath);
+        }
     }
 }

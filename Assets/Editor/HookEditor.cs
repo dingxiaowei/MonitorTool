@@ -45,10 +45,10 @@ public class HookEditor
     [MenuItem("Hook/输出结果")]
     public static void HookUtilsReport()
     {
-
+        HookUtil.MethodAnalysisReport();
     }
 
-    [PostProcessScene] //打包的时候回自动调用下面的注入方法
+    //[PostProcessScene] //打包的时候回自动调用下面的注入方法
     public static void AssemblyPostProcessorRun()
     {
         try
