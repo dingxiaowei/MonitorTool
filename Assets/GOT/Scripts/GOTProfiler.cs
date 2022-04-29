@@ -12,7 +12,7 @@ public class GOTProfiler : MonoBehaviour
     public bool EnableLog = false;
     [Header("是否采集帧图")]
     public bool EnableFrameTexture = false;
-    [Header("是否采集函数性能")]
+    [Header("是否采集函数性能,统计之前需要先点击菜单栏Hook/所有函数性能分析")]
     public bool EnableFunctionAnalysis = false;
     [Header("是否采集CPU温度")]
     public bool EnableCPUInfo = true;
@@ -22,6 +22,8 @@ public class GOTProfiler : MonoBehaviour
     public int BatteryInfoFrame = 5;
     [Header("忽略前面的帧数")]
     public int IgnoreFrameCount = 5;
+    [Header("是否使用二进制文件(否就是使用txt)")]
+    public bool UseBinary = false;
 
     public Text UploadTips;
     public Text ReportUrl;
@@ -46,10 +48,21 @@ public class GOTProfiler : MonoBehaviour
     string testFilePath;
     //性能监控
     string monitorFilePath;
+    //文件后缀类型
+    string fileExt;
+
+    //string data = @"C:\Users\d00605132\AppData\LocalLow\Aladdin\MonitorToolRef\monitor_2022_4_29_23_51_49.data";
 
     void Awake()
     {
         Application.targetFrameRate = 60;
+        //IBinarySerialize testInfo = new MonitorInfos();
+        //var res = FileManager.ReadBinaryDataFromFile(data, ref testInfo);
+        //if (res)
+        //{
+        //    Debug.LogError("解析成功");
+        //    Debug.Log(testInfo.ToString());
+        //}
     }
 
     void Start()
@@ -59,6 +72,7 @@ public class GOTProfiler : MonoBehaviour
         {
             if (res)
             {
+                fileExt = UseBinary ? Config.BinaryExt : Config.TextExt;
                 Debug.Log(Config.Monitoring);
                 m_frameIndex = 0;
                 ShareDatas.StartTime = DateTime.Now; //当前时间
@@ -70,12 +84,12 @@ public class GOTProfiler : MonoBehaviour
                     FileManager.CreateDir($"{Application.persistentDataPath}/{m_StartTime}/");
                 }
                 if (EnableFunctionAnalysis)
-                    funcAnalysisFilePath = $"{Application.persistentDataPath}/funcAnalysis_{m_StartTime}.txt";
+                    funcAnalysisFilePath = $"{Application.persistentDataPath}/funcAnalysis_{m_StartTime}{fileExt}";
                 if (EnableLog)
-                    logFilePath = $"{Application.persistentDataPath}/log_{m_StartTime}.txt";
-                deviceFilePath = $"{Application.persistentDataPath}/device_{m_StartTime}.txt";
-                testFilePath = $"{Application.persistentDataPath}/test_{m_StartTime}.txt";
-                monitorFilePath = $"{Application.persistentDataPath}/monitor_{m_StartTime}.txt";
+                    logFilePath = $"{Application.persistentDataPath}/log_{m_StartTime}{fileExt}";
+                deviceFilePath = $"{Application.persistentDataPath}/device_{m_StartTime}{fileExt}";
+                testFilePath = $"{Application.persistentDataPath}/test_{m_StartTime}{fileExt}";
+                monitorFilePath = $"{Application.persistentDataPath}/monitor_{m_StartTime}{fileExt}";
                 if (EnableLog)
                 {
                     LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
@@ -84,7 +98,7 @@ public class GOTProfiler : MonoBehaviour
 
                 m_TickTime = 0;
                 InvokeRepeating("Tick", 1.0f, 1.0f);
-
+                //写入设备信息
                 GetSystemInfo();
 
                 if (ReportUrl != null)
@@ -102,10 +116,8 @@ public class GOTProfiler : MonoBehaviour
             {
                 Debug.Log(Config.MonitorStop);
                 ShareDatas.EndTime = DateTime.Now;
-                string testTime = ShareDatas.GetTestTime();
                 //上传测试时间
-                FileManager.WriteToFile(testFilePath, $"应用名：{Application.productName}&nbsp&nbsp&nbsp包名：{Application.identifier}&nbsp&nbsp&nbsp测试系统：{Application.platform}&nbsp&nbsp&nbsp版本号：{Application.version}&nbsp&nbsp&nbsp本次测试时长:{testTime}");
-                UploadFile(testFilePath);
+                UploadTestInfo();
 
                 CancelInvoke("Tick");
                 m_TickTime = 0;
@@ -122,10 +134,10 @@ public class GOTProfiler : MonoBehaviour
                     FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
                     UploadFile(logFilePath);
                 }
-//#if ENABLE_ANALYSIS
+
                 if (EnableFunctionAnalysis)
-                    //HookUtil.PrintProfilerDatas();
-//#endif
+                    HookUtil.PrintMethodDatas();
+
                 StopMonitor();
 
                 if (ReportUrl != null)
@@ -136,6 +148,30 @@ public class GOTProfiler : MonoBehaviour
                 }
             }
         };
+    }
+
+    void UploadTestInfo()
+    {
+        TestInfo testInfo = new TestInfo()
+        {
+            ProductName = Application.productName,
+            PackageName = Application.identifier,
+            Platform = Application.platform.ToString(),
+            Version = Application.version,
+            TestTime = ShareDatas.GetTestTime()
+        };
+        //FileManager.WriteToFile(testFilePath, $"应用名：{Application.productName}&nbsp&nbsp&nbsp包名：{Application.identifier}&nbsp&nbsp&nbsp测试系统：{Application.platform}&nbsp&nbsp&nbsp版本号：{Application.version}&nbsp&nbsp&nbsp本次测试时长:{testTime}");
+        bool writeRes = false;
+        if (!UseBinary)
+        {
+            writeRes = FileManager.WriteToFile(testFilePath, JsonUtility.ToJson(testInfo));
+        }
+        else
+        {
+            writeRes = FileManager.WriteBinaryDataToFile(testFilePath, testInfo);
+        }
+        if (writeRes)
+            UploadFile(testFilePath);
     }
 
     void StartMonitor()
@@ -149,9 +185,16 @@ public class GOTProfiler : MonoBehaviour
         {
             monitorInfos.MonitorInfoList.RemoveAt(monitorInfos.MonitorInfoList.Count - 1);
         }
-
-        var monitorToFile = FileManager.WriteToFile(monitorFilePath, JsonUtility.ToJson(monitorInfos));
-        if (monitorToFile)
+        bool writeRes = false;
+        if (!UseBinary)
+        {
+            writeRes = FileManager.WriteToFile(monitorFilePath, JsonUtility.ToJson(monitorInfos));
+        }
+        else
+        {
+            writeRes = FileManager.WriteBinaryDataToFile(monitorFilePath, monitorInfos);
+        }
+        if (writeRes)
         {
             UploadFile(monitorFilePath);
         }
@@ -164,6 +207,7 @@ public class GOTProfiler : MonoBehaviour
 
     void UploadFile(string filePath)
     {
+        return;//TODO:暂时屏蔽不上传
         FileUploadManager.UploadFile(filePath, (sender, e) =>
         {
             Debug.Log("Uploading Progreess: " + e.ProgressPercentage);
@@ -254,9 +298,16 @@ public class GOTProfiler : MonoBehaviour
             ScreenHeight = Screen.height,
             ScreenWidth = Screen.width
         };
-
-        var deviceInfoToFile = FileManager.WriteToFile(deviceFilePath, JsonUtility.ToJson(deviceInfo));
-        if (deviceInfoToFile)
+        bool writeRes = false;
+        if (!UseBinary)
+        {
+            writeRes = FileManager.WriteToFile(deviceFilePath, JsonUtility.ToJson(deviceInfo));
+        }
+        else
+        {
+            writeRes = FileManager.WriteBinaryDataToFile(deviceFilePath, deviceInfo);
+        }
+        if (writeRes)
         {
             UploadFile(deviceFilePath);
         }

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 
 namespace MonitorLib.GOT
 {
     [Serializable]
-    public struct DeviceInfo
+    public struct DeviceInfo : IBinarySerialize
     {
         /// <summary>
         /// Unity版本
@@ -68,6 +69,48 @@ namespace MonitorLib.GOT
         //屏幕分辨率
         public int ScreenWidth;
         public int ScreenHeight;
+
+        public void DeSerialize(BinaryReader reader)
+        {
+            UnityVersion = reader.ReadString();
+            OperatingSystem = reader.ReadString();
+            DeviceModel = reader.ReadString();
+            DeviceName = reader.ReadString();
+            DeviceUniqueIdentifier = reader.ReadString();
+            SystemMemorySize = reader.ReadInt32();
+            GraphicsMemorySize = reader.ReadInt32();
+            ProcessorType = reader.ReadString();
+            ProcessorFrequency = reader.ReadInt32();
+            ProcessorCount = reader.ReadInt32();
+            GraphicsDeviceName = reader.ReadString();
+            GraphicsDeviceVendor = reader.ReadString();
+            GraphicsDeviceVersion = reader.ReadString();
+            SupportsShadows = reader.ReadBoolean();
+            BatteryLevel = reader.ReadSingle();
+            ScreenWidth = reader.ReadInt32();
+            ScreenHeight = reader.ReadInt32();
+        }
+
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(UnityVersion);
+            writer.Write(OperatingSystem);
+            writer.Write(DeviceModel);
+            writer.Write(DeviceName);
+            writer.Write(DeviceUniqueIdentifier);
+            writer.Write(SystemMemorySize);
+            writer.Write(GraphicsMemorySize);
+            writer.Write(ProcessorType);
+            writer.Write(ProcessorFrequency);
+            writer.Write(ProcessorCount);
+            writer.Write(GraphicsDeviceName);
+            writer.Write(GraphicsDeviceVendor);
+            writer.Write(GraphicsDeviceVersion);
+            writer.Write(SupportsShadows);
+            writer.Write(BatteryLevel);
+            writer.Write(ScreenWidth);
+            writer.Write(ScreenHeight);
+        }
 
         public override string ToString()
         {

@@ -20,11 +20,61 @@ namespace MonitorLib.GOT
             return true;
         }
 
+        /// <summary>
+        /// 将数据写入二进制文件
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="data">继承自IBinarySerialize的数据</param>
+        public static bool WriteBinaryDataToFile(string filePath, IBinarySerialize data)
+        {
+            if (string.IsNullOrEmpty(filePath))
+                return false;
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                using (var bw = new BinaryWriter(fileStream))
+                {
+                    data.Serialize(bw);
+                    bw.Flush();
+                    bw.Close();
+                }
+                fileStream.Close();
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 读取二进制文件
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static bool ReadBinaryDataFromFile(string filePath, ref IBinarySerialize data)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return false;
+            }
+            using (var fileStream = new FileStream(filePath, FileMode.Open))
+            {
+                using (var br = new BinaryReader(fileStream))
+                {
+                    data.DeSerialize(br);
+                    br.Close();
+                }
+                fileStream.Close();
+            }
+            return true;
+        }
+
         public static bool WriteBytesToFile(string filePath, byte[] data)
         {
             if (string.IsNullOrEmpty(filePath))
                 return false;
-            if(File.Exists(filePath))
+            if (File.Exists(filePath))
             {
                 File.Delete(filePath);
             }

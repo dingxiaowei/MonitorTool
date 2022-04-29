@@ -8,5 +8,8 @@
         public const string MonitorBegin = "开始监控";
         public const string Monitoring = "监控中";
         public const string MonitorStop = "停止监控";
+
+        public const string BinaryExt = ".data";
+        public const string TextExt = ".txt";
     }
 }

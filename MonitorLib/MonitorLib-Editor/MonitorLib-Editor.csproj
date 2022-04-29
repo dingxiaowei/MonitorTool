@@ -282,6 +282,9 @@
     <Compile Include="..\MonitorLib\GOT\HookUtil.cs">
       <Link>GOT\HookUtil.cs</Link>
     </Compile>
+    <Compile Include="..\MonitorLib\GOT\IBinarySerialize.cs">
+      <Link>GOT\IBinarySerialize.cs</Link>
+    </Compile>
     <Compile Include="..\MonitorLib\GOT\LogManager.cs">
       <Link>GOT\LogManager.cs</Link>
     </Compile>
@@ -293,6 +296,9 @@
     </Compile>
     <Compile Include="..\MonitorLib\GOT\ShareDatas.cs">
       <Link>GOT\ShareDatas.cs</Link>
+    </Compile>
+    <Compile Include="..\MonitorLib\GOT\TestInfo.cs">
+      <Link>GOT\TestInfo.cs</Link>
     </Compile>
     <Compile Include="..\MonitorLib\GOT\Tools.cs">
       <Link>GOT\Tools.cs</Link>

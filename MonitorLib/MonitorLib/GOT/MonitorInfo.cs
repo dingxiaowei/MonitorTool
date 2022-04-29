@@ -36,7 +36,7 @@ namespace MonitorLib.GOT
     }
 
     [Serializable]
-    public struct MonitorInfo
+    public struct MonitorInfo : IBinarySerialize
     {
         public int FrameIndex;
         public float BatteryLevel;
@@ -50,7 +50,7 @@ namespace MonitorLib.GOT
         /// Mono堆内存使用大小
         /// </summary>
         public long MonoUsedSize;
-        
+
         public long AllocatedMemoryForGraphicsDriver;
         /// <summary>
         /// Unity分配的内存
@@ -100,7 +100,7 @@ namespace MonitorLib.GOT
     }
 
     [Serializable]
-    public class MonitorInfos
+    public class MonitorInfos : IBinarySerialize
     {
         public List<MonitorInfo> MonitorInfoList = new List<MonitorInfo>();
         public void DeSerialize(BinaryReader reader)

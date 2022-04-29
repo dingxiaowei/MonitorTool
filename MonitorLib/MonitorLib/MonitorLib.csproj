@@ -290,6 +290,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GOT\IBinarySerialize.cs" />
     <Compile Include="GOT\Config.cs" />
     <Compile Include="GOT\DeviceInfo.cs" />
     <Compile Include="GOT\EnumDefine.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="GOT\Tools.cs" />
     <Compile Include="GOT\Utils\ConverUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GOT\TestInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
