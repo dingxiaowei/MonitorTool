@@ -1,0 +1,145 @@
+{"File":"D:\\Study\\GitHub\\MonitorTool\\Assembly-CSharp.csproj","Date":"2022-04-30T17:21:43.3746933+08:00","Diagnostics":[
+    {
+      "Id": "UEA0003",
+      "Message": "'Reporter' has an empty MonoBehaviour method 'OnDisable'. Empty MonoBehaviour methods causes some overhead.",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\ThirdParty\\Unity-Logs-Viewer-master\\Reporter\\Reporter.cs",
+      "LineNumber": 326,
+      "CharacterPosition": 1,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    },
+    {
+      "Id": "UEA0005",
+      "Message": "The method GameObject.Find(\"\") is called from FooBehaviour.Update which could cause performance problems. Cache the result from GameObject.Find(\"\") in Start or Awake instead.",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\Demo\\FooBehaviour.cs",
+      "LineNumber": 41,
+      "CharacterPosition": 2,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    },
+    {
+      "Id": "UEA0003",
+      "Message": "'FooBehaviour' has an empty MonoBehaviour method 'OnGUI'. Empty MonoBehaviour methods causes some overhead.",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\Demo\\FooBehaviour.cs",
+      "LineNumber": 18,
+      "CharacterPosition": 1,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    },
+    {
+      "Id": "UEA0003",
+      "Message": "'FooBehaviour' has an empty MonoBehaviour method 'FixedUpdate'. Empty MonoBehaviour methods causes some overhead.",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\Demo\\FooBehaviour.cs",
+      "LineNumber": 24,
+      "CharacterPosition": 1,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    },
+    {
+      "Id": "UEA0004",
+      "Message": "Use CompareTag instead of using the Equals operator",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\Demo\\FooBehaviour.cs",
+      "LineNumber": 32,
+      "CharacterPosition": 6,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    },
+    {
+      "Id": "UEA0003",
+      "Message": "'InjectDemo' has an empty MonoBehaviour method 'OnGUI'. Empty MonoBehaviour methods causes some overhead.",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\Demo\\InjectDemo.cs",
+      "LineNumber": 96,
+      "CharacterPosition": 8,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    },
+    {
+      "Id": "UEA0005",
+      "Message": "The method ReporterGUI is called from OnGUI.reporter.OnGUIDraw() which could cause performance problems. Cache the result from ReporterGUI in Start or Awake instead.",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\ThirdParty\\Unity-Logs-Viewer-master\\Reporter\\ReporterGUI.cs",
+      "LineNumber": 13,
+      "CharacterPosition": 2,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    },
+    {
+      "Id": "UEA0008",
+      "Message": "Method Awake in Derived Class HyperlinkText is not sealed. Sealing the method or class improves performance.",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\GOT\\Scripts\\HyperlinkText.cs",
+      "LineNumber": 65,
+      "CharacterPosition": 4,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    },
+    {
+      "Id": "UEA0008",
+      "Message": "Method OnEnable in Derived Class HyperlinkText is not sealed. Sealing the method or class improves performance.",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\GOT\\Scripts\\HyperlinkText.cs",
+      "LineNumber": 71,
+      "CharacterPosition": 4,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    },
+    {
+      "Id": "UEA0008",
+      "Message": "Method OnDisable in Derived Class HyperlinkText is not sealed. Sealing the method or class improves performance.",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\GOT\\Scripts\\HyperlinkText.cs",
+      "LineNumber": 77,
+      "CharacterPosition": 4,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    },
+    {
+      "Id": "UEA0008",
+      "Message": "Method SetVerticesDirty in Derived Class HyperlinkText is not sealed. Sealing the method or class improves performance.",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\GOT\\Scripts\\HyperlinkText.cs",
+      "LineNumber": 93,
+      "CharacterPosition": 4,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    },
+    {
+      "Id": "UEA0008",
+      "Message": "Method OnPopulateMesh in Derived Class HyperlinkText is not sealed. Sealing the method or class improves performance.",
+      "FileName": "D:\\Study\\GitHub\\MonitorTool\\Assets\\GOT\\Scripts\\HyperlinkText.cs",
+      "LineNumber": 106,
+      "CharacterPosition": 4,
+      "Severity": 2,
+      "VersionSpan": {
+        "First": 1,
+        "Last": 24
+      }
+    }],"Exceptions":[]}

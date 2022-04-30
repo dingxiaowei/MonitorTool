@@ -65,7 +65,7 @@
 		* CPU使用率和温度
 		* 内存使用
       		* 托管堆内存大小
-     		 * 堆内存使用大小
+     		* 堆内存使用大小
       		* Unity分配的内存
       		* Unity保留的总内存
         	* 当前使用内存、系统内存、未使用的内存等
@@ -74,6 +74,8 @@
     	* 能获取到项目中运行的每个函数的执行时间，以及开辟的内存(有利于对帧率和内存泄漏、内存优化具有指导意义)
     	* 支持特性屏蔽指定不想要分析性能的函数
     	* 支持特性指定需要利用profiler深度分析的函数
+
+	* 支持代码规范检查和自定义检查规则添加
 
 	* 详细Log信息并猜测标注Log级别
 		* Error（红色）
@@ -122,8 +124,10 @@ http://124.223.54.98/report_2022_1_21_14_33_30.html
 * 适配Lua性能监测
 * 内存泄漏定位
 * 生成版本报告(world)以及针对性能问题提出针对性的优化建议
-* 支持代码规范新检测
 * 支持overdraw帧图显示
+
+## 说明
+* C#代码检查工具需要用.net 6  下载[链接](https://dotnet.microsoft.com/zh-cn/download/visual-studio-sdks?utm_source=getdotnetsdk&utm_medium=referral) ,可以将这个exe工具目录添加到环境变量
 
 ## 工程仓库
 https://codehub-g.huawei.com/d00605132/MonitorTool/home
