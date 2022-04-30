@@ -2,6 +2,7 @@ using MonitorLib.GOT;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.UI;
@@ -29,7 +30,7 @@ public class GOTProfiler : MonoBehaviour
     public Text ReportUrl;
     int m_FPS = 0;
     int m_TickTime = 0;
-    string m_StartTime;
+    string m_StartTime = "";
     float m_Accumulator = 0;
     int m_Frames = 0;
     float m_TimeLeft;
@@ -39,6 +40,7 @@ public class GOTProfiler : MonoBehaviour
     int m_frameIndex = 0;
     Action<bool> MonitorCallback;
     MonitorInfos monitorInfos = null;
+    //函数性能分析csv
     string funcAnalysisFilePath;
     //log日志路径
     string logFilePath;
@@ -78,13 +80,16 @@ public class GOTProfiler : MonoBehaviour
                 ShareDatas.StartTime = DateTime.Now; //当前时间
                 m_StartTime = ShareDatas.StartTime.ToString().Replace(" ", "_").Replace("/", "_").Replace(":", "_");
                 ShareDatas.StartTimeStr = m_StartTime;
-
+#if UNITY_EDITOR
+                PlayerPrefs.SetString("TestTime", m_StartTime);
+                PlayerPrefs.Save();
+#endif
                 if (EnableFrameTexture)
                 {
                     FileManager.CreateDir($"{Application.persistentDataPath}/{m_StartTime}/");
                 }
                 if (EnableFunctionAnalysis)
-                    funcAnalysisFilePath = $"{Application.persistentDataPath}/funcAnalysis_{m_StartTime}{fileExt}";
+                    funcAnalysisFilePath = $"{Application.persistentDataPath}/funcAnalysis_{m_StartTime}.csv";
                 if (EnableLog)
                     logFilePath = $"{Application.persistentDataPath}/log_{m_StartTime}{fileExt}";
                 deviceFilePath = $"{Application.persistentDataPath}/device_{m_StartTime}{fileExt}";
@@ -122,29 +127,34 @@ public class GOTProfiler : MonoBehaviour
                 CancelInvoke("Tick");
                 m_TickTime = 0;
 
+                MonitorInfosReport();
+                FuncAnalysisReport();
+
                 if (EnableLog)
                 {
                     Application.logMessageReceived -= LogManager.LogToFile;
                     LogManager.CloseLogFile();
                 }
+
+//#if UNITY_EDITOR
+//                if (EnableFunctionAnalysis)
+//                {
+//                    HookUtil.PrintMethodDatas();
+//                }
+//#endif
                 if (EnableLog)
                 {
-                    FileManager.ReplaceContent(logFilePath, "[Log]", "<font color=\"#0000FF\">[Log]</font>");
-                    FileManager.ReplaceContent(logFilePath, "[Error]", "<font color=\"#FF0000\">[Error]</font>");
-                    FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
+                    //FileManager.ReplaceContent(logFilePath, "[Log]", "<font color=\"#0000FF\">[Log]</font>");
+                    //FileManager.ReplaceContent(logFilePath, "[Error]", "<font color=\"#FF0000\">[Error]</font>");
+                    //FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
                     UploadFile(logFilePath);
                 }
-
-                if (EnableFunctionAnalysis)
-                    HookUtil.PrintMethodDatas();
-
-                StopMonitor();
 
                 if (ReportUrl != null)
                 {
                     ReportUrl.gameObject.SetActive(true);
                     var url = string.Format(ShareDatas.ReportUrl, m_StartTime);
-                    ReportUrl.text = $"<a href={url}>[{url}]</a>";
+                    ReportUrl.text = $"<a href={url}>[{url}]</a>"; //TODO:修改成动态网页的连接
                 }
             }
         };
@@ -179,7 +189,23 @@ public class GOTProfiler : MonoBehaviour
         monitorInfos = new MonitorInfos();
     }
 
-    void StopMonitor()
+    void FuncAnalysisReport()
+    {
+        if (EnableFunctionAnalysis)
+        {
+            HookUtil.MethodAnalysisReport(m_StartTime);
+            if (File.Exists(funcAnalysisFilePath))
+            {
+                UploadFile(funcAnalysisFilePath);
+            }
+            else
+            {
+                Debug.LogError($"当前函数性能分析报告  {funcAnalysisFilePath}不存在");
+            }
+        }
+    }
+
+    void MonitorInfosReport()
     {
         if (monitorInfos.MonitorInfoList.Count > 1)
         {
@@ -207,7 +233,6 @@ public class GOTProfiler : MonoBehaviour
 
     void UploadFile(string filePath)
     {
-        return;//TODO:暂时屏蔽不上传
         FileUploadManager.UploadFile(filePath, (sender, e) =>
         {
             Debug.Log("Uploading Progreess: " + e.ProgressPercentage);

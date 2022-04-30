@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using UnityEngine;
@@ -64,10 +63,24 @@ namespace MonitorLib.GOT
             }
         }
 
-        public static void MethodAnalysisReport()
+        public static void MethodAnalysisReport(string testTime = "")
         {
-            string nowTime = System.DateTime.Now.ToString("[yyyy-MM-dd]-[HH-mm-ss]");
-            string fileName = nowTime + ".csv";
+            if (FunctionDatas.Count <= 0)
+            {
+                Debug.Log("当前没有函数分析数据,请运行菜单栏中的函数注入并运行");
+                return;
+            }
+            string fileName = "";
+            if (string.IsNullOrEmpty(testTime))
+            {
+                fileName = System.DateTime.Now.ToString("[yyyy-MM-dd]-[HH-mm-ss]");
+            }
+            else
+            {
+                fileName = "funcAnalysis_" + testTime;
+            }
+            fileName += ".csv";
+            fileName = Path.Combine(Application.persistentDataPath, fileName);
             string header = "FuncName,FuncMemory/k,FuncAverageMemory/k,FuncUseTime/s,FuncAverageTime/ms,FuncCalls";
             using (StreamWriter sw = new StreamWriter(fileName))
             {
@@ -88,7 +101,7 @@ namespace MonitorLib.GOT
                     sw.WriteLine(sb);
                 }
             }
-            Debug.Log("文件输出完成");
+            Debug.Log($"函数性能报告{fileName}文件输出完成");
         }
 
         public static void BeginSample(string methodName)
@@ -113,6 +126,11 @@ namespace MonitorLib.GOT
 
         public static void PrintMethodDatas()
         {
+            if(FunctionDatas.Count <= 0)
+            {
+                Debug.LogWarning("执行菜单栏注入功能，然后再运行分析函数性能");
+                return;
+            }
             Debug.Log("------------打印函数执行效率-----------------");
             var ge = FunctionDatas.GetEnumerator();
             while (ge.MoveNext())
@@ -130,47 +148,5 @@ namespace MonitorLib.GOT
                 Debug.Log(sb.ToString());
             }
         }
-
-        //public static List<FunctionMonitorFileDatas> GetFunctionMonitorFileDatas()
-        //{
-        //    List<FunctionMonitorFileDatas> datas = new List<FunctionMonitorFileDatas>();
-        //    foreach (var pair in ProfilersDatas)
-        //    {
-        //        if (pair.Value.Count == 1)
-        //        {
-        //            datas.Add(new FunctionMonitorFileDatas()
-        //            {
-        //                FunctionName = $"{pair.Key}()",
-        //                CallCount = 1,
-        //                AverageAllocatedMemory = pair.Value[0].EndTotalAllocatedMemory - pair.Value[0].BeginTotalAllocatedMemory,
-        //                AverageRunTime = pair.Value[0].EndTime - pair.Value[0].BeginTime,
-        //                AverageAllocatedMemoryStr = ConverUtils.ByteConversionGBMBKB(pair.Value[0].EndTotalAllocatedMemory - pair.Value[0].BeginTotalAllocatedMemory),
-        //                AverageRunTimeStr = $"{(pair.Value[0].EndTime - pair.Value[0].BeginTime) * 1000}ms"
-        //            });
-        //        }
-        //        else
-        //        {
-        //            int count = 0;
-        //            long deltaTotalAllocMemory = 0;
-        //            float deltaTotalTime = 0;
-        //            foreach (var funcData in pair.Value)
-        //            {
-        //                count++;
-        //                deltaTotalAllocMemory += funcData.AverageAllocatedMemory;
-        //                deltaTotalTime += funcData.AverageTime;
-        //            }
-        //            datas.Add(new FunctionMonitorFileDatas()
-        //            {
-        //                FunctionName = $"{pair.Key}()",
-        //                CallCount = count,
-        //                AverageAllocatedMemory = deltaTotalAllocMemory / count,
-        //                AverageRunTime = deltaTotalTime / count,
-        //                AverageAllocatedMemoryStr = ConverUtils.ByteConversionGBMBKB(deltaTotalAllocMemory / count),
-        //                AverageRunTimeStr = $"{deltaTotalTime / count * 1000}ms"
-        //            });
-        //        }
-        //    }
-        //    return datas;
-        //}
     }
 }

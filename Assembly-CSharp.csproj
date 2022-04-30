@@ -66,6 +66,7 @@
     <Compile Include="Assets\ThirdParty\Unity-Logs-Viewer-master\Reporter\Reporter.cs" />
     <Compile Include="Assets\Demo\UnityAndroidInteract.cs" />
     <Compile Include="Assets\ThirdParty\Unity-Logs-Viewer-master\Reporter\ReporterMessageReceiver.cs" />
+    <Compile Include="Assets\Demo\FooBehaviour.cs" />
     <Compile Include="Assets\Demo\InjectDemo.cs" />
   </ItemGroup>
   <ItemGroup>

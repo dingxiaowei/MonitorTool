@@ -42,7 +42,7 @@ namespace MonitorLib.GOT
             if (ShareDatas.ShowDebugLog)
                 Debug.Log(msg);
             if (ShareDatas.WriteLogToFile)
-                LogToFile(LogType.Log, $"[Log]{msg}", true);
+                LogToFile(LogType.Log, $"<font color=\"#0000FF\">[Log]</font>{msg}", true);
         }
 
         public static void LogError(string msg)
@@ -50,7 +50,7 @@ namespace MonitorLib.GOT
             if (ShareDatas.ShowDebugLog)
                 Debug.LogError(msg);
             if (ShareDatas.WriteLogToFile)
-                LogToFile(LogType.Error, $"[Error]{msg}", true);
+                LogToFile(LogType.Error, $"<font color=\"#FF0000\">[Error]</font>{msg}", true);
         }
 
         public static void LogWarning(string msg)
@@ -58,7 +58,7 @@ namespace MonitorLib.GOT
             if (ShareDatas.ShowDebugLog)
                 Debug.LogWarning(msg);
             if (ShareDatas.WriteLogToFile)
-                LogToFile(LogType.Warning, $"[Warning]{msg}", true);
+                LogToFile(LogType.Warning, $"<font color=\"#FFD700\">[Warning]</font>{msg}", true);
         }
 
         public static void LogAssert(string msg)
@@ -66,7 +66,7 @@ namespace MonitorLib.GOT
             if (ShareDatas.ShowDebugLog)
                 Debug.LogAssertion(msg);
             if (ShareDatas.WriteLogToFile)
-                LogToFile(LogType.Assert, $"[Assert]{msg}", true);
+                LogToFile(LogType.Assert, $"<font color=\"#FF0000\">[Assert]{msg}</font>", true);
         }
 
         public static void LogException(Exception ex)
@@ -74,12 +74,36 @@ namespace MonitorLib.GOT
             if (ShareDatas.ShowDebugLog)
                 Debug.LogException(ex);
             if (ShareDatas.WriteLogToFile)
-                LogToFile(LogType.Exception, $"[Exception]{ex.ToString()}", true);
+                LogToFile(LogType.Exception, $"<font color=\"#FF0000\">[Exception]</font>{ex.ToString()}", true);
         }
 
         public static void LogToFile(string logString, string stackTrace, LogType type)
         {
             LogToFile(type, logString, true, stackTrace);
+        }
+
+        static string ColorTypeLog(LogType type, string msg)
+        {
+            string log = "";
+            switch (type)
+            {
+                case LogType.Log:
+                    log = $"<font color=\"#0000FF\">[Log]{msg.TrimEnd()}</font>";
+                    break;
+                case LogType.Error:
+                    log = $"<font color=\"#FF0000\">[Error]{msg.TrimEnd()}</font>";
+                    break;
+                case LogType.Warning:
+                    log = $"<font color=\"#FFD700\">[Warning]{msg.TrimEnd()}</font>";
+                    break;
+                case LogType.Assert:
+                    log = $"<font color=\"#FF0000\">[Assert]{msg.TrimEnd()}</font>";
+                    break;
+                case LogType.Exception:
+                    log = $"<font color=\"#FF0000\">[Assert]{msg.TrimEnd()}</font>";
+                    break;
+            }
+            return log;
         }
 
         /// <summary>
@@ -97,7 +121,7 @@ namespace MonitorLib.GOT
                 {
                     msg += "\n";
                 }
-                byte[] data = Encoding.Default.GetBytes(($"[{logType.ToString()}]msg:{msg} stackTrace:{stackTrace}").ToString());
+                byte[] data = Encoding.Default.GetBytes(($"[{DateTime.Now.ToString()}]{ColorTypeLog(logType, msg)} \r\nstackTrace:{stackTrace}").ToString());
 
                 if (logFileStream == null)
                 {

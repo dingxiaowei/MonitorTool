@@ -1,6 +1,0 @@
-FuncName,FuncMemory/k,FuncAverageMemory/k,FuncUseTime/s,FuncAverageTime/ms,FuncCalls
-TestModule.InjectDemo.Start,50.6563,50.6563,0.01149678,11.49678,1
-TestModule.Normal.GetMax,0.6250,0.6250,0.001072645,1.072645,1
-TestModule.Inject.GetMax,0.0000,0.0000,3.576279E-06,0.003576279,1
-TestModule.InjectDemo.Test,47.9688,47.9688,0.008476019,8.476019,1
-TestModule.InjectDemo.TestDefine,0.2500,0.3750,7.963181E-05,0.0881354,3

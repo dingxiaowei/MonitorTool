@@ -285,6 +285,9 @@
     <Compile Include="..\MonitorLib\GOT\IBinarySerialize.cs">
       <Link>GOT\IBinarySerialize.cs</Link>
     </Compile>
+    <Compile Include="..\MonitorLib\GOT\LogInfos.cs">
+      <Link>GOT\LogInfos.cs</Link>
+    </Compile>
     <Compile Include="..\MonitorLib\GOT\LogManager.cs">
       <Link>GOT\LogManager.cs</Link>
     </Compile>

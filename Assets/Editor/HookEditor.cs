@@ -42,10 +42,17 @@ public class HookEditor
         AssemblyPostProcessorHookLogRun("Update", "OnGUI");
     }
 
-    [MenuItem("Hook/输出结果")]
+    [MenuItem("Hook/打印函数的执行效率")]
+    public static void ShowFuncAnaysics()
+    {
+        HookUtil.PrintMethodDatas();
+    }
+
+    [MenuItem("Hook/输出函数性能报告结果")]
     public static void HookUtilsReport()
     {
-        HookUtil.MethodAnalysisReport();
+        var lastTestTime = PlayerPrefs.GetString("TestTime", "");
+        HookUtil.MethodAnalysisReport(lastTestTime);
     }
 
     //[PostProcessScene] //打包的时候回自动调用下面的注入方法

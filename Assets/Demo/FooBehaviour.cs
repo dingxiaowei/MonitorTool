@@ -1,6 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
+/// <summary>
+/// 代码规范性检测测试用例
+/// </summary>
 class FooBehaviour : MonoBehaviour 
 {
 	void Start()
