@@ -74,8 +74,8 @@ public class GOTProfiler : MonoBehaviour
         {
             if (res)
             {
-                fileExt = UseBinary ? Config.BinaryExt : Config.TextExt;
-                Debug.Log(Config.Monitoring);
+                fileExt = UseBinary ? ConstString.BinaryExt : ConstString.TextExt;
+                Debug.Log(ConstString.Monitoring);
                 m_frameIndex = 0;
                 ShareDatas.StartTime = DateTime.Now; //当前时间
                 m_StartTime = ShareDatas.StartTime.ToString().Replace(" ", "_").Replace("/", "_").Replace(":", "_");
@@ -89,12 +89,12 @@ public class GOTProfiler : MonoBehaviour
                     FileManager.CreateDir($"{Application.persistentDataPath}/{m_StartTime}/");
                 }
                 if (EnableFunctionAnalysis)
-                    funcAnalysisFilePath = $"{Application.persistentDataPath}/funcAnalysis_{m_StartTime}.csv";
+                    funcAnalysisFilePath = $"{Application.persistentDataPath}/{ConstString.FuncAnalysisPrefix}{m_StartTime}.csv";
                 if (EnableLog)
-                    logFilePath = $"{Application.persistentDataPath}/log_{m_StartTime}{fileExt}";
-                deviceFilePath = $"{Application.persistentDataPath}/device_{m_StartTime}{fileExt}";
-                testFilePath = $"{Application.persistentDataPath}/test_{m_StartTime}{fileExt}";
-                monitorFilePath = $"{Application.persistentDataPath}/monitor_{m_StartTime}{fileExt}";
+                    logFilePath = $"{Application.persistentDataPath}/{ConstString.LogPrefix}{m_StartTime}{fileExt}";
+                deviceFilePath = $"{Application.persistentDataPath}/{ConstString.DevicePrefix}{m_StartTime}{fileExt}";
+                testFilePath = $"{Application.persistentDataPath}/{ConstString.TestPrefix}{m_StartTime}{fileExt}";
+                monitorFilePath = $"{Application.persistentDataPath}/{ConstString.MonitorPrefix}{m_StartTime}{fileExt}";
                 if (EnableLog)
                 {
                     LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
@@ -119,7 +119,7 @@ public class GOTProfiler : MonoBehaviour
             }
             else
             {
-                Debug.Log(Config.MonitorStop);
+                Debug.Log(ConstString.MonitorStop);
                 ShareDatas.EndTime = DateTime.Now;
                 //上传测试时间
                 UploadTestInfo();
@@ -234,7 +234,7 @@ public class GOTProfiler : MonoBehaviour
 
     void UploadFile(string filePath)
     {
-        return;
+        //return;
         FileUploadManager.UploadFile(filePath, (sender, e) =>
         {
             Debug.Log("Uploading Progreess: " + e.ProgressPercentage);
@@ -265,12 +265,12 @@ public class GOTProfiler : MonoBehaviour
         if (GUI.Button(new Rect(150, 350, 200, 100), btnMsg))
         {
             btnMonitor = !btnMonitor;
-            btnMsg = btnMonitor ? Config.Monitoring : Config.MonitorBegin;
+            btnMsg = btnMonitor ? ConstString.Monitoring : ConstString.MonitorBegin;
             if (MonitorCallback != null)
                 MonitorCallback.Invoke(btnMonitor);
         }
         if (btnMonitor)
-            btnMsg = $"{Config.Monitoring}{m_TickTime}s";
+            btnMsg = $"{ConstString.Monitoring}{m_TickTime}s";
         GUI.Label(new Rect(Screen.width / 2, 0, 100, 100), "FPS:" + m_FPS);
     }
 
