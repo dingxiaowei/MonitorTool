@@ -1,15 +1,19 @@
-﻿using System.Net;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
 using System.Net.Mail;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace MonitorLib.GOT
 {
-    public class EmailManager
+    public class Tools
     {
-        public static void Send(string msg)
+        public static void EmailSend(string msg)
         {
             Task task = new Task(() =>
             {
@@ -32,6 +36,64 @@ namespace MonitorLib.GOT
                 Debug.Log("send email success");
             });
             task.Start();
+        }
+
+        public static bool BatRunner(string batPath, string arg)
+        {
+            // System.Console.InputEncoding = System.Text.Encoding.UTF8;
+            using (Process proc = new Process())
+            {
+                proc.StartInfo.Verb = "call";
+                proc.StartInfo.WorkingDirectory = Path.GetDirectoryName(batPath);
+                proc.StartInfo.FileName = batPath;
+                if (!string.IsNullOrEmpty(arg))
+                {
+                    proc.StartInfo.Arguments = arg;
+                }
+                proc.StartInfo.UseShellExecute = false;
+
+                // set up output redirection
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.RedirectStandardError = true;
+                proc.EnableRaisingEvents = true;
+                proc.StartInfo.CreateNoWindow = true;
+
+                StringBuilder sbError = new StringBuilder();
+                StringBuilder sbNormal = new StringBuilder();
+
+                // Set the data received handlers
+                proc.ErrorDataReceived += (sender, e) =>
+                {
+                    if (e.Data != null)
+                    {
+                        sbError.Append(e.Data + Environment.NewLine);
+                    }
+                };
+                proc.OutputDataReceived += (sender, e) =>
+                {
+                    if (e.Data != null)
+                    {
+                        sbNormal.Append(e.Data + Environment.NewLine);
+                    }
+                };
+
+                proc.Start();
+                proc.BeginErrorReadLine();
+                proc.BeginOutputReadLine();
+                proc.WaitForExit();
+
+                bool isError = sbError.ToString().Contains("error");
+                if (proc.ExitCode == 0 && !isError)
+                {
+                    Debug.Log($"Success. {sbNormal}");
+                    return true;
+                }
+                else
+                {
+                    Debug.Log($"Failed. {sbError}");
+                    return false;
+                }
+            }
         }
     }
 }
