@@ -152,16 +152,16 @@ public class GOTProfiler : MonoBehaviour
                 }
                 Debug.Log("文件上传完毕");
 
-                HttpGet(string.Format(Config.ReportRecordUpdateRequestUrl, Application.identifier, m_StartTime), (res1) =>
+                HttpGet(string.Format(Config.ReportRecordUpdateRequestUrl, Application.identifier, m_StartTime), (result) =>
                  {
-                     if (res1)
+                     if (result)
                      {
                          if (ReportUrl != null)
                          {
                              ReportUrl.gameObject.SetActive(true);
                              var url = string.Format(ShareDatas.ReportUrl, m_StartTime);
-                            //ReportUrl.text = $"<a href={url}>[{url}]</a>"; //TODO:修改成动态网页的连接
-                            ReportUrl.text = $"<a href={Config.ReportUrl}>[{Config.ReportUrl}]</a>";
+                             //ReportUrl.text = $"<a href={url}>[{url}]</a>"; //TODO:修改成动态网页的连接
+                             ReportUrl.text = $"<a href={Config.ReportUrl}>[{Config.ReportUrl}]</a>";
                          }
                      }
                  });
@@ -178,7 +178,8 @@ public class GOTProfiler : MonoBehaviour
     private IEnumerator GetUrl(UnityWebRequest unityWebRequest, Action<bool> callback)
     {
         yield return unityWebRequest.SendWebRequest();
-        if (unityWebRequest.isDone )
+#if UNITY_2020
+        if (unityWebRequest.result == UnityWebRequest.Result.Success)
         {
             var res = unityWebRequest.downloadHandler.text;
             if (res.Equals("success"))
@@ -192,6 +193,30 @@ public class GOTProfiler : MonoBehaviour
                 callback.Invoke(false);
             }
         }
+#else
+        if (unityWebRequest.isDone)
+        {
+            if(!string.IsNullOrEmpty(unityWebRequest.error))
+            {
+                var res = unityWebRequest.downloadHandler.text;
+                if (res.Equals("success"))
+                {
+                    callback.Invoke(true);
+                    Debug.Log("http get请求存档成功");
+                }
+                else
+                {
+                    Debug.LogError("http get请求存档失败,服务器返回异常");
+                    callback.Invoke(false);
+                }
+            }
+            else
+            {
+                Debug.LogError("http get请求存档失败");
+                callback.Invoke(false);
+            }
+        }
+#endif
         else
         {
             Debug.LogError(unityWebRequest.error);
