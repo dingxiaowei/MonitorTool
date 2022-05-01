@@ -148,8 +148,15 @@ public class HookEditor
                     if (method.CustomAttributes.Any(typeAttribute => typeAttribute.AttributeType.FullName == hideAnalysisType))
                         continue;
 
+                    if (method.Body == null)
+                        continue;
+
+                    //屏蔽一些Lua相关的
+                    //if (method.Name.Contains("lua") || method.Name.Contains("_Gen") || type.Name.Contains("Lua"))
+                      //  continue;
+
                     //如果注入代码失败，可以打开下面的输出看看卡在了那个方法上。
-                    //Debug.Log(method.Name + "======= " + type.Name + "======= " + type.BaseType.GenericParameters +" ===== "+ module.Name);
+                    //Debug.Log(method.Name + "======= " + type.Name + "======= " + method.Body + "======= " + type.BaseType.GenericParameters + " ===== " + module.Name);
                     var hookUtilBegin = module.ImportReference(typeof(HookUtil).GetMethod("Begin", new[] { typeof(string) }));
                     var hookUtilEnd = module.ImportReference(typeof(HookUtil).GetMethod("End", new[] { typeof(string) }));
                     ILProcessor ilProcessor = method.Body.GetILProcessor();

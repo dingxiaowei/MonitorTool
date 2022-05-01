@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Profiling;
 using UnityEngine.UI;
 
@@ -136,12 +137,12 @@ public class GOTProfiler : MonoBehaviour
                     LogManager.CloseLogFile();
                 }
 
-//#if UNITY_EDITOR
-//                if (EnableFunctionAnalysis)
-//                {
-//                    HookUtil.PrintMethodDatas();
-//                }
-//#endif
+                //#if UNITY_EDITOR
+                //                if (EnableFunctionAnalysis)
+                //                {
+                //                    HookUtil.PrintMethodDatas();
+                //                }
+                //#endif
                 if (EnableLog)
                 {
                     //FileManager.ReplaceContent(logFilePath, "[Log]", "<font color=\"#0000FF\">[Log]</font>");
@@ -150,15 +151,51 @@ public class GOTProfiler : MonoBehaviour
                     UploadFile(logFilePath);
                 }
                 Debug.Log("文件上传完毕");
-                if (ReportUrl != null)
-                {
-                    ReportUrl.gameObject.SetActive(true);
-                    var url = string.Format(ShareDatas.ReportUrl, m_StartTime);
-                    //ReportUrl.text = $"<a href={url}>[{url}]</a>"; //TODO:修改成动态网页的连接
-                    ReportUrl.text = $"<a href={Config.ReportUrl}>[{Config.ReportUrl}]</a>";
-                }
+
+                HttpGet(string.Format(Config.ReportRecordUpdateRequestUrl, Application.identifier, m_StartTime), (res) =>
+                 {
+                     if (res)
+                     {
+                         if (ReportUrl != null)
+                         {
+                             ReportUrl.gameObject.SetActive(true);
+                             var url = string.Format(ShareDatas.ReportUrl, m_StartTime);
+                            //ReportUrl.text = $"<a href={url}>[{url}]</a>"; //TODO:修改成动态网页的连接
+                            ReportUrl.text = $"<a href={Config.ReportUrl}>[{Config.ReportUrl}]</a>";
+                         }
+                     }
+                 });
             }
         };
+    }
+
+    public void HttpGet(string url, Action<bool> callback)
+    {
+        UnityWebRequest unityWebRequest = UnityWebRequest.Get(url);
+        StartCoroutine(GetUrl(unityWebRequest, callback));
+    }
+
+    private IEnumerator GetUrl(UnityWebRequest unityWebRequest, Action<bool> callback)
+    {
+        yield return unityWebRequest.SendWebRequest();
+        if (unityWebRequest.result == UnityWebRequest.Result.Success)
+        {
+            var res = unityWebRequest.downloadHandler.text;
+            if (res.Equals("success"))
+            {
+                callback.Invoke(true);
+                Debug.Log("http get请求存档成功");
+            }
+            else
+            {
+                Debug.LogError("http get请求存档失败");
+                callback.Invoke(false);
+            }
+        }
+        else
+        {
+            Debug.LogError(unityWebRequest.error);
+        }
     }
 
     void UploadTestInfo()
@@ -234,7 +271,6 @@ public class GOTProfiler : MonoBehaviour
 
     void UploadFile(string filePath)
     {
-        //return;
         FileUploadManager.UploadFile(filePath, (sender, e) =>
         {
             Debug.Log("Uploading Progreess: " + e.ProgressPercentage);

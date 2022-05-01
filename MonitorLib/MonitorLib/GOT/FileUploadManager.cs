@@ -6,7 +6,8 @@ namespace MonitorLib.GOT
 {
     public class FileUploadManager
     {
-        public static string FTPHost = $"ftp://{Config.IP}/";
+        //备注:远程服务器需要端口映射
+        public static string FTPHost = $"ftp://{Config.IP}:2121/";
         public static void UploadFile(string filePath, Action<object, UploadProgressChangedEventArgs> OnFileUploadProgressChanged, Action<object, UploadFileCompletedEventArgs> OnFileUploadCompleted)
         {
             if (string.IsNullOrEmpty(filePath))

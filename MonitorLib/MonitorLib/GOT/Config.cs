@@ -4,6 +4,7 @@
     {
         public static string IP = "124.223.54.98";
         public static string ReportUrl = "http://124.223.54.98:888/Index.aspx";
+        public static string ReportRecordUpdateRequestUrl = "http://124.223.54.98:888/ReceiveDataHandler.ashx?PackageName={0}&TestTime={1}";
     }
 
     public class ConstString
