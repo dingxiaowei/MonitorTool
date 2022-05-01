@@ -196,7 +196,7 @@ public class GOTProfiler : MonoBehaviour
 #else
         if (unityWebRequest.isDone)
         {
-            if(!string.IsNullOrEmpty(unityWebRequest.error))
+            if(string.IsNullOrEmpty(unityWebRequest.error))
             {
                 var res = unityWebRequest.downloadHandler.text;
                 if (res.Equals("success"))
