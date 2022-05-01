@@ -152,9 +152,9 @@ public class GOTProfiler : MonoBehaviour
                 }
                 Debug.Log("文件上传完毕");
 
-                HttpGet(string.Format(Config.ReportRecordUpdateRequestUrl, Application.identifier, m_StartTime), (res) =>
+                HttpGet(string.Format(Config.ReportRecordUpdateRequestUrl, Application.identifier, m_StartTime), (res1) =>
                  {
-                     if (res)
+                     if (res1)
                      {
                          if (ReportUrl != null)
                          {
@@ -178,7 +178,7 @@ public class GOTProfiler : MonoBehaviour
     private IEnumerator GetUrl(UnityWebRequest unityWebRequest, Action<bool> callback)
     {
         yield return unityWebRequest.SendWebRequest();
-        if (unityWebRequest.result == UnityWebRequest.Result.Success)
+        if (unityWebRequest.isDone )
         {
             var res = unityWebRequest.downloadHandler.text;
             if (res.Equals("success"))
