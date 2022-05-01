@@ -6,7 +6,7 @@ using System.Text;
 namespace MonitorLib.GOT
 {
     [Serializable]
-    public class LogInfos : IBinarySerialize
+    public class LogInfos : IBinarySerializable
     {
         public List<string> LogDatas = new List<string>();
 

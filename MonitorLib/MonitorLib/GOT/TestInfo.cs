@@ -7,7 +7,7 @@ namespace MonitorLib.GOT
     /// 一次测试数据
     /// </summary>
     [Serializable]
-    public struct TestInfo : IBinarySerialize
+    public struct TestInfo : IBinarySerializable
     {
         public string ProductName;
         public string PackageName;
@@ -43,7 +43,7 @@ namespace MonitorLib.GOT
 }
 
 //二进制文件读取
-//IBinarySerialize testInfo = new TestInfo();
+//IBinarySerializable testInfo = new TestInfo();
 //var res = FileManager.ReadBinaryDataFromFile(binaryFile, ref testInfo);
 //if(res)
 //{

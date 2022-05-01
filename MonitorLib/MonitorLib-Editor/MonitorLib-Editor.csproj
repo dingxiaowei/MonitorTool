@@ -264,6 +264,9 @@
     <Compile Include="..\MonitorLib\GOT\Config.cs">
       <Link>GOT\Config.cs</Link>
     </Compile>
+    <Compile Include="..\MonitorLib\GOT\CSVHelper.cs">
+      <Link>GOT\CSVHelper.cs</Link>
+    </Compile>
     <Compile Include="..\MonitorLib\GOT\DeviceInfo.cs">
       <Link>GOT\DeviceInfo.cs</Link>
     </Compile>

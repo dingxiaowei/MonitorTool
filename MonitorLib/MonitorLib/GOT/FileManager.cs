@@ -25,7 +25,7 @@ namespace MonitorLib.GOT
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="data">继承自IBinarySerialize的数据</param>
-        public static bool WriteBinaryDataToFile(string filePath, IBinarySerialize data)
+        public static bool WriteBinaryDataToFile(string filePath, IBinarySerializable data)
         {
             if (string.IsNullOrEmpty(filePath))
                 return false;
@@ -52,7 +52,7 @@ namespace MonitorLib.GOT
         /// <param name="filePath"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static bool ReadBinaryDataFromFile(string filePath, ref IBinarySerialize data)
+        public static bool ReadBinaryDataFromFile(string filePath, ref IBinarySerializable data)
         {
             if (string.IsNullOrEmpty(filePath))
             {

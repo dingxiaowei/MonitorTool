@@ -36,7 +36,7 @@ namespace MonitorLib.GOT
     }
 
     [Serializable]
-    public struct MonitorInfo : IBinarySerialize
+    public struct MonitorInfo : IBinarySerializable
     {
         public int FrameIndex;
         public float BatteryLevel;
@@ -100,7 +100,7 @@ namespace MonitorLib.GOT
     }
 
     [Serializable]
-    public class MonitorInfos : IBinarySerialize
+    public class MonitorInfos : IBinarySerializable
     {
         public List<MonitorInfo> MonitorInfoList = new List<MonitorInfo>();
         public void DeSerialize(BinaryReader reader)

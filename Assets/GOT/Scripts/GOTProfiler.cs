@@ -58,7 +58,7 @@ public class GOTProfiler : MonoBehaviour
     void Awake()
     {
         Application.targetFrameRate = 60;
-        //IBinarySerialize testInfo = new MonitorInfos();
+        //IBinarySerializable testInfo = new MonitorInfos();
         //var res = FileManager.ReadBinaryDataFromFile(data, ref testInfo);
         //if (res)
         //{
@@ -149,12 +149,13 @@ public class GOTProfiler : MonoBehaviour
                     //FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
                     UploadFile(logFilePath);
                 }
-
+                Debug.Log("文件上传完毕");
                 if (ReportUrl != null)
                 {
                     ReportUrl.gameObject.SetActive(true);
                     var url = string.Format(ShareDatas.ReportUrl, m_StartTime);
-                    ReportUrl.text = $"<a href={url}>[{url}]</a>"; //TODO:修改成动态网页的连接
+                    //ReportUrl.text = $"<a href={url}>[{url}]</a>"; //TODO:修改成动态网页的连接
+                    ReportUrl.text = $"<a href={Config.ReportUrl}>[{Config.ReportUrl}]</a>";
                 }
             }
         };
@@ -233,6 +234,7 @@ public class GOTProfiler : MonoBehaviour
 
     void UploadFile(string filePath)
     {
+        return;
         FileUploadManager.UploadFile(filePath, (sender, e) =>
         {
             Debug.Log("Uploading Progreess: " + e.ProgressPercentage);

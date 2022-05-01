@@ -4,7 +4,7 @@ using System.IO;
 namespace MonitorLib.GOT
 {
     [Serializable]
-    public struct DeviceInfo : IBinarySerialize
+    public struct DeviceInfo : IBinarySerializable
     {
         /// <summary>
         /// Unity版本
