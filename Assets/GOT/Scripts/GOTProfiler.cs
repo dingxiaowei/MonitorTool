@@ -193,7 +193,7 @@ public class GOTProfiler : MonoBehaviour
                 callback.Invoke(false);
             }
         }
-#elif UNITY_2019
+#else
         if (unityWebRequest.isDone)
         {
             if(!string.IsNullOrEmpty(unityWebRequest.error))
