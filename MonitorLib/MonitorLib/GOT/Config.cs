@@ -26,5 +26,7 @@
         //函数规划范分析
         public const string FuncCodeAnalysisPrefix = "funcCodeAnalysis_";
         public const string CPUTemperaturePrefix = "cpuTemperature_";
+        //功耗模块
+        public const string PowerConsumePrefix = "powerConsume_";
     }
 }
