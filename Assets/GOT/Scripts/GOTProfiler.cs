@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using GOT.Scripts;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Profiling;
@@ -47,6 +48,8 @@ public class GOTProfiler : MonoBehaviour
     string logFilePath;
     //设备信息路径
     string deviceFilePath;
+    //功耗信息路径
+    string powerConsumeFilePath;
     //测试信息路径
     string testFilePath;
     //性能监控
@@ -96,6 +99,7 @@ public class GOTProfiler : MonoBehaviour
                 deviceFilePath = $"{Application.persistentDataPath}/{ConstString.DevicePrefix}{m_StartTime}{fileExt}";
                 testFilePath = $"{Application.persistentDataPath}/{ConstString.TestPrefix}{m_StartTime}{fileExt}";
                 monitorFilePath = $"{Application.persistentDataPath}/{ConstString.MonitorPrefix}{m_StartTime}{fileExt}";
+                powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
                 if (EnableLog)
                 {
                     LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
@@ -360,6 +364,11 @@ public class GOTProfiler : MonoBehaviour
                 {
                     ScreenCapture.CaptureScreenshot($"{Application.persistentDataPath}/{m_StartTime}/img_{m_StartTime}_{m_frameIndex - IgnoreFrameCount}.png");
                 }
+
+                if (m_frameIndex % 1000 == 0)
+                {
+                    GetPowerConsume();
+                }
             }
         }
     }
@@ -399,5 +408,32 @@ public class GOTProfiler : MonoBehaviour
         {
             UploadFile(deviceFilePath);
         }
+    }
+
+    /// <summary>
+    /// 获取功耗参数
+    /// </summary>
+    void GetPowerConsume()
+    {
+        Debug.Log("GetPowerConsume");
+#if UNITY_ANDROID && !UNITY_EDITOR
+        UnityAndroidProxy unityAndroidProxy = new UnityAndroidProxy();
+        unityAndroidProxy.Init();
+        DevicePowerConsumeArgs devicePowerConsumeArgs = unityAndroidProxy.GetPowerConsumeArgs();
+        Debug.Log($"获取安卓功耗参数:{devicePowerConsumeArgs.ToString()}");
+        bool writeRes = false;
+        if (!UseBinary)
+        {
+            writeRes = FileManager.WriteToFile(powerConsumeFilePath, JsonUtility.ToJson(devicePowerConsumeArgs));
+        }
+        else
+        {
+            writeRes = FileManager.WriteBinaryDataToFile(powerConsumeFilePath, devicePowerConsumeArgs);
+        }
+        if (writeRes)
+        {
+            UploadFile(powerConsumeFilePath);
+        }
+#endif
     }
 }

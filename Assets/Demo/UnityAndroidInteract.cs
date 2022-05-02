@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using GOT.Scripts;
+using MonitorLib.GOT;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -206,6 +208,17 @@ public class UnityAndroidInteract : MonoBehaviour
             AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
             float a = jo.Call<float>("GetCurAppMemorySize");
             log.text = a +"M";
+        }
+        
+        if (GUI.Button(new Rect(200, 370, 140, 40), "当前APP功能自定义参数"))
+        {
+            Debug.Log($"获取安卓功耗自定义参数");
+            UnityAndroidProxy unityAndroidProxy = new UnityAndroidProxy();
+            unityAndroidProxy.Init();
+            Debug.Log($"初始化Android环境");
+            DevicePowerConsumeArgs devicePowerConsumeArgs = unityAndroidProxy.GetPowerConsumeArgs();
+            Debug.Log($"获取安卓功耗参数:{devicePowerConsumeArgs.ToString()}");
+            log.text = devicePowerConsumeArgs.ToString();
         }
         
         
