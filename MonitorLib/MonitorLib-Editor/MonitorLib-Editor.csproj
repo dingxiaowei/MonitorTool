@@ -270,6 +270,9 @@
     <Compile Include="..\MonitorLib\GOT\DeviceInfo.cs">
       <Link>GOT\DeviceInfo.cs</Link>
     </Compile>
+    <Compile Include="..\MonitorLib\GOT\DevicePowerConsumeArgs.cs">
+      <Link>GOT\DevicePowerConsumeArgs.cs</Link>
+    </Compile>
     <Compile Include="..\MonitorLib\GOT\EnumDefine.cs">
       <Link>GOT\EnumDefine.cs</Link>
     </Compile>
