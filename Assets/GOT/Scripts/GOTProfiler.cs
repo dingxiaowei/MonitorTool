@@ -17,12 +17,8 @@ public class GOTProfiler : MonoBehaviour
     public bool EnableFrameTexture = false;
     [Header("是否采集函数性能,统计之前需要先点击菜单栏Hook/所有函数性能分析")]
     public bool EnableFunctionAnalysis = false;
-    [Header("是否采集CPU温度")]
-    public bool EnableCPUInfo = true;
-    public int CPUInfoFrame = 5;
-    [Header("是否采集电池功耗")]
-    public bool EnableBatteryInfo = true;
-    public int BatteryInfoFrame = 5;
+    [Header("是否采集手机功耗信息")]
+    public bool EnableMobileConsumptionInfo = true;
     [Header("忽略前面的帧数")]
     public int IgnoreFrameCount = 5;
     [Header("是否使用二进制文件(否就是使用txt)")]
@@ -99,7 +95,8 @@ public class GOTProfiler : MonoBehaviour
                 deviceFilePath = $"{Application.persistentDataPath}/{ConstString.DevicePrefix}{m_StartTime}{fileExt}";
                 testFilePath = $"{Application.persistentDataPath}/{ConstString.TestPrefix}{m_StartTime}{fileExt}";
                 monitorFilePath = $"{Application.persistentDataPath}/{ConstString.MonitorPrefix}{m_StartTime}{fileExt}";
-                powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
+                if (EnableMobileConsumptionInfo)
+                    powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
                 if (EnableLog)
                 {
                     LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
@@ -200,7 +197,7 @@ public class GOTProfiler : MonoBehaviour
 #else
         if (unityWebRequest.isDone)
         {
-            if(string.IsNullOrEmpty(unityWebRequest.error))
+            if (string.IsNullOrEmpty(unityWebRequest.error))
             {
                 var res = unityWebRequest.downloadHandler.text;
                 if (res.Equals("success"))
@@ -367,7 +364,8 @@ public class GOTProfiler : MonoBehaviour
 
                 if (m_frameIndex % 1000 == 0)
                 {
-                    GetPowerConsume();
+                    if (EnableMobileConsumptionInfo)
+                        GetPowerConsume();
                 }
             }
         }
@@ -415,8 +413,8 @@ public class GOTProfiler : MonoBehaviour
     /// </summary>
     void GetPowerConsume()
     {
-        Debug.Log("GetPowerConsume");
 #if UNITY_ANDROID && !UNITY_EDITOR
+        Debug.Log("GetPowerConsume");
         UnityAndroidProxy unityAndroidProxy = new UnityAndroidProxy();
         unityAndroidProxy.Init();
         DevicePowerConsumeArgs devicePowerConsumeArgs = unityAndroidProxy.GetPowerConsumeArgs();

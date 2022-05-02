@@ -216,7 +216,7 @@ public class UnityAndroidInteract : MonoBehaviour
             UnityAndroidProxy unityAndroidProxy = new UnityAndroidProxy();
             unityAndroidProxy.Init();
             Debug.Log($"初始化Android环境");
-            DevicePowerConsumeArgs devicePowerConsumeArgs = unityAndroidProxy.GetPowerConsumeArgs();
+            DevicePowerConsumeInfo devicePowerConsumeArgs = unityAndroidProxy.GetPowerConsumeInfo();
             Debug.Log($"获取安卓功耗参数:{devicePowerConsumeArgs.ToString()}");
             log.text = devicePowerConsumeArgs.ToString();
         }
