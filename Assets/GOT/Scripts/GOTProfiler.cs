@@ -417,16 +417,16 @@ public class GOTProfiler : MonoBehaviour
         Debug.Log("GetPowerConsume");
         UnityAndroidProxy unityAndroidProxy = new UnityAndroidProxy();
         unityAndroidProxy.Init();
-        DevicePowerConsumeArgs devicePowerConsumeArgs = unityAndroidProxy.GetPowerConsumeArgs();
-        Debug.Log($"获取安卓功耗参数:{devicePowerConsumeArgs.ToString()}");
+        DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo();
+        Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
         bool writeRes = false;
         if (!UseBinary)
         {
-            writeRes = FileManager.WriteToFile(powerConsumeFilePath, JsonUtility.ToJson(devicePowerConsumeArgs));
+            writeRes = FileManager.WriteToFile(powerConsumeFilePath, JsonUtility.ToJson(devicePowerConsumeInfo));
         }
         else
         {
-            writeRes = FileManager.WriteBinaryDataToFile(powerConsumeFilePath, devicePowerConsumeArgs);
+            writeRes = FileManager.WriteBinaryDataToFile(powerConsumeFilePath, devicePowerConsumeInfo);
         }
         if (writeRes)
         {
