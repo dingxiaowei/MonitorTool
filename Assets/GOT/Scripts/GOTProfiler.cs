@@ -103,7 +103,7 @@ public class GOTProfiler : MonoBehaviour
                 //测试Log颜色
                 Debug.LogError("测试Error Log");
                 Debug.LogWarning("测试Warning Log");
-                
+
                 StartMonitor();
             }
             else
@@ -150,7 +150,6 @@ public class GOTProfiler : MonoBehaviour
                          {
                              ReportUrl.gameObject.SetActive(true);
                              var url = string.Format(ShareDatas.ReportUrl, m_StartTime);
-                             //ReportUrl.text = $"<a href={url}>[{url}]</a>"; //TODO:修改成动态网页的连接
                              ReportUrl.text = $"<a href={Config.ReportUrl}>[{Config.ReportUrl}]</a>";
                          }
                      }
