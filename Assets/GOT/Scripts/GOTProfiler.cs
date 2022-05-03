@@ -1,7 +1,6 @@
 using MonitorLib.GOT;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -16,12 +15,8 @@ public class GOTProfiler : MonoBehaviour
     public bool EnableFrameTexture = false;
     [Header("是否采集函数性能,统计之前需要先点击菜单栏Hook/所有函数性能分析")]
     public bool EnableFunctionAnalysis = false;
-    [Header("是否采集CPU温度")]
-    public bool EnableCPUInfo = true;
-    public int CPUInfoFrame = 5;
-    [Header("是否采集电池功耗")]
-    public bool EnableBatteryInfo = true;
-    public int BatteryInfoFrame = 5;
+    [Header("是否采集手机功耗信息")]
+    public bool EnableMobileConsumptionInfo = true;
     [Header("忽略前面的帧数")]
     public int IgnoreFrameCount = 5;
     [Header("是否使用二进制文件(否就是使用txt)")]
@@ -41,12 +36,14 @@ public class GOTProfiler : MonoBehaviour
     int m_frameIndex = 0;
     Action<bool> MonitorCallback;
     MonitorInfos monitorInfos = null;
-    //函数性能分析csv
+    //函数性能分析
     string funcAnalysisFilePath;
     //log日志路径
     string logFilePath;
     //设备信息路径
     string deviceFilePath;
+    //功耗信息路径
+    string powerConsumeFilePath;
     //测试信息路径
     string testFilePath;
     //性能监控
@@ -54,18 +51,9 @@ public class GOTProfiler : MonoBehaviour
     //文件后缀类型
     string fileExt;
 
-    //string data = @"C:\Users\d00605132\AppData\LocalLow\Aladdin\MonitorToolRef\monitor_2022_4_29_23_51_49.data";
-
     void Awake()
     {
         Application.targetFrameRate = 60;
-        //IBinarySerializable testInfo = new MonitorInfos();
-        //var res = FileManager.ReadBinaryDataFromFile(data, ref testInfo);
-        //if (res)
-        //{
-        //    Debug.LogError("解析成功");
-        //    Debug.Log(testInfo.ToString());
-        //}
     }
 
     void Start()
@@ -90,12 +78,14 @@ public class GOTProfiler : MonoBehaviour
                     FileManager.CreateDir($"{Application.persistentDataPath}/{m_StartTime}/");
                 }
                 if (EnableFunctionAnalysis)
-                    funcAnalysisFilePath = $"{Application.persistentDataPath}/{ConstString.FuncAnalysisPrefix}{m_StartTime}.csv";
+                    funcAnalysisFilePath = $"{Application.persistentDataPath}/{ConstString.FuncAnalysisPrefix}{m_StartTime}{fileExt}";
                 if (EnableLog)
                     logFilePath = $"{Application.persistentDataPath}/{ConstString.LogPrefix}{m_StartTime}{fileExt}";
                 deviceFilePath = $"{Application.persistentDataPath}/{ConstString.DevicePrefix}{m_StartTime}{fileExt}";
                 testFilePath = $"{Application.persistentDataPath}/{ConstString.TestPrefix}{m_StartTime}{fileExt}";
                 monitorFilePath = $"{Application.persistentDataPath}/{ConstString.MonitorPrefix}{m_StartTime}{fileExt}";
+                if (EnableMobileConsumptionInfo)
+                    powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
                 if (EnableLog)
                 {
                     LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
@@ -115,7 +105,7 @@ public class GOTProfiler : MonoBehaviour
                 //测试Log颜色
                 Debug.LogError("测试Error Log");
                 Debug.LogWarning("测试Warning Log");
-
+                
                 StartMonitor();
             }
             else
@@ -196,7 +186,7 @@ public class GOTProfiler : MonoBehaviour
 #else
         if (unityWebRequest.isDone)
         {
-            if(string.IsNullOrEmpty(unityWebRequest.error))
+            if (string.IsNullOrEmpty(unityWebRequest.error))
             {
                 var res = unityWebRequest.downloadHandler.text;
                 if (res.Equals("success"))
@@ -360,6 +350,12 @@ public class GOTProfiler : MonoBehaviour
                 {
                     ScreenCapture.CaptureScreenshot($"{Application.persistentDataPath}/{m_StartTime}/img_{m_StartTime}_{m_frameIndex - IgnoreFrameCount}.png");
                 }
+
+                if (m_frameIndex % 1000 == 0)
+                {
+                    if (EnableMobileConsumptionInfo)
+                        GetPowerConsume();
+                }
             }
         }
     }
@@ -399,5 +395,32 @@ public class GOTProfiler : MonoBehaviour
         {
             UploadFile(deviceFilePath);
         }
+    }
+
+    /// <summary>
+    /// 获取功耗参数
+    /// </summary>
+    void GetPowerConsume()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        Debug.Log("GetPowerConsume");
+        UnityAndroidProxy unityAndroidProxy = new UnityAndroidProxy();
+        unityAndroidProxy.Init();
+        DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo();
+        Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
+        bool writeRes = false;
+        if (!UseBinary)
+        {
+            writeRes = FileManager.WriteToFile(powerConsumeFilePath, JsonUtility.ToJson(devicePowerConsumeInfo));
+        }
+        else
+        {
+            writeRes = FileManager.WriteBinaryDataToFile(powerConsumeFilePath, devicePowerConsumeInfo);
+        }
+        if (writeRes)
+        {
+            UploadFile(powerConsumeFilePath);
+        }
+#endif
     }
 }

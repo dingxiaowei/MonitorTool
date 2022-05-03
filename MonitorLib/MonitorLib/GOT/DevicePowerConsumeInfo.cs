@@ -4,7 +4,7 @@ using System.IO;
 namespace MonitorLib.GOT
 {
     [Serializable]
-    public struct DevicePowerConsumeArgs:IBinarySerializable
+    public struct DevicePowerConsumeInfo : IBinarySerializable
     {
         /// <summary>
         /// 电池总容量
@@ -42,7 +42,7 @@ namespace MonitorLib.GOT
         /// cpu温度
         /// </summary>
         public int cpuTemperate;
-        
+
         public void Serialize(BinaryWriter writer)
         {
             writer.Write(capacity);
@@ -54,9 +54,9 @@ namespace MonitorLib.GOT
             writer.Write(power);
             writer.Write(useLeftHours);
             writer.Write(cpuTemperate);
-            
+
         }
-        
+
         public void DeSerialize(BinaryReader reader)
         {
             capacity = reader.ReadInt32();
@@ -73,14 +73,14 @@ namespace MonitorLib.GOT
         public override string ToString()
         {
             return
-                $"电池总容量:{capacity}\n"+
-                $"电池温度:{temperature}\n"+
-                $"电池电压:{batteryV}\n"+
-                $"剩余电量百分比:{batteryCapacity}\n"+
-                $"当前剩余容量:{batteryChargeCounter}\n"+
-                $"瞬时电流:{batteryCurrentNow}\n"+
-                $"瞬时功率:{power}\n"+
-                $"剩余使用时长:{useLeftHours}\n"+
+                $"电池总容量:{capacity}\n" +
+                $"电池温度:{temperature}\n" +
+                $"电池电压:{batteryV}\n" +
+                $"剩余电量百分比:{batteryCapacity}\n" +
+                $"当前剩余容量:{batteryChargeCounter}\n" +
+                $"瞬时电流:{batteryCurrentNow}\n" +
+                $"瞬时功率:{power}\n" +
+                $"剩余使用时长:{useLeftHours}\n" +
                 $"cpu温度:{cpuTemperate}\n";
         }
     }

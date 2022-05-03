@@ -34,6 +34,10 @@
     <Reference Include="DOTween">
       <HintPath>..\..\Lib\DOTween.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers">
       <HintPath>..\..\Lib\System.Buffers.dll</HintPath>
@@ -270,8 +274,8 @@
     <Compile Include="..\MonitorLib\GOT\DeviceInfo.cs">
       <Link>GOT\DeviceInfo.cs</Link>
     </Compile>
-    <Compile Include="..\MonitorLib\GOT\DevicePowerConsumeArgs.cs">
-      <Link>GOT\DevicePowerConsumeArgs.cs</Link>
+    <Compile Include="..\MonitorLib\GOT\DevicePowerConsumeInfo.cs">
+      <Link>GOT\DevicePowerConsumeInfo.cs</Link>
     </Compile>
     <Compile Include="..\MonitorLib\GOT\EnumDefine.cs">
       <Link>GOT\EnumDefine.cs</Link>
@@ -281,6 +285,9 @@
     </Compile>
     <Compile Include="..\MonitorLib\GOT\FileUploadManager.cs">
       <Link>GOT\FileUploadManager.cs</Link>
+    </Compile>
+    <Compile Include="..\MonitorLib\GOT\FuncAnalysisInfo.cs">
+      <Link>GOT\FuncAnalysisInfo.cs</Link>
     </Compile>
     <Compile Include="..\MonitorLib\GOT\FunctionMonitorDatas.cs">
       <Link>GOT\FunctionMonitorDatas.cs</Link>

@@ -70,19 +70,23 @@ namespace MonitorLib.GOT
                 Debug.Log("当前没有函数分析数据,请运行菜单栏中的函数注入并运行");
                 return;
             }
-            string fileName = "";
+            string fileCSVName = "";
+            string fileTxtName = "";
             if (string.IsNullOrEmpty(testTime))
             {
-                fileName = System.DateTime.Now.ToString("[yyyy-MM-dd]-[HH-mm-ss]");
+                fileCSVName = System.DateTime.Now.ToString("[yyyy-MM-dd]-[HH-mm-ss]");
             }
             else
             {
-                fileName = "funcAnalysis_" + testTime;
+                fileCSVName = ConstString.FuncAnalysisPrefix + testTime;
+                fileTxtName = ConstString.FuncAnalysisPrefix + testTime + ConstString.TextExt;
+                fileTxtName = Path.Combine(Application.persistentDataPath, fileTxtName);
             }
-            fileName += ".csv";
-            fileName = Path.Combine(Application.persistentDataPath, fileName);
+            fileCSVName += ".csv";
+            fileCSVName = Path.Combine(Application.persistentDataPath, fileCSVName);
+
             string header = "FuncName,FuncMemory/k,FuncAverageMemory/k,FuncUseTime/s,FuncAverageTime/ms,FuncCalls";
-            using (StreamWriter sw = new StreamWriter(fileName))
+            using (StreamWriter sw = new StreamWriter(fileCSVName))
             {
                 sw.WriteLine(header);
                 var ge = FunctionDatas.GetEnumerator();
@@ -100,8 +104,37 @@ namespace MonitorLib.GOT
                     sb.AppendFormat("{0}", tmp.FuncCalls);
                     sw.WriteLine(sb);
                 }
+                sw.Close();
             }
-            Debug.Log($"函数性能报告{fileName}文件输出完成");
+            Debug.Log($"函数性能报告{fileCSVName}文件输出完成");
+
+            if (!string.IsNullOrEmpty(fileTxtName))
+            {
+                List<FuncAnalysisInfo> funcAnalysisInfos = new List<FuncAnalysisInfo>();
+                var ge = FunctionDatas.GetEnumerator();
+                while (ge.MoveNext())
+                {
+                    var tmp = ge.Current.Value;
+                    //过滤调用次数0的函数
+                    if (tmp.FuncCalls <= 0) continue;
+                    FuncAnalysisInfo funcInfo = new FuncAnalysisInfo()
+                    {
+                        Name = tmp.FuncName,
+                        Memory = tmp.FuncMemory / 1024.0,
+                        AverageMemory = tmp.FuncTotalMemory / (tmp.FuncCalls * 1024.0),
+                        UseTime = tmp.FuncTime,
+                        AverageTime = tmp.FuncTotalTime / tmp.FuncCalls * 1000,
+                        Calls = tmp.FuncCalls
+                    };
+                    funcAnalysisInfos.Add(funcInfo);
+                }
+                
+                var res = FileManager.WriteToFile(fileTxtName, Newtonsoft.Json.JsonConvert.SerializeObject(funcAnalysisInfos));
+                if (res)
+                    Debug.Log($"函数性能报告{fileTxtName}文件输出完成");
+                else
+                    Debug.LogError($"函数性能报告{fileTxtName}文件输出异常");
+            }
         }
 
         public static void BeginSample(string methodName)
@@ -126,7 +159,7 @@ namespace MonitorLib.GOT
 
         public static void PrintMethodDatas()
         {
-            if(FunctionDatas.Count <= 0)
+            if (FunctionDatas.Count <= 0)
             {
                 Debug.LogWarning("执行菜单栏注入功能，然后再运行分析函数性能");
                 return;

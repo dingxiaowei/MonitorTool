@@ -121,7 +121,8 @@ namespace MonitorLib.GOT
                 {
                     msg += "\n";
                 }
-                byte[] data = Encoding.Default.GetBytes(($"[{DateTime.Now.ToString()}]{ColorTypeLog(logType, msg)} \r\nstackTrace:{stackTrace}").ToString());
+                var logStr = $"[{DateTime.Now.ToString()}]{ColorTypeLog(logType, msg)} \n\rstackTrace:{stackTrace}";
+                byte[] data = Encoding.Default.GetBytes(logStr);
 
                 if (logFileStream == null)
                 {

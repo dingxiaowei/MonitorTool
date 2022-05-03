@@ -37,6 +37,10 @@
     <Reference Include="LitJson">
       <HintPath>..\..\Lib\LitJson.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers">
       <HintPath>..\..\Lib\System.Buffers.dll</HintPath>
@@ -291,7 +295,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GOT\CSVHelper.cs" />
-    <Compile Include="GOT\DevicePowerConsumeArgs.cs" />
+    <Compile Include="GOT\DevicePowerConsumeInfo.cs" />
+    <Compile Include="GOT\FuncAnalysisInfo.cs" />
     <Compile Include="GOT\IBinarySerialize.cs" />
     <Compile Include="GOT\Config.cs" />
     <Compile Include="GOT\DeviceInfo.cs" />
