@@ -94,8 +94,6 @@ public class GOTProfiler : MonoBehaviour
 
                 m_TickTime = 0;
                 InvokeRepeating("Tick", 1.0f, 1.0f);
-                //写入设备信息
-                GetSystemInfo();
 
                 if (ReportUrl != null)
                 {
@@ -114,6 +112,8 @@ public class GOTProfiler : MonoBehaviour
                 ShareDatas.EndTime = DateTime.Now;
                 //上传测试时间
                 UploadTestInfo();
+                //写入设备信息
+                GetSystemInfo();
 
                 CancelInvoke("Tick");
                 m_TickTime = 0;
