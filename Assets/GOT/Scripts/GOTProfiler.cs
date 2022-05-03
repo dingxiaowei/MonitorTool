@@ -1,9 +1,7 @@
 using MonitorLib.GOT;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using GOT.Scripts;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Profiling;
@@ -53,18 +51,9 @@ public class GOTProfiler : MonoBehaviour
     //文件后缀类型
     string fileExt;
 
-    //string data = @"C:\Users\d00605132\AppData\LocalLow\Aladdin\MonitorToolRef\monitor_2022_4_29_23_51_49.data";
-
     void Awake()
     {
         Application.targetFrameRate = 60;
-        //IBinarySerializable testInfo = new MonitorInfos();
-        //var res = FileManager.ReadBinaryDataFromFile(data, ref testInfo);
-        //if (res)
-        //{
-        //    Debug.LogError("解析成功");
-        //    Debug.Log(testInfo.ToString());
-        //}
     }
 
     void Start()
