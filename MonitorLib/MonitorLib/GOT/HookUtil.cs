@@ -128,7 +128,8 @@ namespace MonitorLib.GOT
                     };
                     funcAnalysisInfos.Add(funcInfo);
                 }
-                var res = FileManager.WriteToFile(fileTxtName, LitJson.JsonMapper.ToJson(funcAnalysisInfos));
+                
+                var res = FileManager.WriteToFile(fileTxtName, Newtonsoft.Json.JsonConvert.SerializeObject(funcAnalysisInfos));
                 if (res)
                     Debug.Log($"函数性能报告{fileTxtName}文件输出完成");
                 else

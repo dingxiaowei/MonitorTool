@@ -105,7 +105,7 @@ public class GOTProfiler : MonoBehaviour
                 //≤‚ ‘Log—’…´
                 Debug.LogError("≤‚ ‘Error Log");
                 Debug.LogWarning("≤‚ ‘Warning Log");
-
+                
                 StartMonitor();
             }
             else
