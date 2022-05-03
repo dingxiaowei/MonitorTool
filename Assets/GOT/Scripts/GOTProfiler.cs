@@ -38,7 +38,7 @@ public class GOTProfiler : MonoBehaviour
     int m_frameIndex = 0;
     Action<bool> MonitorCallback;
     MonitorInfos monitorInfos = null;
-    //函数性能分析csv
+    //函数性能分析
     string funcAnalysisFilePath;
     //log日志路径
     string logFilePath;
@@ -89,7 +89,7 @@ public class GOTProfiler : MonoBehaviour
                     FileManager.CreateDir($"{Application.persistentDataPath}/{m_StartTime}/");
                 }
                 if (EnableFunctionAnalysis)
-                    funcAnalysisFilePath = $"{Application.persistentDataPath}/{ConstString.FuncAnalysisPrefix}{m_StartTime}.csv";
+                    funcAnalysisFilePath = $"{Application.persistentDataPath}/{ConstString.FuncAnalysisPrefix}{m_StartTime}{fileExt}";
                 if (EnableLog)
                     logFilePath = $"{Application.persistentDataPath}/{ConstString.LogPrefix}{m_StartTime}{fileExt}";
                 deviceFilePath = $"{Application.persistentDataPath}/{ConstString.DevicePrefix}{m_StartTime}{fileExt}";

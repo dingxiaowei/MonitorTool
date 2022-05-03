@@ -292,6 +292,7 @@
   <ItemGroup>
     <Compile Include="GOT\CSVHelper.cs" />
     <Compile Include="GOT\DevicePowerConsumeInfo.cs" />
+    <Compile Include="GOT\FuncAnalysisInfo.cs" />
     <Compile Include="GOT\IBinarySerialize.cs" />
     <Compile Include="GOT\Config.cs" />
     <Compile Include="GOT\DeviceInfo.cs" />

@@ -34,6 +34,9 @@
     <Reference Include="DOTween">
       <HintPath>..\..\Lib\DOTween.dll</HintPath>
     </Reference>
+    <Reference Include="LitJson">
+      <HintPath>..\..\Lib\LitJson.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers">
       <HintPath>..\..\Lib\System.Buffers.dll</HintPath>
@@ -281,6 +284,9 @@
     </Compile>
     <Compile Include="..\MonitorLib\GOT\FileUploadManager.cs">
       <Link>GOT\FileUploadManager.cs</Link>
+    </Compile>
+    <Compile Include="..\MonitorLib\GOT\FuncAnalysisInfo.cs">
+      <Link>GOT\FuncAnalysisInfo.cs</Link>
     </Compile>
     <Compile Include="..\MonitorLib\GOT\FunctionMonitorDatas.cs">
       <Link>GOT\FunctionMonitorDatas.cs</Link>
