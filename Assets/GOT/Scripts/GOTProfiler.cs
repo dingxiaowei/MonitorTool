@@ -56,114 +56,118 @@ public class GOTProfiler : MonoBehaviour
         Application.targetFrameRate = 60;
     }
 
+    void MonitorCallBackFunc(bool res)
+    {
+        if (res)
+        {
+            fileExt = UseBinary ? ConstString.BinaryExt : ConstString.TextExt;
+            Debug.Log(ConstString.Monitoring);
+            m_frameIndex = 0;
+            ShareDatas.StartTime = DateTime.Now; //当前时间
+            m_StartTime = ShareDatas.StartTime.ToString().Replace(" ", "_").Replace("/", "_").Replace(":", "_");
+            ShareDatas.StartTimeStr = m_StartTime;
+#if UNITY_EDITOR
+            PlayerPrefs.SetString("TestTime", m_StartTime);
+            PlayerPrefs.Save();
+#endif
+            if (EnableFrameTexture)
+            {
+                FileManager.CreateDir($"{Application.persistentDataPath}/{m_StartTime}/");
+            }
+            if (EnableFunctionAnalysis)
+                funcAnalysisFilePath = $"{Application.persistentDataPath}/{ConstString.FuncAnalysisPrefix}{m_StartTime}{fileExt}";
+            if (EnableLog)
+                logFilePath = $"{Application.persistentDataPath}/{ConstString.LogPrefix}{m_StartTime}{fileExt}";
+            deviceFilePath = $"{Application.persistentDataPath}/{ConstString.DevicePrefix}{m_StartTime}{fileExt}";
+            testFilePath = $"{Application.persistentDataPath}/{ConstString.TestPrefix}{m_StartTime}{fileExt}";
+            monitorFilePath = $"{Application.persistentDataPath}/{ConstString.MonitorPrefix}{m_StartTime}{fileExt}";
+            if (EnableMobileConsumptionInfo)
+                powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
+            if (EnableLog)
+            {
+                LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
+                Application.logMessageReceived += LogManager.LogToFile;
+            }
+
+            m_TickTime = 0;
+            InvokeRepeating("Tick", 1.0f, 1.0f);
+
+            if (ReportUrl != null)
+            {
+                ReportUrl.gameObject.SetActive(false);
+            }
+
+            //测试Log颜色
+            Debug.LogError("测试Error Log");
+            Debug.LogWarning("测试Warning Log");
+
+            StartMonitor();
+        }
+        else
+        {
+            Debug.Log(ConstString.MonitorStop);
+            ShareDatas.EndTime = DateTime.Now;
+            //上传测试时间
+            UploadTestInfo();
+            //写入设备信息
+            GetSystemInfo();
+
+            CancelInvoke("Tick");
+            m_TickTime = 0;
+
+            MonitorInfosReport();
+            FuncAnalysisReport();
+
+            if (EnableLog)
+            {
+                Application.logMessageReceived -= LogManager.LogToFile;
+                LogManager.CloseLogFile();
+            }
+
+            //#if UNITY_EDITOR
+            //                if (EnableFunctionAnalysis)
+            //                {
+            //                    HookUtil.PrintMethodDatas();
+            //                }
+            //#endif
+            if (EnableLog)
+            {
+                //FileManager.ReplaceContent(logFilePath, "[Log]", "<font color=\"#0000FF\">[Log]</font>");
+                //FileManager.ReplaceContent(logFilePath, "[Error]", "<font color=\"#FF0000\">[Error]</font>");
+                //FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
+                UploadFile(logFilePath);
+            }
+            Debug.Log("文件上传完毕");
+
+            HttpGet(string.Format(Config.ReportRecordUpdateRequestUrl, Application.identifier, m_StartTime), (result) =>
+            {
+                if (result)
+                {
+                    if (ReportUrl != null)
+                    {
+                        ReportUrl.gameObject.SetActive(true);
+                        ReportUrl.text = $"<a href={Config.ReportUrl}>{Config.ReportUrl}</a>";
+                    }
+                }
+            });
+        }
+    }
+
+    [FunctionAnalysis]
     void Start()
     {
         GameObject.DontDestroyOnLoad(gameObject);
-        MonitorCallback += (res) =>
-        {
-            if (res)
-            {
-                fileExt = UseBinary ? ConstString.BinaryExt : ConstString.TextExt;
-                Debug.Log(ConstString.Monitoring);
-                m_frameIndex = 0;
-                ShareDatas.StartTime = DateTime.Now; //当前时间
-                m_StartTime = ShareDatas.StartTime.ToString().Replace(" ", "_").Replace("/", "_").Replace(":", "_");
-                ShareDatas.StartTimeStr = m_StartTime;
-#if UNITY_EDITOR
-                PlayerPrefs.SetString("TestTime", m_StartTime);
-                PlayerPrefs.Save();
-#endif
-                if (EnableFrameTexture)
-                {
-                    FileManager.CreateDir($"{Application.persistentDataPath}/{m_StartTime}/");
-                }
-                if (EnableFunctionAnalysis)
-                    funcAnalysisFilePath = $"{Application.persistentDataPath}/{ConstString.FuncAnalysisPrefix}{m_StartTime}{fileExt}";
-                if (EnableLog)
-                    logFilePath = $"{Application.persistentDataPath}/{ConstString.LogPrefix}{m_StartTime}{fileExt}";
-                deviceFilePath = $"{Application.persistentDataPath}/{ConstString.DevicePrefix}{m_StartTime}{fileExt}";
-                testFilePath = $"{Application.persistentDataPath}/{ConstString.TestPrefix}{m_StartTime}{fileExt}";
-                monitorFilePath = $"{Application.persistentDataPath}/{ConstString.MonitorPrefix}{m_StartTime}{fileExt}";
-                if (EnableMobileConsumptionInfo)
-                    powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
-                if (EnableLog)
-                {
-                    LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
-                    Application.logMessageReceived += LogManager.LogToFile;
-                }
-
-                m_TickTime = 0;
-                InvokeRepeating("Tick", 1.0f, 1.0f);
-
-                if (ReportUrl != null)
-                {
-                    ReportUrl.gameObject.SetActive(false);
-                }
-
-                //测试Log颜色
-                Debug.LogError("测试Error Log");
-                Debug.LogWarning("测试Warning Log");
-
-                StartMonitor();
-            }
-            else
-            {
-                Debug.Log(ConstString.MonitorStop);
-                ShareDatas.EndTime = DateTime.Now;
-                //上传测试时间
-                UploadTestInfo();
-                //写入设备信息
-                GetSystemInfo();
-
-                CancelInvoke("Tick");
-                m_TickTime = 0;
-
-                MonitorInfosReport();
-                FuncAnalysisReport();
-
-                if (EnableLog)
-                {
-                    Application.logMessageReceived -= LogManager.LogToFile;
-                    LogManager.CloseLogFile();
-                }
-
-                //#if UNITY_EDITOR
-                //                if (EnableFunctionAnalysis)
-                //                {
-                //                    HookUtil.PrintMethodDatas();
-                //                }
-                //#endif
-                if (EnableLog)
-                {
-                    //FileManager.ReplaceContent(logFilePath, "[Log]", "<font color=\"#0000FF\">[Log]</font>");
-                    //FileManager.ReplaceContent(logFilePath, "[Error]", "<font color=\"#FF0000\">[Error]</font>");
-                    //FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
-                    UploadFile(logFilePath);
-                }
-                Debug.Log("文件上传完毕");
-
-                HttpGet(string.Format(Config.ReportRecordUpdateRequestUrl, Application.identifier, m_StartTime), (result) =>
-                 {
-                     if (result)
-                     {
-                         if (ReportUrl != null)
-                         {
-                             ReportUrl.gameObject.SetActive(true);
-                             var url = string.Format(ShareDatas.ReportUrl, m_StartTime);
-                             ReportUrl.text = $"<a href={Config.ReportUrl}>[{Config.ReportUrl}]</a>";
-                         }
-                     }
-                 });
-            }
-        };
+        MonitorCallback += MonitorCallBackFunc;
     }
 
+    [FunctionAnalysis]
     public void HttpGet(string url, Action<bool> callback)
     {
         UnityWebRequest unityWebRequest = UnityWebRequest.Get(url);
         StartCoroutine(GetUrl(unityWebRequest, callback));
     }
 
+    [FunctionAnalysis]
     private IEnumerator GetUrl(UnityWebRequest unityWebRequest, Action<bool> callback)
     {
         yield return unityWebRequest.SendWebRequest();
@@ -421,5 +425,10 @@ public class GOTProfiler : MonoBehaviour
             UploadFile(powerConsumeFilePath);
         }
 #endif
+    }
+
+    private void OnDestroy()
+    {
+        MonitorCallback -= MonitorCallBackFunc;
     }
 }
