@@ -28,5 +28,8 @@
         public const string CPUTemperaturePrefix = "cpuTemperature_";
         //功耗模块
         public const string PowerConsumePrefix = "powerConsume_";
+
+        //采集帧率
+        public const string captureFramePrefix = "captureFrame_";
     }
 }

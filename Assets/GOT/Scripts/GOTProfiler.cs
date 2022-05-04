@@ -17,6 +17,9 @@ public class GOTProfiler : MonoBehaviour
     public bool EnableFunctionAnalysis = false;
     [Header("是否采集手机功耗信息")]
     public bool EnableMobileConsumptionInfo = true;
+    [Header("采集手机功耗间隔帧")]
+    [Range(1,1000)]
+    public int IntervalFrame = 10;
     [Header("忽略前面的帧数")]
     public int IgnoreFrameCount = 5;
     [Header("是否使用二进制文件(否就是使用txt)")]
@@ -44,6 +47,8 @@ public class GOTProfiler : MonoBehaviour
     string deviceFilePath;
     //功耗信息路径
     string powerConsumeFilePath;
+    //截图信息路径
+    string captureFilePath;
     //测试信息路径
     string testFilePath;
     //性能监控
@@ -74,7 +79,8 @@ public class GOTProfiler : MonoBehaviour
 #endif
             if (EnableFrameTexture)
             {
-                FileManager.CreateDir($"{Application.persistentDataPath}/{m_StartTime}/");
+                captureFilePath = $"{Application.persistentDataPath}/{ConstString.captureFramePrefix}{m_StartTime}";
+                FileManager.CreateDir(captureFilePath);
             }
             if (EnableFunctionAnalysis)
                 funcAnalysisFilePath = $"{Application.persistentDataPath}/{ConstString.FuncAnalysisPrefix}{m_StartTime}{fileExt}";
@@ -119,6 +125,7 @@ public class GOTProfiler : MonoBehaviour
 
             MonitorInfosReport();
             FuncAnalysisReport();
+            ZipCaptureFiles();
 
             if (EnableLog)
             {
@@ -353,12 +360,12 @@ public class GOTProfiler : MonoBehaviour
                 var monitorInfo = new MonitorInfo() { FrameIndex = m_frameIndex - IgnoreFrameCount, BatteryLevel = SystemInfo.batteryLevel, MemorySize = 0, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
                 monitorInfos.MonitorInfoList.Add(monitorInfo);
 
-                if (m_frameIndex % 1000 == 0)
+                if (m_frameIndex % IntervalFrame == 0)
                 {
                     if (EnableMobileConsumptionInfo)
                         GetPowerConsume();
                     if (EnableFrameTexture)
-                        ScreenCapture.CaptureScreenshot($"{Application.persistentDataPath}/{m_StartTime}/img_{m_StartTime}_{m_frameIndex - IgnoreFrameCount}.png");
+                        ScreenCapture.CaptureScreenshot($"{captureFilePath}/img_{m_StartTime}_{m_frameIndex - IgnoreFrameCount}.png");
                 }
             }
         }
@@ -429,6 +436,27 @@ public class GOTProfiler : MonoBehaviour
 #endif
     }
 
+    /// <summary>
+    /// 压缩采集帧并上传
+    /// </summary>
+    private void ZipCaptureFiles()
+    {
+        string srcFileDir = captureFilePath;
+        string zipFilePath = captureFilePath + ".zip";
+        bool zipSuccess = ZipUtils.ZipFile(srcFileDir, zipFilePath);
+        Debug.Log($"采集帧压缩完成:{zipFilePath}");
+
+        if (zipSuccess)
+        {
+            UploadFile(zipFilePath);
+            Debug.Log("压缩成功后上传");
+        }
+        else
+        {
+            Debug.LogError("压缩文件失败!");
+        }
+    }
+    
     private void OnDestroy()
     {
         MonitorCallback -= MonitorCallBackFunc;
