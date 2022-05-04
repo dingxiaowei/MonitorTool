@@ -1,7 +1,9 @@
 using MonitorLib.GOT;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using GOT.Scripts;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Profiling;
@@ -50,6 +52,8 @@ public class GOTProfiler : MonoBehaviour
     string monitorFilePath;
     //文件后缀类型
     string fileExt;
+    //设备功耗采集记录
+    DevicePowerConsumeInfos devicePowerConsumeInfos;
 
     void Awake()
     {
@@ -243,6 +247,7 @@ public class GOTProfiler : MonoBehaviour
     void StartMonitor()
     {
         monitorInfos = new MonitorInfos();
+        devicePowerConsumeInfos = new DevicePowerConsumeInfos();
     }
 
     void FuncAnalysisReport()
@@ -411,14 +416,15 @@ public class GOTProfiler : MonoBehaviour
         unityAndroidProxy.Init();
         DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo();
         Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
+        devicePowerConsumeInfos.devicePowerConsumeInfos.Add(devicePowerConsumeInfo);
         bool writeRes = false;
         if (!UseBinary)
         {
-            writeRes = FileManager.WriteToFile(powerConsumeFilePath, JsonUtility.ToJson(devicePowerConsumeInfo));
+            writeRes = FileManager.WriteToFile(powerConsumeFilePath, JsonUtility.ToJson(devicePowerConsumeInfos));
         }
         else
         {
-            writeRes = FileManager.WriteBinaryDataToFile(powerConsumeFilePath, devicePowerConsumeInfo);
+            writeRes = FileManager.WriteBinaryDataToFile(powerConsumeFilePath, devicePowerConsumeInfos);
         }
         if (writeRes)
         {

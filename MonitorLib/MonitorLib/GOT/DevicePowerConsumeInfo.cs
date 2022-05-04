@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace MonitorLib.GOT
 {
@@ -82,6 +84,38 @@ namespace MonitorLib.GOT
                 $"瞬时功率:{BatteryPower}\n" +
                 $"剩余使用时长:{UseLeftHours}\n" +
                 $"cpu温度:{CpuTemperate}\n";
+        }
+    }
+    [Serializable]
+    public class DevicePowerConsumeInfos : IBinarySerializable
+    {
+        public List<DevicePowerConsumeInfo> devicePowerConsumeInfos = new List<DevicePowerConsumeInfo>();
+        public void DeSerialize(BinaryReader reader)
+        {
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                DevicePowerConsumeInfo tempData = new DevicePowerConsumeInfo();
+                tempData.DeSerialize(reader);
+                devicePowerConsumeInfos.Add(tempData);
+            }
+        }
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(devicePowerConsumeInfos.Count);
+            for (int i = 0; i < devicePowerConsumeInfos.Count; i++)
+            {
+                devicePowerConsumeInfos[i].Serialize(writer);
+            }
+        }
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < devicePowerConsumeInfos.Count; i++)
+            {
+                sb.Append($"{devicePowerConsumeInfos[i].ToString()}\n");
+            }
+            return sb.ToString();
         }
     }
 }

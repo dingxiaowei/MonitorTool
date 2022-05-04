@@ -8,14 +8,20 @@ namespace GOT.Scripts
     {
         private AndroidJavaClass jc;
         private AndroidJavaObject jo;
+        private bool isInit = false;
     
         public void Init()
         {
 #if UNITY_ANDROID
+            if (isInit)
+            {
+                return;
+            }
             try
             {
                 jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
                 jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
+                isInit = true;
             }
             catch (Exception e)
             {
