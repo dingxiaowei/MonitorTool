@@ -66,7 +66,7 @@ public class GOTProfiler : MonoBehaviour
             Debug.Log(ConstString.Monitoring);
             m_frameIndex = 0;
             ShareDatas.StartTime = DateTime.Now; //当前时间
-            m_StartTime = ShareDatas.StartTime.ToString().Replace(" ", "_").Replace("/", "_").Replace(":", "_");
+            m_StartTime = ShareDatas.StartTime.ToString("yyyy_MM_dd_HH_mm_ss");
             ShareDatas.StartTimeStr = m_StartTime;
 #if UNITY_EDITOR
             PlayerPrefs.SetString("TestTime", m_StartTime);
