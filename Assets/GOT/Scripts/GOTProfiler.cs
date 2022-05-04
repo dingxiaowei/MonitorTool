@@ -1,9 +1,7 @@
 using MonitorLib.GOT;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using GOT.Scripts;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Profiling;
@@ -414,8 +412,8 @@ public class GOTProfiler : MonoBehaviour
         Debug.Log("GetPowerConsume");
         UnityAndroidProxy unityAndroidProxy = new UnityAndroidProxy();
         unityAndroidProxy.Init();
-        DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo();
-        Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
+        DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo(m_frameIndex);
+        //Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
         devicePowerConsumeInfos.devicePowerConsumeInfos.Add(devicePowerConsumeInfo);
         bool writeRes = false;
         if (!UseBinary)

@@ -9,6 +9,10 @@ namespace MonitorLib.GOT
     public struct DevicePowerConsumeInfo : IBinarySerializable
     {
         /// <summary>
+        /// 帧率
+        /// </summary>
+        public int FrameIndex;
+        /// <summary>
         /// 电池总容量
         /// </summary>
         public int Capacity;
@@ -47,6 +51,7 @@ namespace MonitorLib.GOT
 
         public void Serialize(BinaryWriter writer)
         {
+            writer.Write(FrameIndex);
             writer.Write(Capacity);
             writer.Write(Temperature);
             writer.Write(BatteryV);
@@ -61,6 +66,7 @@ namespace MonitorLib.GOT
 
         public void DeSerialize(BinaryReader reader)
         {
+            FrameIndex = reader.ReadInt32();
             Capacity = reader.ReadInt32();
             Temperature = reader.ReadInt32();
             BatteryV = reader.ReadSingle();
@@ -75,6 +81,7 @@ namespace MonitorLib.GOT
         public override string ToString()
         {
             return
+                $"当前帧:{FrameIndex}\n" +
                 $"电池总容量:{Capacity}\n" +
                 $"电池温度:{Temperature}\n" +
                 $"电池电压:{BatteryV}\n" +

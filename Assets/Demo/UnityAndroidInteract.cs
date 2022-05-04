@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using GOT.Scripts;
-using MonitorLib.GOT;
+﻿using MonitorLib.GOT;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -216,9 +213,9 @@ public class UnityAndroidInteract : MonoBehaviour
             UnityAndroidProxy unityAndroidProxy = new UnityAndroidProxy();
             unityAndroidProxy.Init();
             Debug.Log($"初始化Android环境");
-            DevicePowerConsumeInfo devicePowerConsumeArgs = unityAndroidProxy.GetPowerConsumeInfo();
-            Debug.Log($"获取安卓功耗参数:{devicePowerConsumeArgs.ToString()}");
-            log.text = devicePowerConsumeArgs.ToString();
+            DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo();
+            Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
+            log.text = devicePowerConsumeInfo.ToString();
         }
         
         
