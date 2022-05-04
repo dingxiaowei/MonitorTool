@@ -34,6 +34,9 @@
     <Reference Include="DOTween">
       <HintPath>..\..\Lib\DOTween.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.3.3.11, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.1.3.3\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="LitJson">
       <HintPath>..\..\Lib\LitJson.dll</HintPath>
     </Reference>
@@ -311,9 +314,13 @@
     <Compile Include="GOT\ShareDatas.cs" />
     <Compile Include="GOT\Tools.cs" />
     <Compile Include="GOT\Utils\ConverUtils.cs" />
+    <Compile Include="GOT\ZipUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GOT\TestInfo.cs" />
     <Compile Include="GOT\Utils\Singleton.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
