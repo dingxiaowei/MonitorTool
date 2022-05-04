@@ -9,79 +9,79 @@ namespace MonitorLib.GOT
         /// <summary>
         /// 电池总容量
         /// </summary>
-        public int capacity;
+        public int Capacity;
         /// <summary>
         /// 电池温度
         /// </summary>
-        public int temperature;
+        public int Temperature;
         /// <summary>
         /// 电池电压
         /// </summary>
-        public float batteryV;
+        public float BatteryV;
         /// <summary>
         /// 剩余电量百分比（value）
         /// </summary>
-        public int batteryCapacity;
+        public int BatteryCapacity;
         /// <summary>
         /// 当前剩余容量
         /// </summary>
-        public int batteryChargeCounter;
+        public int BatteryChargeCounter;
         /// <summary>
         /// 瞬时电流
         /// </summary>
-        public int batteryCurrentNow;
+        public int BatteryCurrentNow;
         /// <summary>
         /// 瞬时功率
         /// </summary>
-        public float power;
+        public float BatteryPower;
         /// <summary>
         /// 剩余使用时长
         /// </summary>
-        public float useLeftHours;
+        public float UseLeftHours;
         /// <summary>
         /// cpu温度
         /// </summary>
-        public int cpuTemperate;
+        public int CpuTemperate;
 
         public void Serialize(BinaryWriter writer)
         {
-            writer.Write(capacity);
-            writer.Write(temperature);
-            writer.Write(batteryV);
-            writer.Write(batteryCapacity);
-            writer.Write(batteryChargeCounter);
-            writer.Write(batteryCurrentNow);
-            writer.Write(power);
-            writer.Write(useLeftHours);
-            writer.Write(cpuTemperate);
+            writer.Write(Capacity);
+            writer.Write(Temperature);
+            writer.Write(BatteryV);
+            writer.Write(BatteryCapacity);
+            writer.Write(BatteryChargeCounter);
+            writer.Write(BatteryCurrentNow);
+            writer.Write(BatteryPower);
+            writer.Write(UseLeftHours);
+            writer.Write(CpuTemperate);
 
         }
 
         public void DeSerialize(BinaryReader reader)
         {
-            capacity = reader.ReadInt32();
-            temperature = reader.ReadInt32();
-            batteryV = reader.ReadSingle();
-            batteryCapacity = reader.ReadInt32();
-            batteryChargeCounter = reader.ReadInt32();
-            batteryCurrentNow = reader.ReadInt32();
-            power = reader.ReadSingle();
-            useLeftHours = reader.ReadSingle();
-            cpuTemperate = reader.ReadInt32();
+            Capacity = reader.ReadInt32();
+            Temperature = reader.ReadInt32();
+            BatteryV = reader.ReadSingle();
+            BatteryCapacity = reader.ReadInt32();
+            BatteryChargeCounter = reader.ReadInt32();
+            BatteryCurrentNow = reader.ReadInt32();
+            BatteryPower = reader.ReadSingle();
+            UseLeftHours = reader.ReadSingle();
+            CpuTemperate = reader.ReadInt32();
         }
 
         public override string ToString()
         {
             return
-                $"电池总容量:{capacity}\n" +
-                $"电池温度:{temperature}\n" +
-                $"电池电压:{batteryV}\n" +
-                $"剩余电量百分比:{batteryCapacity}\n" +
-                $"当前剩余容量:{batteryChargeCounter}\n" +
-                $"瞬时电流:{batteryCurrentNow}\n" +
-                $"瞬时功率:{power}\n" +
-                $"剩余使用时长:{useLeftHours}\n" +
-                $"cpu温度:{cpuTemperate}\n";
+                $"电池总容量:{Capacity}\n" +
+                $"电池温度:{Temperature}\n" +
+                $"电池电压:{BatteryV}\n" +
+                $"剩余电量百分比:{BatteryCapacity}\n" +
+                $"当前剩余容量:{BatteryChargeCounter}\n" +
+                $"瞬时电流:{BatteryCurrentNow}\n" +
+                $"瞬时功率:{BatteryPower}\n" +
+                $"剩余使用时长:{UseLeftHours}\n" +
+                $"cpu温度:{CpuTemperate}\n";
         }
     }
 }

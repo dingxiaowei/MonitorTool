@@ -39,15 +39,15 @@ namespace GOT.Scripts
             Debug.Log($"从安卓获取结果:{result}");
             string[] args = result.Split('|');
             DevicePowerConsumeInfo devicePowerConsumeInfo = new DevicePowerConsumeInfo();
-            devicePowerConsumeInfo.capacity = Convert.ToInt32(args[0]);
-            devicePowerConsumeInfo.temperature = Convert.ToInt32(args[1]);
-            devicePowerConsumeInfo.batteryV = Convert.ToSingle(args[2]);
-            devicePowerConsumeInfo.batteryCapacity = Convert.ToInt32(args[3]);
-            devicePowerConsumeInfo.batteryChargeCounter = Convert.ToInt32(args[4]);
-            devicePowerConsumeInfo.batteryCurrentNow = Convert.ToInt32(args[5]);
-            devicePowerConsumeInfo.power = Convert.ToSingle(args[6]);
-            devicePowerConsumeInfo.useLeftHours = Convert.ToSingle(args[7]);
-            devicePowerConsumeInfo.cpuTemperate = Convert.ToInt32(args[8]);
+            devicePowerConsumeInfo.Capacity = Convert.ToInt32(args[0]);
+            devicePowerConsumeInfo.Temperature = Convert.ToInt32(args[1]);
+            devicePowerConsumeInfo.BatteryV = Convert.ToSingle(args[2]);
+            devicePowerConsumeInfo.BatteryCapacity = Convert.ToInt32(args[3]);
+            devicePowerConsumeInfo.BatteryChargeCounter = Convert.ToInt32(args[4]);
+            devicePowerConsumeInfo.BatteryCurrentNow = Convert.ToInt32(args[5]);
+            devicePowerConsumeInfo.BatteryPower = Convert.ToSingle(args[6]);
+            devicePowerConsumeInfo.UseLeftHours = Convert.ToSingle(args[7]);
+            devicePowerConsumeInfo.CpuTemperate = Convert.ToInt32(args[8]);
             return devicePowerConsumeInfo;
         }
 #endif
