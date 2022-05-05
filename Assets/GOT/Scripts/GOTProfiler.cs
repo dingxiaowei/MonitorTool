@@ -18,8 +18,8 @@ public class GOTProfiler : MonoBehaviour
     [Header("是否采集手机功耗信息")]
     public bool EnableMobileConsumptionInfo = true;
     [Header("采集手机功耗间隔帧")]
-    [Range(1,1000)]
-    public int IntervalFrame = 10;
+    [Range(10, 1000)]
+    public int IntervalFrame = 100;
     [Header("忽略前面的帧数")]
     public int IgnoreFrameCount = 5;
     [Header("是否使用二进制文件(否就是使用txt)")]
@@ -233,7 +233,8 @@ public class GOTProfiler : MonoBehaviour
             PackageName = Application.identifier,
             Platform = Application.platform.ToString(),
             Version = Application.version,
-            TestTime = ShareDatas.GetTestTime()
+            TestTime = ShareDatas.GetTestTime(),
+            IntervalFrame = this.IntervalFrame
         };
         //FileManager.WriteToFile(testFilePath, $"应用名：{Application.productName}&nbsp&nbsp&nbsp包名：{Application.identifier}&nbsp&nbsp&nbsp测试系统：{Application.platform}&nbsp&nbsp&nbsp版本号：{Application.version}&nbsp&nbsp&nbsp本次测试时长:{testTime}");
         bool writeRes = false;
@@ -360,7 +361,7 @@ public class GOTProfiler : MonoBehaviour
                 var monitorInfo = new MonitorInfo() { FrameIndex = m_frameIndex - IgnoreFrameCount, BatteryLevel = SystemInfo.batteryLevel, MemorySize = 0, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
                 monitorInfos.MonitorInfoList.Add(monitorInfo);
 
-                if (m_frameIndex % IntervalFrame == 0)
+                if ((m_frameIndex - IgnoreFrameCount) % IntervalFrame == 0)
                 {
                     if (EnableMobileConsumptionInfo)
                         GetPowerConsume();
@@ -417,7 +418,7 @@ public class GOTProfiler : MonoBehaviour
         Debug.Log("GetPowerConsume");
         UnityAndroidProxy unityAndroidProxy = new UnityAndroidProxy();
         unityAndroidProxy.Init();
-        DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo(m_frameIndex);
+        DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo(m_frameIndex - IgnoreFrameCount);
         //Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
         devicePowerConsumeInfos.devicePowerConsumeInfos.Add(devicePowerConsumeInfo);
         bool writeRes = false;
@@ -456,7 +457,7 @@ public class GOTProfiler : MonoBehaviour
             Debug.LogError("压缩文件失败!");
         }
     }
-    
+
     private void OnDestroy()
     {
         MonitorCallback -= MonitorCallBackFunc;

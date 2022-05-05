@@ -14,6 +14,7 @@ namespace MonitorLib.GOT
         public string Platform;
         public string Version;
         public string TestTime;
+        public int IntervalFrame;//检测多少帧截图/获取原生数据一次
         public override string ToString()
         {
             return
@@ -21,7 +22,8 @@ namespace MonitorLib.GOT
                 $"包名：{PackageName}\n" +
                 $"平台：{Platform}\n" +
                 $"版本号：{Version}\n" +
-                $"测试时长：{TestTime}";
+                $"测试时长：{TestTime}\n" +
+                $"检测多少帧检测一次:{IntervalFrame}";
         }
         public void DeSerialize(BinaryReader reader)
         {
@@ -30,6 +32,7 @@ namespace MonitorLib.GOT
             Platform = reader.ReadString();
             Version = reader.ReadString();
             TestTime = reader.ReadString();
+            IntervalFrame = reader.ReadInt32();
         }
         public void Serialize(BinaryWriter writer)
         {
@@ -38,6 +41,7 @@ namespace MonitorLib.GOT
             writer.Write(Platform);
             writer.Write(Version);
             writer.Write(TestTime);
+            writer.Write(IntervalFrame);
         }
     }
 }
