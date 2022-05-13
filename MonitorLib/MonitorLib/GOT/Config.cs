@@ -30,6 +30,10 @@
         public const string PowerConsumePrefix = "powerConsume_";
 
         //采集帧率
-        public const string captureFramePrefix = "captureFrame_";
+        public const string CaptureFramePrefix = "captureFrame_";
+        //内存分布
+        public const string ResMemoryDistributionPrefix = "resMemoryDistribution_";
+        //渲染信息
+        public const string RenderPrefix = "renderInfo_";
     }
 }

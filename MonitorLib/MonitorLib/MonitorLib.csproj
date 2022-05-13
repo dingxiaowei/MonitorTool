@@ -297,6 +297,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GOT\CollectDatas.cs" />
     <Compile Include="GOT\DevicePowerConsumeInfo.cs" />
     <Compile Include="GOT\FuncAnalysisInfo.cs" />
     <Compile Include="GOT\IBinarySerialize.cs" />
@@ -311,6 +312,7 @@
     <Compile Include="GOT\LogManager.cs" />
     <Compile Include="GOT\MonitorAttributes.cs" />
     <Compile Include="GOT\MonitorInfo.cs" />
+    <Compile Include="GOT\RenderInfo.cs" />
     <Compile Include="GOT\ShareDatas.cs" />
     <Compile Include="GOT\Tools.cs" />
     <Compile Include="GOT\Utils\ConverUtils.cs" />
@@ -318,6 +320,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GOT\TestInfo.cs" />
     <Compile Include="GOT\Utils\Singleton.cs" />
+    <Compile Include="GOT\RecoreInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

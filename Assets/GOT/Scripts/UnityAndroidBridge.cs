@@ -8,6 +8,11 @@ public class UnityAndroidProxy
     private AndroidJavaObject jo;
     private bool isInit = false;
 
+    public UnityAndroidProxy()
+    {
+        Init();
+    }
+
     public void Init()
     {
 #if UNITY_ANDROID

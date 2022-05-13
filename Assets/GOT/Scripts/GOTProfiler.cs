@@ -2,6 +2,7 @@ using MonitorLib.GOT;
 using System;
 using System.Collections;
 using System.IO;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Profiling;
@@ -17,6 +18,10 @@ public class GOTProfiler : MonoBehaviour
     public bool EnableFunctionAnalysis = false;
     [Header("是否采集手机功耗信息")]
     public bool EnableMobileConsumptionInfo = true;
+    [Header("是否统计内存资源分布信息")]
+    public bool EnableResMemoryDistributionInfo = true;
+    [Header("是否采集渲染数据")]
+    public bool EnableRenderInfo = true;
     [Header("采集手机功耗间隔帧")]
     [Range(10, 1000)]
     public int IntervalFrame = 100;
@@ -39,6 +44,9 @@ public class GOTProfiler : MonoBehaviour
     int m_frameIndex = 0;
     Action<bool> MonitorCallback;
     MonitorInfos monitorInfos = null;
+    RenderInfos renderInfos = null;
+    //设备功耗采集记录
+    DevicePowerConsumeInfos devicePowerConsumeInfos = null;
     //函数性能分析
     string funcAnalysisFilePath;
     //log日志路径
@@ -53,14 +61,30 @@ public class GOTProfiler : MonoBehaviour
     string testFilePath;
     //性能监控
     string monitorFilePath;
+    //内存分布
+    string resMemoryDistributionPath;
+    //渲染信息
+    string renderFilePath;
     //文件后缀类型
     string fileExt;
-    //设备功耗采集记录
-    DevicePowerConsumeInfos devicePowerConsumeInfos;
 
+    private ProfilerRecorder setPassCallRecord;
+    private ProfilerRecorder drawCallRecord;//dc技术
+    private ProfilerRecorder verticesRecord;//顶点数
+    private ProfilerRecorder trianglesRecord;//三角面
+
+    private UnityAndroidProxy unityAndroidProxy = null;
     void Awake()
     {
         Application.targetFrameRate = 60;
+
+        if (EnableRenderInfo)
+        {
+            setPassCallRecord = ProfilerRecorder.StartNew(ProfilerCategory.Render, "SetPass Calls Count");
+            drawCallRecord = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Draw Calls Count");
+            verticesRecord = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Vertices Count");
+            trianglesRecord = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Triangles Count");
+        }
     }
 
     void MonitorCallBackFunc(bool res)
@@ -79,7 +103,7 @@ public class GOTProfiler : MonoBehaviour
 #endif
             if (EnableFrameTexture)
             {
-                captureFilePath = $"{Application.persistentDataPath}/{ConstString.captureFramePrefix}{m_StartTime}";
+                captureFilePath = $"{Application.persistentDataPath}/{ConstString.CaptureFramePrefix}{m_StartTime}";
                 FileManager.CreateDir(captureFilePath);
             }
             if (EnableFunctionAnalysis)
@@ -91,6 +115,10 @@ public class GOTProfiler : MonoBehaviour
             monitorFilePath = $"{Application.persistentDataPath}/{ConstString.MonitorPrefix}{m_StartTime}{fileExt}";
             if (EnableMobileConsumptionInfo)
                 powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
+            if (EnableResMemoryDistributionInfo)
+                resMemoryDistributionPath = $"{Application.persistentDataPath}/{ConstString.ResMemoryDistributionPrefix}{m_StartTime}{fileExt}";
+            if (EnableRenderInfo)
+                renderFilePath = $"{Application.persistentDataPath}/{ConstString.RenderPrefix}{m_StartTime}{fileExt}";
             if (EnableLog)
             {
                 LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
@@ -124,8 +152,14 @@ public class GOTProfiler : MonoBehaviour
             m_TickTime = 0;
 
             MonitorInfosReport();
-            FuncAnalysisReport();
-            ZipCaptureFiles();
+            if (EnableRenderInfo)
+                RenderInfosReport();
+            if (EnableFunctionAnalysis)
+                FuncAnalysisReport();
+            if (EnableMobileConsumptionInfo) //上报手机数据
+                MobileConsumptionInfoReport();
+            if (EnableFrameTexture)
+                ZipCaptureFiles();
 
             if (EnableLog)
             {
@@ -253,22 +287,56 @@ public class GOTProfiler : MonoBehaviour
     void StartMonitor()
     {
         monitorInfos = new MonitorInfos();
+        renderInfos = new RenderInfos();
         devicePowerConsumeInfos = new DevicePowerConsumeInfos();
+    }
+
+    void MobileConsumptionInfoReport()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        bool writeRes = false;
+        if (!UseBinary)
+        {
+            writeRes = FileManager.WriteToFile(powerConsumeFilePath, JsonUtility.ToJson(devicePowerConsumeInfos));
+        }
+        else
+        {
+            writeRes = FileManager.WriteBinaryDataToFile(powerConsumeFilePath, devicePowerConsumeInfos);
+        }
+        if (writeRes)
+        {
+            UploadFile(powerConsumeFilePath);
+        }
+#endif
     }
 
     void FuncAnalysisReport()
     {
-        if (EnableFunctionAnalysis)
+        HookUtil.MethodAnalysisReport(m_StartTime);
+        if (File.Exists(funcAnalysisFilePath))
         {
-            HookUtil.MethodAnalysisReport(m_StartTime);
-            if (File.Exists(funcAnalysisFilePath))
-            {
-                UploadFile(funcAnalysisFilePath);
-            }
-            else
-            {
-                Debug.LogError($"当前函数性能分析报告  {funcAnalysisFilePath}不存在");
-            }
+            UploadFile(funcAnalysisFilePath);
+        }
+        else
+        {
+            Debug.LogError($"当前函数性能分析报告  {funcAnalysisFilePath}不存在");
+        }
+    }
+
+    void RenderInfosReport()
+    {
+        bool writeRes = false;
+        if (!UseBinary)
+        {
+            writeRes = FileManager.WriteToFile(renderFilePath, JsonUtility.ToJson(renderInfos));
+        }
+        else
+        {
+            writeRes = FileManager.WriteBinaryDataToFile(renderFilePath, renderInfos);
+        }
+        if (writeRes)
+        {
+            UploadFile(renderFilePath);
         }
     }
 
@@ -358,15 +426,17 @@ public class GOTProfiler : MonoBehaviour
             ++m_frameIndex;
             if (m_frameIndex > IgnoreFrameCount)
             {
-                var monitorInfo = new MonitorInfo() { FrameIndex = m_frameIndex - IgnoreFrameCount, BatteryLevel = SystemInfo.batteryLevel, MemorySize = 0, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
+                var relativeIndex = m_frameIndex - IgnoreFrameCount;
+                var monitorInfo = new MonitorInfo() { FrameIndex = relativeIndex, BatteryLevel = SystemInfo.batteryLevel, MemorySize = 0, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
                 monitorInfos.MonitorInfoList.Add(monitorInfo);
-
                 if ((m_frameIndex - IgnoreFrameCount) % IntervalFrame == 0)
                 {
                     if (EnableMobileConsumptionInfo)
-                        GetPowerConsume();
+                        GetPowerConsume(relativeIndex);
                     if (EnableFrameTexture)
-                        ScreenCapture.CaptureScreenshot($"{captureFilePath}/img_{m_StartTime}_{m_frameIndex - IgnoreFrameCount}.png");
+                        ScreenCapture.CaptureScreenshot($"{captureFilePath}/img_{m_StartTime}_{relativeIndex}.png");
+                    if (EnableRenderInfo)
+                        GetRenderInfo(relativeIndex);
                 }
             }
         }
@@ -409,31 +479,23 @@ public class GOTProfiler : MonoBehaviour
         }
     }
 
+    void GetRenderInfo(int index)
+    {
+        var renderInfo = new RenderInfo() { FrameIndex = index, DrawCall = drawCallRecord.LastValue, SetPassCall = setPassCallRecord.LastValue, Triangles = trianglesRecord.LastValue, Vertices = verticesRecord.LastValue };
+        renderInfos.RenderInfoList.Add(renderInfo);
+    }
+
     /// <summary>
     /// 获取功耗参数
     /// </summary>
-    void GetPowerConsume()
+    void GetPowerConsume(int index)
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
         Debug.Log("GetPowerConsume");
-        UnityAndroidProxy unityAndroidProxy = new UnityAndroidProxy();
-        unityAndroidProxy.Init();
-        DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo(m_frameIndex - IgnoreFrameCount);
+        unityAndroidProxy ??= new UnityAndroidProxy();
+        DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo(index);
         //Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
         devicePowerConsumeInfos.devicePowerConsumeInfos.Add(devicePowerConsumeInfo);
-        bool writeRes = false;
-        if (!UseBinary)
-        {
-            writeRes = FileManager.WriteToFile(powerConsumeFilePath, JsonUtility.ToJson(devicePowerConsumeInfos));
-        }
-        else
-        {
-            writeRes = FileManager.WriteBinaryDataToFile(powerConsumeFilePath, devicePowerConsumeInfos);
-        }
-        if (writeRes)
-        {
-            UploadFile(powerConsumeFilePath);
-        }
 #endif
     }
 
@@ -461,5 +523,16 @@ public class GOTProfiler : MonoBehaviour
     private void OnDestroy()
     {
         MonitorCallback -= MonitorCallBackFunc;
+    }
+
+    void OnDisable()
+    {
+        if (EnableRenderInfo)
+        {
+            setPassCallRecord.Dispose();
+            drawCallRecord.Dispose();
+            verticesRecord.Dispose();
+            trianglesRecord.Dispose();
+        }
     }
 }
