@@ -44,7 +44,9 @@ public class GOTProfiler : MonoBehaviour
     int m_frameIndex = 0;
     Action<bool> MonitorCallback;
     MonitorInfos monitorInfos = null;
+#if UNITY_2020_1_OR_NEWER
     RenderInfos renderInfos = null;
+#endif
     //设备功耗采集记录
     DevicePowerConsumeInfos devicePowerConsumeInfos = null;
     //函数性能分析
@@ -63,8 +65,10 @@ public class GOTProfiler : MonoBehaviour
     string monitorFilePath;
     //内存分布
     string resMemoryDistributionPath;
+#if UNITY_2020_1_OR_NEWER
     //渲染信息
     string renderFilePath;
+#endif
     //文件后缀类型
     string fileExt;
 
@@ -117,8 +121,10 @@ public class GOTProfiler : MonoBehaviour
                 powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
             if (EnableResMemoryDistributionInfo)
                 resMemoryDistributionPath = $"{Application.persistentDataPath}/{ConstString.ResMemoryDistributionPrefix}{m_StartTime}{fileExt}";
+#if UNITY_2020_1_OR_NEWER
             if (EnableRenderInfo)
                 renderFilePath = $"{Application.persistentDataPath}/{ConstString.RenderPrefix}{m_StartTime}{fileExt}";
+#endif
             if (EnableLog)
             {
                 LogManager.CreateLogFile(logFilePath, System.IO.FileMode.Append);
@@ -152,8 +158,10 @@ public class GOTProfiler : MonoBehaviour
             m_TickTime = 0;
 
             MonitorInfosReport();
+#if UNITY_2020_1_OR_NEWER
             if (EnableRenderInfo)
                 RenderInfosReport();
+#endif
             if (EnableFunctionAnalysis)
                 FuncAnalysisReport();
             if (EnableMobileConsumptionInfo) //上报手机数据
@@ -323,6 +331,7 @@ public class GOTProfiler : MonoBehaviour
         }
     }
 
+#if UNITY_2020_1_OR_NEWER
     void RenderInfosReport()
     {
         bool writeRes = false;
@@ -339,6 +348,7 @@ public class GOTProfiler : MonoBehaviour
             UploadFile(renderFilePath);
         }
     }
+#endif
 
     void MonitorInfosReport()
     {
@@ -435,8 +445,10 @@ public class GOTProfiler : MonoBehaviour
                         GetPowerConsume(relativeIndex);
                     if (EnableFrameTexture)
                         ScreenCapture.CaptureScreenshot($"{captureFilePath}/img_{m_StartTime}_{relativeIndex}.png");
+#if UNITY_2020_1_OR_NEWER
                     if (EnableRenderInfo)
                         GetRenderInfo(relativeIndex);
+#endif
                 }
             }
         }
@@ -479,11 +491,13 @@ public class GOTProfiler : MonoBehaviour
         }
     }
 
+#if UNITY_2020_1_OR_NEWER
     void GetRenderInfo(int index)
     {
         var renderInfo = new RenderInfo() { FrameIndex = index, DrawCall = drawCallRecord.LastValue, SetPassCall = setPassCallRecord.LastValue, Triangles = trianglesRecord.LastValue, Vertices = verticesRecord.LastValue };
         renderInfos.RenderInfoList.Add(renderInfo);
     }
+#endif
 
     /// <summary>
     /// 获取功耗参数
