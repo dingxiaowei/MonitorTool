@@ -72,16 +72,21 @@ public class GOTProfiler : MonoBehaviour
     //文件后缀类型
     string fileExt;
 
+#if UNITY_2020_1_OR_NEWER
     private ProfilerRecorder setPassCallRecord;
     private ProfilerRecorder drawCallRecord;//dc技术
     private ProfilerRecorder verticesRecord;//顶点数
     private ProfilerRecorder trianglesRecord;//三角面
+    //private ProfilerRecorder gcMemoryRecord;//gc
+    //private ProfilerRecorder mainThreadTimeRecord;
+#endif
 
     private UnityAndroidProxy unityAndroidProxy = null;
     void Awake()
     {
         Application.targetFrameRate = 60;
 
+#if UNITY_2020_1_OR_NEWER
         if (EnableRenderInfo)
         {
             setPassCallRecord = ProfilerRecorder.StartNew(ProfilerCategory.Render, "SetPass Calls Count");
@@ -89,6 +94,7 @@ public class GOTProfiler : MonoBehaviour
             verticesRecord = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Vertices Count");
             trianglesRecord = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Triangles Count");
         }
+#endif
     }
 
     void MonitorCallBackFunc(bool res)

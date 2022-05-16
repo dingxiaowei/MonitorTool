@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace MonitorLib.GOT
 {
@@ -123,6 +125,103 @@ namespace MonitorLib.GOT
                 sb.Append($"{RecordInfosList[i].ToString()}\n");
             }
             return sb.ToString();
+        }
+    }
+
+    [Serializable]
+    public struct RecordResInfo : IBinarySerializable
+    {
+        public long TextureSize;
+        public int TextureCount;
+        public long MeshSize;
+        public int MeshCount;
+        public long MaterialSize;
+        public int MaterialCount;
+        public long ShaderSize;
+        public int ShaderCount;
+        public long AnimationClipSize;
+        public int AnimationClipCount;
+        public long AudioClipSize;
+        public int AudioClipCount;
+        public long FountSize;
+        public int FountCount;
+        public long TextAssetSize;
+        public int TextAssetCount;
+        public long ScriptableObjectSize;
+        public int ScriptableObjectCount;
+        public long TotalSize; //统计部分的总量
+        public int TotalCount;//统计部分的数量
+
+        public void DeSerialize(BinaryReader reader)
+        {
+            TextureSize = reader.ReadInt64();
+            TextureCount = reader.ReadInt32();
+            MeshSize = reader.ReadInt64();
+            MeshCount = reader.ReadInt32();
+            MaterialSize = reader.ReadInt64();
+            MaterialCount = reader.ReadInt32();
+            ShaderSize = reader.ReadInt64();
+            ShaderCount = reader.ReadInt32();
+            AnimationClipSize = reader.ReadInt64();
+            AnimationClipCount = reader.ReadInt32();
+            AudioClipSize = reader.ReadInt64();
+            AudioClipSize = reader.ReadInt32();
+            FountSize = reader.ReadInt64();
+            FountCount = reader.ReadInt32();
+            TextAssetSize = reader.ReadInt64();
+            TextAssetCount = reader.ReadInt32();
+            ScriptableObjectSize = reader.ReadInt64();
+            ScriptableObjectCount = reader.ReadInt32();
+            TotalSize = reader.ReadInt64();
+            TotalCount = reader.ReadInt32();
+        }
+
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(TextureSize);
+            writer.Write(TextureCount);
+            writer.Write(MeshSize);
+            writer.Write(MeshCount);
+            writer.Write(MaterialSize);
+            writer.Write(MaterialCount);
+            writer.Write(ShaderSize);
+            writer.Write(ShaderCount);
+            writer.Write(AnimationClipSize);
+            writer.Write(AnimationClipCount);
+            writer.Write(AudioClipSize);
+            writer.Write(AudioClipCount);
+            writer.Write(FountSize);
+            writer.Write(FountCount);
+            writer.Write(TextAssetSize);
+            writer.Write(TextAssetCount);
+            writer.Write(ScriptableObjectSize);
+            writer.Write(ScriptableObjectCount);
+            writer.Write(TotalSize);
+            writer.Write(TotalCount);
+        }
+    }
+
+    [Serializable]
+    public class RecoreResInfos : IBinarySerializable
+    {
+        public List<RecordResInfo> RecordResInfosList = new List<RecordResInfo>();
+        public void DeSerialize(BinaryReader reader)
+        {
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                RecordResInfo tempData = new RecordResInfo();
+                tempData.DeSerialize(reader);
+                RecordResInfosList.Add(tempData);
+            }
+        }
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(RecordResInfosList.Count);
+            for (int i = 0; i < RecordResInfosList.Count; i++)
+            {
+                RecordResInfosList[i].Serialize(writer);
+            }
         }
     }
 }
