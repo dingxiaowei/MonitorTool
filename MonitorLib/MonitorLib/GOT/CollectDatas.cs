@@ -5,10 +5,24 @@ using UnityEngine.Profiling;
 
 namespace MonitorLib.GOT
 {
-    /// <summary>
-    /// 采样帧内存分类数据记录集合
-    /// </summary>
-    [Serializable]
+    public class CollectResFrameDatas<T> where T : UnityEngine.Object
+    {
+        public static KeyValuePair<long, int> TakeSample()
+        {
+            long size = 0L;
+            int count = 0;
+            T[] samples = Resources.FindObjectsOfTypeAll<T>();
+            for (int i = 0; i < samples.Length; i++)
+            {
+                long sampleSize = Profiler.GetRuntimeMemorySizeLong(samples[i]);
+                string name = samples[i].GetType().Name;
+                count++;
+                size += sampleSize;
+            }
+            return new KeyValuePair<long, int>(size, count);
+        }
+    }
+
     public class CollectDatas<T> where T : UnityEngine.Object
     {
         private readonly List<RecoreInfo> m_Records = new List<RecoreInfo>();

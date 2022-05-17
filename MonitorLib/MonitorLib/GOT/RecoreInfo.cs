@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using UnityEngine;
-using UnityEngine.Profiling;
 
 namespace MonitorLib.GOT
 {
     [Serializable]
     public class RecoreInfo : IBinarySerializable
     {
+        public int FrameIndex;
         public string Name;
         public int Count;
         public long Size;
@@ -25,6 +24,7 @@ namespace MonitorLib.GOT
 
         public void DeSerialize(BinaryReader reader)
         {
+            FrameIndex = reader.ReadInt32();
             Name = reader.ReadString();
             Count = reader.ReadInt32();
             Size = reader.ReadInt64();
@@ -32,6 +32,7 @@ namespace MonitorLib.GOT
 
         public void Serialize(BinaryWriter writer)
         {
+            writer.Write(FrameIndex);
             writer.Write(Name);
             writer.Write(Count);
             writer.Write(Size);
@@ -131,6 +132,7 @@ namespace MonitorLib.GOT
     [Serializable]
     public struct RecordResInfo : IBinarySerializable
     {
+        public int FrameIndex;
         public long TextureSize;
         public int TextureCount;
         public long MeshSize;
@@ -143,8 +145,8 @@ namespace MonitorLib.GOT
         public int AnimationClipCount;
         public long AudioClipSize;
         public int AudioClipCount;
-        public long FountSize;
-        public int FountCount;
+        public long FontSize;
+        public int FontCount;
         public long TextAssetSize;
         public int TextAssetCount;
         public long ScriptableObjectSize;
@@ -154,6 +156,7 @@ namespace MonitorLib.GOT
 
         public void DeSerialize(BinaryReader reader)
         {
+            FrameIndex = reader.ReadInt32();
             TextureSize = reader.ReadInt64();
             TextureCount = reader.ReadInt32();
             MeshSize = reader.ReadInt64();
@@ -166,8 +169,8 @@ namespace MonitorLib.GOT
             AnimationClipCount = reader.ReadInt32();
             AudioClipSize = reader.ReadInt64();
             AudioClipSize = reader.ReadInt32();
-            FountSize = reader.ReadInt64();
-            FountCount = reader.ReadInt32();
+            FontSize = reader.ReadInt64();
+            FontCount = reader.ReadInt32();
             TextAssetSize = reader.ReadInt64();
             TextAssetCount = reader.ReadInt32();
             ScriptableObjectSize = reader.ReadInt64();
@@ -178,6 +181,7 @@ namespace MonitorLib.GOT
 
         public void Serialize(BinaryWriter writer)
         {
+            writer.Write(FrameIndex);
             writer.Write(TextureSize);
             writer.Write(TextureCount);
             writer.Write(MeshSize);
@@ -190,8 +194,8 @@ namespace MonitorLib.GOT
             writer.Write(AnimationClipCount);
             writer.Write(AudioClipSize);
             writer.Write(AudioClipCount);
-            writer.Write(FountSize);
-            writer.Write(FountCount);
+            writer.Write(FontSize);
+            writer.Write(FontCount);
             writer.Write(TextAssetSize);
             writer.Write(TextAssetCount);
             writer.Write(ScriptableObjectSize);

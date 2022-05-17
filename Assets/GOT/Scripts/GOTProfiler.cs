@@ -49,6 +49,10 @@ public class GOTProfiler : MonoBehaviour
 #endif
     //设备功耗采集记录
     DevicePowerConsumeInfos devicePowerConsumeInfos = null;
+    /// <summary>
+    /// 资源内存分布
+    /// </summary>
+    RecoreResInfos recordResInfos = null;
     //函数性能分析
     string funcAnalysisFilePath;
     //log日志路径
@@ -168,6 +172,8 @@ public class GOTProfiler : MonoBehaviour
             if (EnableRenderInfo)
                 RenderInfosReport();
 #endif
+            if (EnableResMemoryDistributionInfo)
+                ResMemoryReport();
             if (EnableFunctionAnalysis)
                 FuncAnalysisReport();
             if (EnableMobileConsumptionInfo) //上报手机数据
@@ -303,6 +309,7 @@ public class GOTProfiler : MonoBehaviour
         monitorInfos = new MonitorInfos();
         renderInfos = new RenderInfos();
         devicePowerConsumeInfos = new DevicePowerConsumeInfos();
+        recordResInfos = new RecoreResInfos();
     }
 
     void MobileConsumptionInfoReport()
@@ -334,6 +341,23 @@ public class GOTProfiler : MonoBehaviour
         else
         {
             Debug.LogError($"当前函数性能分析报告  {funcAnalysisFilePath}不存在");
+        }
+    }
+
+    void ResMemoryReport()
+    {
+        bool writeRes = false;
+        if (!UseBinary)
+        {
+            writeRes = FileManager.WriteToFile(resMemoryDistributionPath, JsonUtility.ToJson(recordResInfos));
+        }
+        else
+        {
+            writeRes = FileManager.WriteBinaryDataToFile(resMemoryDistributionPath, recordResInfos);
+        }
+        if (writeRes)
+        {
+            UploadFile(resMemoryDistributionPath);
         }
     }
 
@@ -449,6 +473,8 @@ public class GOTProfiler : MonoBehaviour
                 {
                     if (EnableMobileConsumptionInfo)
                         GetPowerConsume(relativeIndex);
+                    if (EnableResMemoryDistributionInfo)
+                        GetResMemoryInfo(relativeIndex);
                     if (EnableFrameTexture)
                         ScreenCapture.CaptureScreenshot($"{captureFilePath}/img_{m_StartTime}_{relativeIndex}.png");
 #if UNITY_2020_1_OR_NEWER
@@ -504,6 +530,63 @@ public class GOTProfiler : MonoBehaviour
         renderInfos.RenderInfoList.Add(renderInfo);
     }
 #endif
+
+    void GetResMemoryInfo(int index)
+    {
+        RecordResInfo record = new RecordResInfo();
+        record.FrameIndex = index;
+        var pair = CollectResFrameDatas<Texture>.TakeSample();
+        record.TextureSize = pair.Key;
+        record.TotalSize += pair.Key;
+        record.TextureCount = pair.Value;
+        record.TotalCount += pair.Value;
+        pair = CollectResFrameDatas<Mesh>.TakeSample();
+        record.MeshSize = pair.Key;
+        record.TotalSize += pair.Key;
+        record.MeshCount = pair.Value;
+        record.TotalCount += pair.Value;
+        pair = CollectResFrameDatas<Material>.TakeSample();
+        record.MaterialSize = pair.Key;
+        record.TotalSize += pair.Key;
+        record.MaterialCount = pair.Value;
+        record.TotalCount += pair.Value;
+        pair = CollectResFrameDatas<Shader>.TakeSample();
+        record.ShaderSize = pair.Key;
+        record.TotalSize += pair.Key;
+        record.ShaderCount = pair.Value;
+        record.TotalCount += pair.Value;
+        pair = CollectResFrameDatas<AnimationClip>.TakeSample();
+        record.AnimationClipSize = pair.Key;
+        record.TotalSize += pair.Key;
+        record.AnimationClipCount = pair.Value;
+        record.TotalCount += pair.Value;
+        pair = CollectResFrameDatas<AudioClip>.TakeSample();
+        record.AudioClipSize = pair.Key;
+        record.TotalSize += pair.Key;
+        record.AudioClipCount = pair.Value;
+        record.TotalCount += pair.Value;
+        pair = CollectResFrameDatas<Texture>.TakeSample();
+        record.TextureSize = pair.Key;
+        record.TotalSize += pair.Key;
+        record.TextureCount = pair.Value;
+        record.TotalCount += pair.Value;
+        pair = CollectResFrameDatas<Font>.TakeSample();
+        record.FontSize = pair.Key;
+        record.TotalSize += pair.Key;
+        record.FontCount = pair.Value;
+        record.TotalCount += pair.Value;
+        pair = CollectResFrameDatas<TextAsset>.TakeSample();
+        record.TextAssetSize = pair.Key;
+        record.TotalSize += pair.Key;
+        record.TextAssetCount = pair.Value;
+        record.TotalCount += pair.Value;
+        pair = CollectResFrameDatas<ScriptableObject>.TakeSample();
+        record.ScriptableObjectSize = pair.Key;
+        record.TotalSize += pair.Key;
+        record.ScriptableObjectCount = pair.Value;
+        record.TotalCount += pair.Value;
+        recordResInfos.RecordResInfosList.Add(record);
+    }
 
     /// <summary>
     /// 获取功耗参数
