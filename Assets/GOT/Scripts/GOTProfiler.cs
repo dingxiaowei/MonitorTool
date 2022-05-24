@@ -408,7 +408,7 @@ public class GOTProfiler : MonoBehaviour
 
     void UploadFile(string filePath)
     {
-        FileUploadManager.UploadFile(filePath, (sender, e) =>
+        FileFTPUploadManager.UploadFile(filePath, (sender, e) =>
         {
             Debug.Log("Uploading Progreess: " + e.ProgressPercentage);
             if (e.ProgressPercentage > 0 && e.ProgressPercentage < 100)

@@ -62,6 +62,7 @@
     <Compile Include="Assets\GOT\Scripts\UnityAndroidBridge.cs" />
     <Compile Include="Assets\Demo\FooBehaviour.cs" />
     <Compile Include="Assets\Demo\InjectDemo.cs" />
+    <Compile Include="Assets\Demo\FileUpload.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\link.xml" />

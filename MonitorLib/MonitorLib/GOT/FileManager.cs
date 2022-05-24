@@ -124,6 +124,10 @@ namespace MonitorLib.GOT
         /// <returns></returns>
         public static string ReadAllByLine(string path)
         {
+            if (string.IsNullOrEmpty(path) || !File.Exists(path))
+            {
+                return string.Empty;
+            }
             StringBuilder sb = new StringBuilder();
             using (StreamReader sr = new StreamReader(path, Encoding.Default))
             {
@@ -135,6 +139,15 @@ namespace MonitorLib.GOT
                 sr.Close();
             }
             return sb.ToString();
+        }
+
+        public static byte[] ReadAllBytes(string path)
+        {
+            if (string.IsNullOrEmpty(path) || !File.Exists(path))
+            {
+                return null;
+            }
+            return File.ReadAllBytes(path);
         }
 
         /// <summary>
