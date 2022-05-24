@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace MonitorLib.GOT
 {
+    /*
     //TODO:未完待续
     public class GOTProfilerRuntime : MonoBehaviour
     {
@@ -65,4 +66,5 @@ namespace MonitorLib.GOT
 
         }
     }
+    */
 }
