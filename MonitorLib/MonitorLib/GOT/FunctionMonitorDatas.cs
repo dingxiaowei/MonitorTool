@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace MonitorLib.GOT
 {
-    
     public struct FuncData
     {
         public string FuncName;

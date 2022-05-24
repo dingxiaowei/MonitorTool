@@ -206,7 +206,7 @@ public class UnityAndroidInteract : MonoBehaviour
             float a = jo.Call<float>("GetCurAppMemorySize");
             log.text = a +"M";
         }
-        
+#if UNITY_ANDROID
         if (GUI.Button(new Rect(200, 370, 140, 40), "当前APP功能自定义参数"))
         {
             Debug.Log($"获取安卓功耗自定义参数");
@@ -217,8 +217,8 @@ public class UnityAndroidInteract : MonoBehaviour
             Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
             log.text = devicePowerConsumeInfo.ToString();
         }
-        
-        
+#endif
+
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Home))
         {
             Application.Quit();

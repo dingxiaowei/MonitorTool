@@ -295,6 +295,9 @@
     <Compile Include="..\MonitorLib\GOT\FunctionMonitorDatas.cs">
       <Link>GOT\FunctionMonitorDatas.cs</Link>
     </Compile>
+    <Compile Include="..\MonitorLib\GOT\GOTProfilerRuntime.cs">
+      <Link>GOT\GOTProfilerRuntime.cs</Link>
+    </Compile>
     <Compile Include="..\MonitorLib\GOT\HookUtil.cs">
       <Link>GOT\HookUtil.cs</Link>
     </Compile>
