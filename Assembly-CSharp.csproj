@@ -67,6 +67,8 @@
   <ItemGroup>
      <None Include="Assets\link.xml" />
      <None Include="Assets\Lib\EditorDll\MonitorLib.dll" />
+     <None Include="Assets\Lib\ICSharpCode.SharpZipLib.dll" />
+     <None Include="Assets\Lib\Newtonsoft.Json.dll" />
      <None Include="Assets\Lib\MonitorLib.dll" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity2020\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
@@ -292,6 +294,12 @@
     </Reference>
     <Reference Include="MonitorLib">
       <HintPath>Assets\Lib\EditorDll\MonitorLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Assets\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>Assets\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>C:\Program Files\Unity2020\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
