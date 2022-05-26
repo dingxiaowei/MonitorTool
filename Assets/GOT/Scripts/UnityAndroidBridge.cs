@@ -33,9 +33,9 @@ public class UnityAndroidProxy
 #endif
     }
 
+#if UNITY_ANDROID
     public DevicePowerConsumeInfo GetPowerConsumeInfo(int frameIndex = 0)
     {
-#if UNITY_ANDROID
         if (null == jo || null == jc)
         {
             Init();

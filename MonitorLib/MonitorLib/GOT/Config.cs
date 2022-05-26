@@ -1,10 +1,15 @@
-﻿namespace MonitorLib.GOT
+﻿using System.Collections.Generic;
+
+namespace MonitorLib.GOT
 {
     public class Config
     {
         public static string IP = "124.223.54.98";
         public static string ReportUrl = "http://124.223.54.98:888/Index.aspx";
         public static string ReportRecordUpdateRequestUrl = "http://124.223.54.98:888/ReceiveDataHandler.ashx?PackageName={0}&TestTime={1}";
+        public static string PostFileUrl = "https://apigw-cn-south.huawei.com/api/cybersim/performance/unity/v1/energy/addUnityPerformanceInfo";
+        //public static string PostFileUrl = "http://124.223.54.98:888/TestHandler.ashx";
+        public static Dictionary<string, string> PostFileHeaders = new Dictionary<string, string>() { { "X-HW-ID", "com.huawei.xr.cyberverse.cybersim" }, { "X-HW-APPKEY", "bA2J8D1u9djyOVtS8efNTQ==" } };
     }
 
     public class ConstString

@@ -20,8 +20,10 @@ public class GOTProfiler : MonoBehaviour
     public bool EnableMobileConsumptionInfo = true;
     [Header("是否统计内存资源分布信息")]
     public bool EnableResMemoryDistributionInfo = true;
+#if UNITY_2020_1_OR_NEWER
     [Header("是否采集渲染数据")]
     public bool EnableRenderInfo = true;
+#endif
     [Header("采集手机功耗间隔帧")]
     [Range(10, 1000)]
     public int IntervalFrame = 100;
@@ -114,7 +116,7 @@ public class GOTProfiler : MonoBehaviour
 #if UNITY_EDITOR
             PlayerPrefs.SetString("TestTime", m_StartTime);
             PlayerPrefs.Save();
-#endif
+#endif      
             if (EnableFrameTexture)
             {
                 captureFilePath = $"{Application.persistentDataPath}/{ConstString.CaptureFramePrefix}{m_StartTime}";
@@ -127,8 +129,10 @@ public class GOTProfiler : MonoBehaviour
             deviceFilePath = $"{Application.persistentDataPath}/{ConstString.DevicePrefix}{m_StartTime}{fileExt}";
             testFilePath = $"{Application.persistentDataPath}/{ConstString.TestPrefix}{m_StartTime}{fileExt}";
             monitorFilePath = $"{Application.persistentDataPath}/{ConstString.MonitorPrefix}{m_StartTime}{fileExt}";
+#if UNITY_ANDROID && !UNITY_EDITOR
             if (EnableMobileConsumptionInfo)
                 powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
+#endif
             if (EnableResMemoryDistributionInfo)
                 resMemoryDistributionPath = $"{Application.persistentDataPath}/{ConstString.ResMemoryDistributionPrefix}{m_StartTime}{fileExt}";
 #if UNITY_2020_1_OR_NEWER
@@ -148,11 +152,6 @@ public class GOTProfiler : MonoBehaviour
             {
                 ReportUrl.gameObject.SetActive(false);
             }
-
-            //测试Log颜色
-            Debug.LogError("测试Error Log");
-            Debug.LogWarning("测试Warning Log");
-
             StartMonitor();
         }
         else
@@ -176,8 +175,10 @@ public class GOTProfiler : MonoBehaviour
                 ResMemoryReport();
             if (EnableFunctionAnalysis)
                 FuncAnalysisReport();
+#if UNITY_ANDROID && !UNITY_EDITOR
             if (EnableMobileConsumptionInfo) //上报手机数据
                 MobileConsumptionInfoReport();
+#endif
             if (EnableFrameTexture)
                 ZipCaptureFiles();
 
@@ -187,20 +188,10 @@ public class GOTProfiler : MonoBehaviour
                 LogManager.CloseLogFile();
             }
 
-            //#if UNITY_EDITOR
-            //                if (EnableFunctionAnalysis)
-            //                {
-            //                    HookUtil.PrintMethodDatas();
-            //                }
-            //#endif
             if (EnableLog)
             {
-                //FileManager.ReplaceContent(logFilePath, "[Log]", "<font color=\"#0000FF\">[Log]</font>");
-                //FileManager.ReplaceContent(logFilePath, "[Error]", "<font color=\"#FF0000\">[Error]</font>");
-                //FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
                 UploadFile(logFilePath);
             }
-            Debug.Log("文件上传完毕");
 
             HttpGet(string.Format(Config.ReportRecordUpdateRequestUrl, Application.identifier, m_StartTime), (result) =>
             {
@@ -312,9 +303,9 @@ public class GOTProfiler : MonoBehaviour
         recordResInfos = new RecoreResInfos();
     }
 
+#if UNITY_ANDROID && !UNITY_EDITOR
     void MobileConsumptionInfoReport()
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
         bool writeRes = false;
         if (!UseBinary)
         {
@@ -328,8 +319,8 @@ public class GOTProfiler : MonoBehaviour
         {
             UploadFile(powerConsumeFilePath);
         }
-#endif
     }
+#endif
 
     void FuncAnalysisReport()
     {
@@ -408,7 +399,7 @@ public class GOTProfiler : MonoBehaviour
 
     void UploadFile(string filePath)
     {
-        FileUploadManager.UploadFile(filePath, (sender, e) =>
+        FileFTPUploadManager.UploadFile(filePath, (sender, e) =>
         {
             Debug.Log("Uploading Progreess: " + e.ProgressPercentage);
             if (e.ProgressPercentage > 0 && e.ProgressPercentage < 100)
@@ -471,8 +462,10 @@ public class GOTProfiler : MonoBehaviour
                 monitorInfos.MonitorInfoList.Add(monitorInfo);
                 if ((m_frameIndex - IgnoreFrameCount) % IntervalFrame == 0)
                 {
+#if UNITY_ANDROID && !UNITY_EDITOR
                     if (EnableMobileConsumptionInfo)
                         GetPowerConsume(relativeIndex);
+#endif
                     if (EnableResMemoryDistributionInfo)
                         GetResMemoryInfo(relativeIndex);
                     if (EnableFrameTexture)
@@ -588,19 +581,19 @@ public class GOTProfiler : MonoBehaviour
         recordResInfos.RecordResInfosList.Add(record);
     }
 
+#if UNITY_ANDROID && !UNITY_EDITOR
     /// <summary>
     /// 获取功耗参数
     /// </summary>
     void GetPowerConsume(int index)
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
         Debug.Log("GetPowerConsume");
         unityAndroidProxy ??= new UnityAndroidProxy();
         DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo(index);
         //Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
         devicePowerConsumeInfos.devicePowerConsumeInfos.Add(devicePowerConsumeInfo);
-#endif
     }
+#endif
 
     /// <summary>
     /// 压缩采集帧并上传

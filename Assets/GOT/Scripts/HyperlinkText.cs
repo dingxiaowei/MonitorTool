@@ -201,6 +201,5 @@ public class HyperlinkText : Text, IPointerClickHandler
             }
         }
     }
-
 }
 
