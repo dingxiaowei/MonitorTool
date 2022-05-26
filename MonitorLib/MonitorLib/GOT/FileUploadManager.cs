@@ -18,12 +18,15 @@ namespace MonitorLib.GOT
             {
                 return;
             }
-            var client = new WebClient();
-            var uri = new Uri(FTPHost + new FileInfo(filePath).Name);
-            client.UploadProgressChanged += new UploadProgressChangedEventHandler(OnFileUploadProgressChanged);
-            client.UploadFileCompleted += new UploadFileCompletedEventHandler(OnFileUploadCompleted);
-            //client.Credentials = new System.Net.NetworkCredential(FTPUserName, FTPPassword);
-            client.UploadFileAsync(uri, "STOR", filePath);
+
+            using (var client = new WebClient())
+            {
+                var uri = new Uri(FTPHost + new FileInfo(filePath).Name);
+                client.UploadProgressChanged += new UploadProgressChangedEventHandler(OnFileUploadProgressChanged);
+                client.UploadFileCompleted += new UploadFileCompletedEventHandler(OnFileUploadCompleted);
+                //client.Credentials = new System.Net.NetworkCredential(FTPUserName, FTPPassword);
+                client.UploadFileAsync(uri, "STOR", filePath);
+            }
         }
     }
 
