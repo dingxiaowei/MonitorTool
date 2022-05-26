@@ -45,7 +45,7 @@ public class UnityAndroidProxy
         {
             return default;
         }
-        Debug.Log($"从安卓获取结果:{result}");
+        //Debug.Log($"从安卓获取结果:{result}");
         string[] args = result.Split('|');
         DevicePowerConsumeInfo devicePowerConsumeInfo = new DevicePowerConsumeInfo();
         devicePowerConsumeInfo.FrameIndex = frameIndex;

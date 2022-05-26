@@ -55,7 +55,7 @@ public class HookEditor
         HookUtil.MethodAnalysisReport(lastTestTime);
     }
 
-    //[PostProcessScene] //打包的时候回自动调用下面的注入方法
+    [PostProcessScene]
     public static void AssemblyPostProcessorRun()
     {
         try

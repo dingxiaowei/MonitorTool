@@ -91,7 +91,6 @@ public class GOTProfiler : MonoBehaviour
     void Awake()
     {
         Application.targetFrameRate = 60;
-
 #if UNITY_2020_1_OR_NEWER
         if (EnableRenderInfo)
         {
@@ -587,7 +586,7 @@ public class GOTProfiler : MonoBehaviour
     /// </summary>
     void GetPowerConsume(int index)
     {
-        Debug.Log("GetPowerConsume");
+        //Debug.Log("GetPowerConsume");
         unityAndroidProxy ??= new UnityAndroidProxy();
         DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo(index);
         //Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
