@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class HookEditor
 {
-    private const string AssemblyPath = "./Library/ScriptAssemblies/Assembly-CSharp.dll";
+    private static string AssemblyPath = Application.dataPath + "/../Library/ScriptAssemblies/Assembly-CSharp.dll";
 #if ENABLE_ANALYSIS
     [MenuItem("Hook/所有函数性能分析")]
     public static void HookInject()
@@ -67,7 +67,7 @@ public class HookEditor
             }
             EditorApplication.LockReloadAssemblies();
             // 按路径读取程序集
-            var readerParameters = new ReaderParameters { ReadSymbols = false };
+            var readerParameters = new ReaderParameters { ReadSymbols = true, SymbolReaderProvider = new Mono.Cecil.Pdb.PdbReaderProvider() };
             var assembly = AssemblyDefinition.ReadAssembly(AssemblyPath, readerParameters);
             if (assembly == null)
             {
@@ -76,7 +76,7 @@ public class HookEditor
             }
             if (HookEditor.ProcessAssembly(assembly))
             {
-                assembly.Write(AssemblyPath, new WriterParameters { WriteSymbols = true });
+                assembly.Write(AssemblyPath, new WriterParameters { WriteSymbols = true, SymbolWriterProvider = new Mono.Cecil.Pdb.PdbWriterProvider() });
             }
             else
             {
@@ -153,7 +153,7 @@ public class HookEditor
 
                     //屏蔽一些Lua相关的
                     //if (method.Name.Contains("lua") || method.Name.Contains("_Gen") || type.Name.Contains("Lua"))
-                      //  continue;
+                    //  continue;
 
                     //如果注入代码失败，可以打开下面的输出看看卡在了那个方法上。
                     //Debug.Log(method.Name + "======= " + type.Name + "======= " + method.Body + "======= " + type.BaseType.GenericParameters + " ===== " + module.Name);
