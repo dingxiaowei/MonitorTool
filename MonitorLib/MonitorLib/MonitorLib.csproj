@@ -309,6 +309,7 @@
     <Compile Include="GOT\HookUtil.cs" />
     <Compile Include="GOT\LogInfos.cs" />
     <Compile Include="GOT\LogManager.cs" />
+    <Compile Include="GOT\MemoryDatas.cs" />
     <Compile Include="GOT\MonitorAttributes.cs" />
     <Compile Include="GOT\MonitorInfo.cs" />
     <Compile Include="GOT\RenderInfo.cs" />

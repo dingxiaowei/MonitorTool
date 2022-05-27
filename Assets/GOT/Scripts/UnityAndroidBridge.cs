@@ -60,5 +60,20 @@ public class UnityAndroidProxy
         devicePowerConsumeInfo.CpuTemperate = Convert.ToInt32(args[8]);
         return devicePowerConsumeInfo;
     }
+
+    public MemoryUseData GetPssMemory(int frameIndex = 0)
+    {
+        if (null == jo || null == jc)
+        {
+            Init();
+        }
+        var pss = jo.Call<float>("GetCurAppMemorySize");
+        var memoryUseData = new MemoryUseData()
+        {
+            FrameIndex = frameIndex,
+            PssMemorySize = pss
+        };
+        return memoryUseData;
+    }
 #endif
 }

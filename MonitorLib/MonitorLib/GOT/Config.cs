@@ -40,5 +40,6 @@ namespace MonitorLib.GOT
         public const string ResMemoryDistributionPrefix = "resMemoryDistribution_";
         //渲染信息
         public const string RenderPrefix = "renderInfo_";
+        public const string PssMemoryPrefix = "pssMemoryInfo_";
     }
 }
