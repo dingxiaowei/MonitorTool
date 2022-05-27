@@ -46,11 +46,15 @@ public class GOTProfiler : MonoBehaviour
     int m_frameIndex = 0;
     Action<bool> MonitorCallback;
     MonitorInfos monitorInfos = null;
+#if UNITY_ANDROID && !UNITY_EDITOR
+    MemoryUseDatas memoryUseDatas = null;  //pss内存
+    //设备功耗采集记录
+    DevicePowerConsumeInfos devicePowerConsumeInfos = null;
+#endif
 #if UNITY_2020_1_OR_NEWER
     RenderInfos renderInfos = null;
 #endif
-    //设备功耗采集记录
-    DevicePowerConsumeInfos devicePowerConsumeInfos = null;
+    
     /// <summary>
     /// 资源内存分布
     /// </summary>
@@ -61,14 +65,19 @@ public class GOTProfiler : MonoBehaviour
     string logFilePath;
     //设备信息路径
     string deviceFilePath;
-    //功耗信息路径
-    string powerConsumeFilePath;
+    
     //截图信息路径
     string captureFilePath;
     //测试信息路径
     string testFilePath;
     //性能监控
     string monitorFilePath;
+#if UNITY_ANDROID && !UNITY_EDITOR
+    //pss内存
+    string pssMemoryUsedFilePath;
+    //功耗信息路径
+    string powerConsumeFilePath;
+#endif
     //内存分布
     string resMemoryDistributionPath;
 #if UNITY_2020_1_OR_NEWER
@@ -115,7 +124,7 @@ public class GOTProfiler : MonoBehaviour
 #if UNITY_EDITOR
             PlayerPrefs.SetString("TestTime", m_StartTime);
             PlayerPrefs.Save();
-#endif      
+#endif
             if (EnableFrameTexture)
             {
                 captureFilePath = $"{Application.persistentDataPath}/{ConstString.CaptureFramePrefix}{m_StartTime}";
@@ -133,7 +142,12 @@ public class GOTProfiler : MonoBehaviour
                 powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
 #endif
             if (EnableResMemoryDistributionInfo)
+            {
                 resMemoryDistributionPath = $"{Application.persistentDataPath}/{ConstString.ResMemoryDistributionPrefix}{m_StartTime}{fileExt}";
+#if UNITY_ANDROID && !UNITY_EDITOR
+                pssMemoryUsedFilePath = $"{Application.persistentDataPath}/{ConstString.PssMemoryPrefix}{m_StartTime}{fileExt}";
+#endif
+            }
 #if UNITY_2020_1_OR_NEWER
             if (EnableRenderInfo)
                 renderFilePath = $"{Application.persistentDataPath}/{ConstString.RenderPrefix}{m_StartTime}{fileExt}";
@@ -176,7 +190,10 @@ public class GOTProfiler : MonoBehaviour
                 FuncAnalysisReport();
 #if UNITY_ANDROID && !UNITY_EDITOR
             if (EnableMobileConsumptionInfo) //上报手机数据
+            {
                 MobileConsumptionInfoReport();
+                MobilePssMemoryUseReport();
+            }
 #endif
             if (EnableFrameTexture)
                 ZipCaptureFiles();
@@ -298,7 +315,10 @@ public class GOTProfiler : MonoBehaviour
     {
         monitorInfos = new MonitorInfos();
         renderInfos = new RenderInfos();
+#if UNITY_ANDROID && !UNITY_EDITOR
         devicePowerConsumeInfos = new DevicePowerConsumeInfos();
+        memoryUseDatas = new MemoryUseDatas();
+#endif
         recordResInfos = new RecoreResInfos();
     }
 
@@ -317,6 +337,23 @@ public class GOTProfiler : MonoBehaviour
         if (writeRes)
         {
             UploadFile(powerConsumeFilePath);
+        }
+    }
+
+     void MobilePssMemoryUseReport()
+    {
+        bool writeRes = false;
+        if (!UseBinary)
+        {
+            writeRes = FileManager.WriteToFile(pssMemoryUsedFilePath, JsonUtility.ToJson(memoryUseDatas));
+        }
+        else
+        {
+            writeRes = FileManager.WriteBinaryDataToFile(pssMemoryUsedFilePath, memoryUseDatas);
+        }
+        if (writeRes)
+        {
+            UploadFile(pssMemoryUsedFilePath);
         }
     }
 #endif
@@ -400,7 +437,7 @@ public class GOTProfiler : MonoBehaviour
     {
         FileFTPUploadManager.UploadFile(filePath, (sender, e) =>
         {
-            Debug.Log("Uploading Progreess: " + e.ProgressPercentage);
+            Debug.Log("Uploading Progreess : " + e.ProgressPercentage);
             if (e.ProgressPercentage > 0 && e.ProgressPercentage < 100)
             {
                 if (UploadTips != null && !UploadTips.gameObject.activeSelf)
@@ -457,13 +494,19 @@ public class GOTProfiler : MonoBehaviour
             if (m_frameIndex > IgnoreFrameCount)
             {
                 var relativeIndex = m_frameIndex - IgnoreFrameCount;
-                var monitorInfo = new MonitorInfo() { FrameIndex = relativeIndex, BatteryLevel = SystemInfo.batteryLevel, MemorySize = 0, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
+                var monitorInfo = new MonitorInfo() { FrameIndex = relativeIndex, BatteryLevel = SystemInfo.batteryLevel, MemorySize = Profiler.maxUsedMemory, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
                 monitorInfos.MonitorInfoList.Add(monitorInfo);
                 if ((m_frameIndex - IgnoreFrameCount) % IntervalFrame == 0)
                 {
 #if UNITY_ANDROID && !UNITY_EDITOR
                     if (EnableMobileConsumptionInfo)
+                    {
                         GetPowerConsume(relativeIndex);
+                    }
+                    if (EnableResMemoryDistributionInfo)
+                    {
+                        GetFramePssMemory(relativeIndex);
+                    }
 #endif
                     if (EnableResMemoryDistributionInfo)
                         GetResMemoryInfo(relativeIndex);
@@ -591,6 +634,13 @@ public class GOTProfiler : MonoBehaviour
         DevicePowerConsumeInfo devicePowerConsumeInfo = unityAndroidProxy.GetPowerConsumeInfo(index);
         //Debug.Log($"获取安卓功耗参数:{devicePowerConsumeInfo.ToString()}");
         devicePowerConsumeInfos.devicePowerConsumeInfos.Add(devicePowerConsumeInfo);
+    }
+
+    void GetFramePssMemory(int index)
+    {
+        unityAndroidProxy ??= new UnityAndroidProxy();
+        MemoryUseData data = unityAndroidProxy.GetPssMemory(index);
+        memoryUseDatas.MemoryUsedList.Add(data);
     }
 #endif
 

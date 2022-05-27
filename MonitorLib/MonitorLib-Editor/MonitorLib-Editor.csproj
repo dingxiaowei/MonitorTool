@@ -311,6 +311,9 @@
     <Compile Include="..\MonitorLib\GOT\LogManager.cs">
       <Link>GOT\LogManager.cs</Link>
     </Compile>
+    <Compile Include="..\MonitorLib\GOT\MemoryDatas.cs">
+      <Link>GOT\MemoryDatas.cs</Link>
+    </Compile>
     <Compile Include="..\MonitorLib\GOT\MonitorAttributes.cs">
       <Link>GOT\MonitorAttributes.cs</Link>
     </Compile>
