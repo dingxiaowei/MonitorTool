@@ -60,7 +60,7 @@
     <Compile Include="Assets\GOT\Scripts\GOTProfiler.cs" />
     <Compile Include="Assets\Demo\UnityAndroidInteract.cs" />
     <Compile Include="Assets\Demo\FileUpload.cs" />
-    <Compile Include="Assets\GOT\Scripts\UnityAndroidBridge.cs" />
+    <Compile Include="Assets\GOT\Scripts\UnityAndroidProxy.cs" />
     <Compile Include="Assets\Demo\FooBehaviour.cs" />
     <Compile Include="Assets\Demo\InjectDemo.cs" />
   </ItemGroup>

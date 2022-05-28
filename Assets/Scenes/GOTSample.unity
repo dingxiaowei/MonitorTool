@@ -463,7 +463,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1579846843, guid: f157c1f95e761cd429e3123c4695b148, type: 3}
       propertyPath: EnableFunctionAnalysis
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1579846843, guid: f157c1f95e761cd429e3123c4695b148, type: 3}
       propertyPath: EnableMobileConsumptionInfo
