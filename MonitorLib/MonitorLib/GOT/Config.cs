@@ -22,6 +22,7 @@ namespace MonitorLib.GOT
         public const string TextExt = ".txt";
 
         //文件前缀
+        public const string FrameRatefix = "frameRate_";
         public const string LogPrefix = "log_";
         public const string DevicePrefix = "device_";
         public const string TestPrefix = "test_";

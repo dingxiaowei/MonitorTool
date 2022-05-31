@@ -46,6 +46,7 @@ public class GOTProfiler : MonoBehaviour
     int m_frameIndex = 0;
     Action<bool> MonitorCallback;
     MonitorInfos monitorInfos = null;
+    FrameRates frameRateInfos = null;
 #if UNITY_ANDROID && !UNITY_EDITOR
     MemoryUseDatas memoryUseDatas = null;  //pss内存
     //设备功耗采集记录
@@ -54,7 +55,7 @@ public class GOTProfiler : MonoBehaviour
 #if UNITY_2020_1_OR_NEWER
     RenderInfos renderInfos = null;
 #endif
-    
+
     /// <summary>
     /// 资源内存分布
     /// </summary>
@@ -65,13 +66,14 @@ public class GOTProfiler : MonoBehaviour
     string logFilePath;
     //设备信息路径
     string deviceFilePath;
-    
+
     //截图信息路径
     string captureFilePath;
     //测试信息路径
     string testFilePath;
     //性能监控
     string monitorFilePath;
+    string frameRateFilePath;
 #if UNITY_ANDROID && !UNITY_EDITOR
     //pss内存
     string pssMemoryUsedFilePath;
@@ -137,6 +139,7 @@ public class GOTProfiler : MonoBehaviour
             deviceFilePath = $"{Application.persistentDataPath}/{ConstString.DevicePrefix}{m_StartTime}{fileExt}";
             testFilePath = $"{Application.persistentDataPath}/{ConstString.TestPrefix}{m_StartTime}{fileExt}";
             monitorFilePath = $"{Application.persistentDataPath}/{ConstString.MonitorPrefix}{m_StartTime}{fileExt}";
+            frameRateFilePath = $"{Application.persistentDataPath}/{ConstString.FrameRatefix}{m_StartTime}{fileExt}";
 #if UNITY_ANDROID && !UNITY_EDITOR
             if (EnableMobileConsumptionInfo)
                 powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
@@ -180,6 +183,7 @@ public class GOTProfiler : MonoBehaviour
             m_TickTime = 0;
 
             MonitorInfosReport();
+            FrameRateInfosReport();
 #if UNITY_2020_1_OR_NEWER
             if (EnableRenderInfo)
                 RenderInfosReport();
@@ -314,6 +318,7 @@ public class GOTProfiler : MonoBehaviour
     void StartMonitor()
     {
         monitorInfos = new MonitorInfos();
+        frameRateInfos = new FrameRates();
         renderInfos = new RenderInfos();
 #if UNITY_ANDROID && !UNITY_EDITOR
         devicePowerConsumeInfos = new DevicePowerConsumeInfos();
@@ -407,12 +412,29 @@ public class GOTProfiler : MonoBehaviour
     }
 #endif
 
+    void FrameRateInfosReport()
+    {
+        bool writeRes = false;
+        if (!UseBinary)
+        {
+            writeRes = FileManager.WriteToFile(frameRateFilePath, JsonUtility.ToJson(frameRateInfos));
+        }
+        else
+        {
+            writeRes = FileManager.WriteBinaryDataToFile(frameRateFilePath, frameRateInfos);
+        }
+        if (writeRes)
+        {
+            UploadFile(frameRateFilePath);
+        }
+    }
+
     void MonitorInfosReport()
     {
-        if (monitorInfos.MonitorInfoList.Count > 1)
-        {
-            monitorInfos.MonitorInfoList.RemoveAt(monitorInfos.MonitorInfoList.Count - 1);
-        }
+        //if (monitorInfos.MonitorInfoList.Count > 1)
+        //{
+        //    monitorInfos.MonitorInfoList.RemoveAt(monitorInfos.MonitorInfoList.Count - 1);
+        //}
         bool writeRes = false;
         if (!UseBinary)
         {
@@ -494,10 +516,11 @@ public class GOTProfiler : MonoBehaviour
             if (m_frameIndex > IgnoreFrameCount)
             {
                 var relativeIndex = m_frameIndex - IgnoreFrameCount;
-                var monitorInfo = new MonitorInfo() { FrameIndex = relativeIndex, BatteryLevel = SystemInfo.batteryLevel, MemorySize = Profiler.maxUsedMemory, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
-                monitorInfos.MonitorInfoList.Add(monitorInfo);
+                frameRateInfos.FrameRateList.Add(new MonitorFrameInfo() { FrameIndex = relativeIndex, Frame = m_FPS });
                 if ((m_frameIndex - IgnoreFrameCount) % IntervalFrame == 0)
                 {
+                    var monitorInfo = new MonitorInfo() { FrameIndex = relativeIndex, BatteryLevel = SystemInfo.batteryLevel, MemorySize = Profiler.maxUsedMemory, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
+                    monitorInfos.MonitorInfoList.Add(monitorInfo);
 #if UNITY_ANDROID && !UNITY_EDITOR
                     if (EnableMobileConsumptionInfo)
                     {
@@ -510,7 +533,7 @@ public class GOTProfiler : MonoBehaviour
 #endif
                     if (EnableResMemoryDistributionInfo)
                         GetResMemoryInfo(relativeIndex);
-                    if (EnableFrameTexture)
+                    if (EnableFrameTexture) //TODO:定帧截图
                         ScreenCapture.CaptureScreenshot($"{captureFilePath}/img_{m_StartTime}_{relativeIndex}.png");
 #if UNITY_2020_1_OR_NEWER
                     if (EnableRenderInfo)
