@@ -1,0 +1,5 @@
+"Int,Id","string,ItemId","String,Name","String,LocalPath","String,Path","Float,TimeLength","Int,ResType","Int,PlayMode"
+序号, 对应道具,名称,本地路径,路径,时长,类型,播放形式
+1,40,Chips,Media/FishandChips,https://cyberverse.hwcloudtest.cn/assets-mgr/arcyberverse/hola/filter%2FMusic%2FFish%20and%20Chips.mp3,205,1,1
+2,13,Motivation,Media/InspirationalMotivation,https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2FInspirational Motivation.mp3,123,1,1
+3,25,Motivation,Media/InspirationalMotivation,https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2FInspirational Motivation.mp3,123,1,1

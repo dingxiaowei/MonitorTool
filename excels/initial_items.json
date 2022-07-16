@@ -1,0 +1,1006 @@
+{ "Items":
+[
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         -180,
+         0
+      ],
+      "Id": 1,
+      "ItemId": "1",
+      "Name": "沙发01",
+      "Position": [
+         0.965,
+         0,
+         0.21
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         -90,
+         0
+      ],
+      "Id": 2,
+      "ItemId": "2",
+      "Name": "沙发02",
+      "Position": [
+         2.164,
+         0,
+         -1.294
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         180,
+         0
+      ],
+      "Id": 3,
+      "ItemId": "3",
+      "Name": "沙发03",
+      "Position": [
+         -2.207,
+         0,
+         0.243
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         180,
+         0
+      ],
+      "Id": 4,
+      "ItemId": "4",
+      "Name": "沙发04",
+      "Position": [
+         -1.077,
+         0,
+         0.216
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 5,
+      "ItemId": "7",
+      "Name": "茶几01",
+      "Position": [
+         -0.088,
+         0,
+         -1.42
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 6,
+      "ItemId": "6",
+      "Name": "台灯",
+      "Position": [
+         2.605,
+         0,
+         -0.3
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 7,
+      "ItemId": "29",
+      "Name": "健身球",
+      "Position": [
+         -1.725,
+         0,
+         -2.7
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 8,
+      "ItemId": "12",
+      "Name": "电视柜",
+      "Position": [
+         0,
+         0,
+         -3.586
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 9,
+      "ItemId": "11",
+      "Name": "挂式电视",
+      "Position": [
+         0,
+         0.893,
+         -3.916
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 10,
+      "ItemId": "10",
+      "Name": "装饰柜03",
+      "Position": [
+         -2.218,
+         0,
+         -3.599
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 11,
+      "ItemId": "13",
+      "Name": "语音播放器",
+      "Position": [
+         2.1,
+         0,
+         -3.747
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         -90,
+         0
+      ],
+      "Id": 12,
+      "ItemId": "9",
+      "Name": "装饰柜01",
+      "Position": [
+         3.656,
+         0,
+         -1.424
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         90,
+         0
+      ],
+      "Id": 13,
+      "ItemId": "8",
+      "Name": "装饰架01",
+      "Position": [
+         -3.61,
+         0,
+         -0.75
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         90,
+         0
+      ],
+      "Id": 14,
+      "ItemId": "10",
+      "Name": "装饰柜03",
+      "Position": [
+         -3.61,
+         0,
+         1.054
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         180,
+         0
+      ],
+      "Id": 15,
+      "ItemId": "10",
+      "Name": "装饰柜03",
+      "Position": [
+         2.424,
+         0,
+         3.616
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         180,
+         0
+      ],
+      "Id": 16,
+      "ItemId": "14",
+      "Name": "衣柜",
+      "Position": [
+         3.34,
+         0,
+         3.616
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         176.05,
+         0
+      ],
+      "Id": 17,
+      "ItemId": "15",
+      "Name": "红椅子",
+      "Position": [
+         -2.155,
+         0,
+         3.5
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         180,
+         0
+      ],
+      "Id": 18,
+      "ItemId": "16",
+      "Name": "蓝椅子",
+      "Position": [
+         -1.368,
+         0,
+         3.5
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         -180,
+         0
+      ],
+      "Id": 19,
+      "ItemId": "17",
+      "Name": "装饰架001",
+      "Position": [
+         1.747,
+         2.168,
+         3.98
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         180,
+         0
+      ],
+      "Id": 20,
+      "ItemId": "18",
+      "Name": "装饰架002",
+      "Position": [
+         -2.344,
+         2.273,
+         3.98
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         -180,
+         0
+      ],
+      "Id": 21,
+      "ItemId": "19",
+      "Name": "装饰架003",
+      "Position": [
+         2.292,
+         1.63,
+         3.98
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         180,
+         0
+      ],
+      "Id": 22,
+      "ItemId": "20",
+      "Name": "装饰架004",
+      "Position": [
+         -1.872,
+         1.416,
+         3.98
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 23,
+      "ItemId": "5",
+      "Name": "装饰柜",
+      "Position": [
+         0.062,
+         0,
+         0.85
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         -16.356,
+         0
+      ],
+      "Id": 24,
+      "ItemId": "21",
+      "Name": "木马",
+      "Position": [
+         1.02,
+         0,
+         1.885
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         -28.521,
+         0
+      ],
+      "Id": 25,
+      "ItemId": "22",
+      "Name": "白板",
+      "Position": [
+         2.253,
+         0,
+         -3.043
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 26,
+      "ItemId": "23",
+      "Name": "会议室沙发",
+      "Position": [
+         3.325,
+         0,
+         -2.081
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         180,
+         0
+      ],
+      "Id": 27,
+      "ItemId": "23",
+      "Name": "会议室沙发",
+      "Position": [
+         3.314,
+         0,
+         0.33
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         214.145,
+         0
+      ],
+      "Id": 28,
+      "ItemId": "23",
+      "Name": "会议室沙发",
+      "Position": [
+         3.13,
+         0,
+         3.26
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 29,
+      "ItemId": "24",
+      "Name": "会议室茶几",
+      "Position": [
+         3.323,
+         0,
+         -0.977
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         90,
+         0
+      ],
+      "Id": 31,
+      "ItemId": "28",
+      "Name": "会议室桌子",
+      "Position": [
+         0.099,
+         0,
+         -0.102039
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         263.45,
+         0
+      ],
+      "Id": 32,
+      "ItemId": "26",
+      "Name": "会议室与会者椅子",
+      "Position": [
+         1.53,
+         0,
+         1.583961
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         263.45,
+         0
+      ],
+      "Id": 33,
+      "ItemId": "26",
+      "Name": "会议室与会者椅子",
+      "Position": [
+         1.53,
+         0,
+         0.4609618
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         263.45,
+         0
+      ],
+      "Id": 34,
+      "ItemId": "26",
+      "Name": "会议室与会者椅子",
+      "Position": [
+         1.62,
+         0,
+         -0.416039
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         263.45,
+         0
+      ],
+      "Id": 35,
+      "ItemId": "26",
+      "Name": "会议室与会者椅子",
+      "Position": [
+         1.49,
+         0,
+         -1.546
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         90,
+         0
+      ],
+      "Id": 36,
+      "ItemId": "26",
+      "Name": "会议室与会者椅子",
+      "Position": [
+         -1.177,
+         0,
+         1.185999
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         90,
+         0
+      ],
+      "Id": 37,
+      "ItemId": "26",
+      "Name": "会议室与会者椅子",
+      "Position": [
+         -1.177,
+         0,
+         -0.481
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         90,
+         0
+      ],
+      "Id": 38,
+      "ItemId": "26",
+      "Name": "会议室与会者椅子",
+      "Position": [
+         -1.177,
+         0,
+         0.37
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         90,
+         0
+      ],
+      "Id": 39,
+      "ItemId": "26",
+      "Name": "会议室与会者椅子",
+      "Position": [
+         -1.177,
+         0,
+         -1.40903
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         180,
+         0
+      ],
+      "Id": 40,
+      "ItemId": "27",
+      "Name": "会议室主席椅子",
+      "Position": [
+         0.076,
+         0,
+         2.633
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 41,
+      "ItemId": "32",
+      "Name": "垃圾桶",
+      "Position": [
+         -2.637,
+         0,
+         2.666
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         90,
+         0
+      ],
+      "Id": 42,
+      "ItemId": "31",
+      "Name": "杂物盒",
+      "Position": [
+         -3.508,
+         0,
+         3.51
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         90,
+         0
+      ],
+      "Id": 43,
+      "ItemId": "30",
+      "Name": "会议室装饰架",
+      "Position": [
+         -3.574,
+         0,
+         1.61
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         90,
+         0
+      ],
+      "Id": 44,
+      "ItemId": "30",
+      "Name": "会议室装饰架",
+      "Position": [
+         -3.574,
+         0,
+         -1.25
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 45,
+      "ItemId": "29",
+      "Name": "健身球",
+      "Position": [
+         -2.641,
+         0.501,
+         -2.087
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 46,
+      "ItemId": "33",
+      "Name": "立式电视",
+      "Position": [
+         0,
+         0,
+         -3.573
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 47,
+      "ItemId": "13",
+      "Name": "音乐播放器",
+      "Position": [
+         -1.938,
+         0,
+         -3.65
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         -90,
+         0
+      ],
+      "Id": 49,
+      "ItemId": "34",
+      "Name": "镜子",
+      "Position": [
+         3.972,
+         1.62,
+         2.478
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 50,
+      "ItemId": "36",
+      "Name": "剪刀布骰子",
+      "Position": [
+         -3.31,
+         0.177,
+         3.137
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 51,
+      "ItemId": "36",
+      "Name": "剪刀布骰子",
+      "Position": [
+         -3.31,
+         0.177,
+         2.438
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 52,
+      "ItemId": "35",
+      "Name": "数字骰子",
+      "Position": [
+         0.713,
+         0.217,
+         3.38
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 53,
+      "ItemId": "35",
+      "Name": "数字骰子",
+      "Position": [
+         1.688,
+         0.217,
+         3.38
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 54,
+      "ItemId": "35",
+      "Name": "数字骰子",
+      "Position": [
+         1.203,
+         0.217,
+         3.38
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 55,
+      "ItemId": "35",
+      "Name": "数字骰子",
+      "Position": [
+         2.16,
+         0,
+         3.635
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 56,
+      "ItemId": "35",
+      "Name": "数字骰子",
+      "Position": [
+         1.682,
+         0,
+         3.635
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 57,
+      "ItemId": "35",
+      "Name": "数字骰子",
+      "Position": [
+         1.162,
+         0,
+         3.635
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 58,
+      "ItemId": "36",
+      "Name": "剪刀布骰子",
+      "Position": [
+         -2.586,
+         0,
+         3.599
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 59,
+      "ItemId": "36",
+      "Name": "剪刀布骰子",
+      "Position": [
+         -2.04,
+         0,
+         3.6
+      ],
+      "RoomType": 2
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         180,
+         0
+      ],
+      "Id": 60,
+      "ItemId": "38",
+      "Name": "沙发边",
+      "Position": [
+         -0.228,
+         0,
+         0.228
+      ],
+      "RoomType": 1
+   },
+   {
+      "Comment": "1",
+      "Direction": [
+         0,
+         0,
+         0
+      ],
+      "Id": 61,
+      "ItemId": "32",
+      "Name": "垃圾桶",
+      "Position": [
+         -2.912,
+         0,
+         3.699
+      ],
+      "RoomType": 1
+   }
+]}

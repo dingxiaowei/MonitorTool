@@ -1,0 +1,803 @@
+{ "Items":
+[
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            0,
+            2,
+            0
+         ],
+         [
+            0,
+            4,
+            0
+         ]
+      ],
+      "Id": 1,
+      "ItemId": "1",
+      "Name": "4人长沙发",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 2,
+      "ItemId": "2",
+      "Name": "单人沙发",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 3,
+      "ItemId": "3",
+      "Name": "茶几",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 4,
+      "ItemId": "4",
+      "Name": "健身球",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 5,
+      "ItemId": "5",
+      "Name": "大屏电视",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Wall",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 6,
+      "ItemId": "6",
+      "Name": "落地镜",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 7,
+      "ItemId": "7",
+      "Name": "主持人椅子",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 8,
+      "ItemId": "8",
+      "Name": "与会者椅子",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 9,
+      "ItemId": "9",
+      "Name": "长方形会议桌",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 10,
+      "ItemId": "10",
+      "Name": "杂物盒",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 11,
+      "ItemId": "11",
+      "Name": "盆栽",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 12,
+      "ItemId": "12",
+      "Name": "音响",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 13,
+      "ItemId": "13",
+      "Name": "饮水机",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 14,
+      "ItemId": "14",
+      "Name": "垃圾桶",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 15,
+      "ItemId": "15",
+      "Name": "电视桌",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 16,
+      "ItemId": "16",
+      "Name": "挂画",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Wall",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 17,
+      "ItemId": "17",
+      "Name": "挂钟",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Wall",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 18,
+      "ItemId": "18",
+      "Name": "柜子",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": null,
+      "Id": 19,
+      "ItemId": "19",
+      "Name": "黄色花盆",
+      "Offset": null,
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": null,
+      "Id": 20,
+      "ItemId": "20",
+      "Name": "紫色花盆",
+      "Offset": null,
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": null,
+      "Id": 21,
+      "ItemId": "21",
+      "Name": "落地灯",
+      "Offset": null,
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": null,
+      "Id": 22,
+      "ItemId": "22",
+      "Name": "左书架",
+      "Offset": null,
+      "PositionType": "Wall",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": null,
+      "Id": 23,
+      "ItemId": "23",
+      "Name": "右书架",
+      "Offset": null,
+      "PositionType": "Wall",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": null,
+      "Id": 24,
+      "ItemId": "24",
+      "Name": "书柜",
+      "Offset": null,
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   },
+   {
+      "Comment": "",
+      "Grid": [
+         [
+            0,
+            0,
+            0
+         ],
+         [
+            0,
+            1,
+            0
+         ],
+         [
+            1,
+            0,
+            0
+         ],
+         [
+            1,
+            1,
+            0
+         ]
+      ],
+      "Id": 25,
+      "ItemId": "25",
+      "Name": "骰子",
+      "Offset": [
+         0,
+         0,
+         0
+      ],
+      "PositionType": "Ground",
+      "ResPath": "path",
+      "Scale": 1,
+      "Script": 0,
+      "ScriptFilePath": ""
+   }
+]}

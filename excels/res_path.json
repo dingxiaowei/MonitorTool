@@ -1,0 +1,584 @@
+{ "Items":
+[
+   {
+      "Comment": "沙发01",
+      "Id": 1,
+      "ItemType": "shafa",
+      "Path": "Prefabs/Miaomiaowu/P_Shafa01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "沙发02",
+      "Id": 2,
+      "ItemType": "shafa",
+      "Path": "Prefabs/Miaomiaowu/P_Shafa02",
+      "ResType": "item"
+   },
+   {
+      "Comment": "沙发03",
+      "Id": 3,
+      "ItemType": "shafa",
+      "Path": "Prefabs/Miaomiaowu/P_Shafa03",
+      "ResType": "item"
+   },
+   {
+      "Comment": "沙发04",
+      "Id": 4,
+      "ItemType": "shafa",
+      "Path": "Prefabs/Miaomiaowu/P_Shafa04",
+      "ResType": "item"
+   },
+   {
+      "Comment": "装饰柜",
+      "Id": 5,
+      "ItemType": "zhuangshigui",
+      "Path": "Prefabs/Miaomiaowu/P_Zhuangshigui02",
+      "ResType": "item"
+   },
+   {
+      "Comment": "台灯03",
+      "Id": 6,
+      "ItemType": "taideng",
+      "Path": "Prefabs/Miaomiaowu/P_Taideng03",
+      "ResType": "item"
+   },
+   {
+      "Comment": "茶几01",
+      "Id": 7,
+      "ItemType": "chaji",
+      "Path": "Prefabs/Miaomiaowu/P_Chaji01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "装饰架01",
+      "Id": 8,
+      "ItemType": "zhuangshijia",
+      "Path": "Prefabs/Miaomiaowu/P_Zhuangshijia01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "装饰柜01",
+      "Id": 9,
+      "ItemType": "zhuangshigui",
+      "Path": "Prefabs/Miaomiaowu/P_Zhuangshigui01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "装饰柜03",
+      "Id": 10,
+      "ItemType": "zhunaghsigui",
+      "Path": "Prefabs/Miaomiaowu/P_Zhuangshigui03",
+      "ResType": "item"
+   },
+   {
+      "Comment": "挂式电视",
+      "Id": 11,
+      "ItemType": "dianshi",
+      "Path": "Prefabs/Miaomiaowu/P_Dianshi02",
+      "ResType": "item"
+   },
+   {
+      "Comment": "电视柜01",
+      "Id": 12,
+      "ItemType": "dianshigui",
+      "Path": "Prefabs/Miaomiaowu/P_Dianshigui01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "工作小会音响",
+      "Id": 13,
+      "ItemType": "yinyuebofangqi",
+      "Path": "Prefabs/Miaomiaowu/P_Yinyuebofangqi01_02",
+      "ResType": "item"
+   },
+   {
+      "Comment": "衣柜",
+      "Id": 14,
+      "ItemType": "yigui",
+      "Path": "Prefabs/Miaomiaowu/P_Yigui01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "红椅子",
+      "Id": 15,
+      "ItemType": "shafa",
+      "Path": "Prefabs/Miaomiaowu/P_Yizi02_02",
+      "ResType": "item"
+   },
+   {
+      "Comment": "蓝椅子",
+      "Id": 16,
+      "ItemType": "shafa",
+      "Path": "Prefabs/Miaomiaowu/P_Yizi02_01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "装饰架001",
+      "Id": 17,
+      "ItemType": "zhuangshijia",
+      "Path": "Prefabs/Miaomiaowu/P_Zhuangshijia04_01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "装饰架002",
+      "Id": 18,
+      "ItemType": "zhuangshijia",
+      "Path": "Prefabs/Miaomiaowu/P_Zhuangshijia04_02",
+      "ResType": "item"
+   },
+   {
+      "Comment": "装饰架003",
+      "Id": 19,
+      "ItemType": "zhuangshijia",
+      "Path": "Prefabs/Miaomiaowu/P_Zhuangshijia04_03",
+      "ResType": "item"
+   },
+   {
+      "Comment": "装饰架004",
+      "Id": 20,
+      "ItemType": "zhuangshijia",
+      "Path": "Prefabs/Miaomiaowu/P_Zhuangshijia04_04",
+      "ResType": "item"
+   },
+   {
+      "Comment": "木马",
+      "Id": 21,
+      "ItemType": "muma",
+      "Path": "Prefabs/Miaomiaowu/P_Muma01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "白板",
+      "Id": 22,
+      "ItemType": "baiban",
+      "Path": "Prefabs/Miaomiaowu/P_Baiban01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "会议室沙发",
+      "Id": 23,
+      "ItemType": "shafa",
+      "Path": "Prefabs/Miaomiaowu/P_Shafa_01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "会议室茶几02",
+      "Id": 24,
+      "ItemType": "chaji",
+      "Path": "Prefabs/Miaomiaowu/P_Chaji_01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "唱片机",
+      "Id": 25,
+      "ItemType": "yinyuebofangqi",
+      "Path": "Prefabs/Miaomiaowu/P_Changpianji01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "会议室与会者椅子",
+      "Id": 26,
+      "ItemType": "shafa",
+      "Path": "Prefabs/Miaomiaowu/P_Yizi01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "会议室主席椅子",
+      "Id": 27,
+      "ItemType": "shafa",
+      "Path": "Prefabs/Miaomiaowu/P_Xuanzhuanyi01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "会议室桌子",
+      "Id": 28,
+      "ItemType": "zhuozi",
+      "Path": "Prefabs/Miaomiaowu/P_Zhuozi01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "健身球",
+      "Id": 29,
+      "ItemType": "jianshenqiu",
+      "Path": "Prefabs/Miaomiaowu/P_Jianshenqiu01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "会议室装饰架",
+      "Id": 30,
+      "ItemType": "zhuangshijia",
+      "Path": "Prefabs/Miaomiaowu/P_Zhuangshijia02",
+      "ResType": "item"
+   },
+   {
+      "Comment": "杂物盒",
+      "Id": 31,
+      "ItemType": "zawuhe",
+      "Path": "Prefabs/Miaomiaowu/P_Zawuxiang04",
+      "ResType": "item"
+   },
+   {
+      "Comment": "垃圾桶",
+      "Id": 32,
+      "ItemType": "lajitong",
+      "Path": "Prefabs/Miaomiaowu/P_Lajitong01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "立式电视",
+      "Id": 33,
+      "ItemType": "dianshi",
+      "Path": "Prefabs/Miaomiaowu/P_Dianshi01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "镜子",
+      "Id": 34,
+      "ItemType": "jingzi",
+      "Path": "Prefabs/Miaomiaowu/P_Shuzhuangjing01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "数字骰子",
+      "Id": 35,
+      "ItemType": "touzi",
+      "Path": "Prefabs/Miaomiaowu/P_Touzi02",
+      "ResType": "item"
+   },
+   {
+      "Comment": "剪刀布骰子",
+      "Id": 36,
+      "ItemType": "touzi",
+      "Path": "Prefabs/Miaomiaowu/P_Touzi01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "DJ台",
+      "Id": 37,
+      "ItemType": "DJtai",
+      "Path": "Prefabs/Miaomiaowu/P_DJtai01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "沙发边",
+      "Id": 38,
+      "ItemType": "Shafabian",
+      "Path": "Prefabs/Miaomiaowu/P_Shafabianji01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "主讲台",
+      "Id": 39,
+      "ItemType": "Zhujiangtai",
+      "Path": "Prefabs/Miaomiaowu/P_Yanjiangtai01",
+      "ResType": "item"
+   },
+   {
+      "Comment": "温馨小聚音响",
+      "Id": 40,
+      "ItemType": "yinyuebofangqi",
+      "Path": "Prefabs/Miaomiaowu/P_Yinyuebofangqi01_04",
+      "ResType": "item"
+   },
+   {
+      "Comment": "1-100为测试用段",
+      "Id": 100,
+      "ItemType": "",
+      "Path": "",
+      "ResType": ""
+   },
+   {
+      "Comment": "101-9999为物件",
+      "Id": 10000,
+      "ItemType": "",
+      "Path": "",
+      "ResType": ""
+   },
+   {
+      "Comment": "10001-19999为道具图标",
+      "Id": 20000,
+      "ItemType": "",
+      "Path": "",
+      "ResType": ""
+   },
+   {
+      "Comment": "沙发01",
+      "Id": 20001,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Shafa01_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "沙发02",
+      "Id": 20002,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Shafa02_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "沙发03",
+      "Id": 20003,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Shafa03_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "沙发04",
+      "Id": 20004,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Shafa04_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "装饰柜",
+      "Id": 20005,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Zhuangshigui02_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "台灯03",
+      "Id": 20006,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Taideng03_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "茶几01",
+      "Id": 20007,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Chaji01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "装饰架01",
+      "Id": 20008,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Zhuangshijia01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "装饰柜01",
+      "Id": 20009,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Zhuangshigui01_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "装饰柜03",
+      "Id": 20010,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Zhuangshigui03_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "挂式电视",
+      "Id": 20011,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Dianshi01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "电视柜01",
+      "Id": 20012,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Dianshigui01_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "工作小会音响",
+      "Id": 20013,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Yinyuebofangqi01_02",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "衣柜",
+      "Id": 20014,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Yigui01_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "红椅子",
+      "Id": 20015,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Yizi02_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "蓝椅子",
+      "Id": 20016,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Yizi02_04",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "装饰架001",
+      "Id": 20017,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Zhuangshijia04",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "装饰架002",
+      "Id": 20018,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Zhuangshijia05",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "装饰架003",
+      "Id": 20019,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Zhuangshijia06_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "装饰架004",
+      "Id": 20020,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Zhuangshijia06_02",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "木马",
+      "Id": 20021,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Muma01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "白板",
+      "Id": 20022,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Baiban01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "会议室沙发",
+      "Id": 20023,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Shafa05",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "会议室茶几02",
+      "Id": 20024,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Chaji02",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "唱片机",
+      "Id": 20025,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Changpianji01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "会议室与会者椅子",
+      "Id": 20026,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Yizi01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "会议室主席椅子",
+      "Id": 20027,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Xuanzhuanyi01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "会议室桌子",
+      "Id": 20028,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Zhuozi01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "健身球",
+      "Id": 20029,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Jianshenqiu01_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "会议室装饰架",
+      "Id": 20030,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Zhuangshijia02",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "杂物盒",
+      "Id": 20031,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Zawuxiang01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "垃圾桶",
+      "Id": 20032,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Lajitong01_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "立式电视",
+      "Id": 20033,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Dianshi01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "镜子",
+      "Id": 20034,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Shuzhuangjing01_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "数字骰子",
+      "Id": 20035,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Touzi02",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "剪刀布骰子",
+      "Id": 20036,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Touzi01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "DJ台",
+      "Id": 20037,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_DJtai01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "沙发边",
+      "Id": 20038,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Shafabian01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "主讲台",
+      "Id": 20039,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Yanjiangtai01_01",
+      "ResType": "icon"
+   },
+   {
+      "Comment": "温馨小聚音响",
+      "Id": 20040,
+      "ItemType": "",
+      "Path": "Textures/ui/Icons/Items/I_Yinyuebofangqi01_04",
+      "ResType": "icon"
+   }
+]}

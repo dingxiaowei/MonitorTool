@@ -1,0 +1,57 @@
+{ "Items":
+[
+   {
+      "Id": 1,
+      "Name": "Yesterday Once More",
+      "Owner": "Done Again",
+      "Path": "https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2FDone Again - Yesterday Once More.mp3"
+   },
+   {
+      "Id": 2,
+      "Name": "冲动的惩罚",
+      "Owner": "刀郎",
+      "Path": "https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2F刀郎 - 冲动的惩罚.mp3"
+   },
+   {
+      "Id": 3,
+      "Name": "耳朵怀孕单曲循坏系列，在幻境中彷徨，我身在何方？ ",
+      "Owner": "动漫唯美风",
+      "Path": "https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2F动漫唯美风 - 耳朵怀孕单曲循坏系列，在幻境中彷徨，我身在何方？ .mp3"
+   },
+   {
+      "Id": 4,
+      "Name": "追梦人",
+      "Owner": "凤飞飞",
+      "Path": "https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2F凤飞飞 - 追梦人.mp3"
+   },
+   {
+      "Id": 5,
+      "Name": "只要平凡",
+      "Owner": "韩红",
+      "Path": "https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2F韩红 - 只要平凡.mp3"
+   },
+   {
+      "Id": 6,
+      "Name": "温馨时刻",
+      "Owner": "胡伟立",
+      "Path": "https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2F胡伟立 - 温馨时刻.mp3"
+   },
+   {
+      "Id": 7,
+      "Name": "你的样子",
+      "Owner": "林志炫",
+      "Path": "https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2F林志炫 - 你的样子.mp3"
+   },
+   {
+      "Id": 8,
+      "Name": "清心普善咒 ",
+      "Owner": "群星",
+      "Path": "https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2F群星 - 清心普善咒 .mp3"
+   },
+   {
+      "Id": 9,
+      "Name": "只要平凡(复制版本)",
+      "Owner": "韩红",
+      "Path": "https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2F韩红 - 只要平凡.mp3"
+   }
+]}

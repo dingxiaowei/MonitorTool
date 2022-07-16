@@ -1,0 +1,243 @@
+{ "Items":
+[
+   {
+      "EventType": "tab",
+      "IconName": "head_up/head_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/tabtol",
+      "Id": 1,
+      "ItemColor": "[100,20,0]:[1,20,0]:[100,200,0]:[50,20,0]:[100,20,0]:[100,20,0]:[20,20,0]:[100,20,0]",
+      "ItemId": 0,
+      "Name": "头部",
+      "Type": 0
+   },
+   {
+      "EventType": "tab",
+      "IconName": "hair_up/hair_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/tabtol",
+      "Id": 2,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "头发",
+      "Type": 0
+   },
+   {
+      "EventType": "tab",
+      "IconName": "eyelash_up/eyelash_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/tabtol",
+      "Id": 3,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "眼睫毛",
+      "Type": 0
+   },
+   {
+      "EventType": "tab",
+      "IconName": "eyes_up/eyes_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/tabtol",
+      "Id": 4,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "眼睛",
+      "Type": 0
+   },
+   {
+      "EventType": "tab",
+      "IconName": "nose_up/nose_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/tabtol",
+      "Id": 5,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "鼻子",
+      "Type": 0
+   },
+   {
+      "EventType": "tab",
+      "IconName": "mouth_up/mouth_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/tabtol",
+      "Id": 6,
+      "ItemColor": "[100,20,0]:[1,20,0]:[100,200,0]:[50,20,0]:[100,20,0]:[100,20,0]:[20,20,0]:[100,20,0]",
+      "ItemId": 0,
+      "Name": "嘴巴",
+      "Type": 0
+   },
+   {
+      "EventType": "tab",
+      "IconName": "top_up/top_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/tabtol",
+      "Id": 1,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "上装",
+      "Type": 1
+   },
+   {
+      "EventType": "tab",
+      "IconName": "bottom_up/bottom_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/tabtol",
+      "Id": 2,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "下装",
+      "Type": 1
+   },
+   {
+      "EventType": "tab",
+      "IconName": "shoes_up/shoes_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/tabtol",
+      "Id": 3,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "鞋子",
+      "Type": 1
+   },
+   {
+      "EventType": "tab",
+      "IconName": "socks_up/socks_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/tabtol",
+      "Id": 4,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "袜子",
+      "Type": 1
+   },
+   {
+      "EventType": "tab",
+      "IconName": "armletright_up/armletright_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/tabtol",
+      "Id": 5,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "臂章",
+      "Type": 1
+   },
+   {
+      "EventType": "tab",
+      "IconName": "handbag_up/handbag_down",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/tabtol",
+      "Id": 6,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "手提包",
+      "Type": 1
+   },
+   {
+      "EventType": "button",
+      "IconName": "head001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/head",
+      "Id": 1,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "头部",
+      "Type": 0
+   },
+   {
+      "EventType": "button",
+      "IconName": "hair001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/hair",
+      "Id": 2,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "头发",
+      "Type": 0
+   },
+   {
+      "EventType": "button",
+      "IconName": "eyelash001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/eyelash",
+      "Id": 3,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "眼睫毛",
+      "Type": 0
+   },
+   {
+      "EventType": "button",
+      "IconName": "eyes001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/eyes",
+      "Id": 4,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "眼睛",
+      "Type": 0
+   },
+   {
+      "EventType": "button",
+      "IconName": "nose001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/nose",
+      "Id": 5,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "鼻子",
+      "Type": 0
+   },
+   {
+      "EventType": "button",
+      "IconName": "mouth001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/kneadface/mouth",
+      "Id": 6,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "嘴巴",
+      "Type": 0
+   },
+   {
+      "EventType": "button",
+      "IconName": "top001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/top",
+      "Id": 1,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "上装",
+      "Type": 1
+   },
+   {
+      "EventType": "button",
+      "IconName": "bottom001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/bottom",
+      "Id": 2,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "下装",
+      "Type": 1
+   },
+   {
+      "EventType": "button",
+      "IconName": "shoes001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/shoes",
+      "Id": 3,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "鞋子",
+      "Type": 1
+   },
+   {
+      "EventType": "button",
+      "IconName": "socks001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/socks",
+      "Id": 4,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "袜子",
+      "Type": 1
+   },
+   {
+      "EventType": "button",
+      "IconName": "armletright001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/armletright",
+      "Id": 5,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "臂章",
+      "Type": 1
+   },
+   {
+      "EventType": "button",
+      "IconName": "handbag001",
+      "IconPath": "Assets/EditorRes/AvatarIcon/FashionIcon/fashion/handbag",
+      "Id": 6,
+      "ItemColor": "",
+      "ItemId": 0,
+      "Name": "手提包",
+      "Type": 1
+   }
+]}

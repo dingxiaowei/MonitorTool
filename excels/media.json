@@ -1,0 +1,33 @@
+{ "Items":
+[
+   {
+      "Id": 1,
+      "ItemId": "40",
+      "LocalPath": "Media/FishandChips",
+      "Name": "Chips",
+      "Path": "https://cyberverse.hwcloudtest.cn/assets-mgr/arcyberverse/hola/filter%2FMusic%2FFish%20and%20Chips.mp3",
+      "PlayMode": 1,
+      "ResType": 1,
+      "TimeLength": 205
+   },
+   {
+      "Id": 2,
+      "ItemId": "13",
+      "LocalPath": "Media/InspirationalMotivation",
+      "Name": "Motivation",
+      "Path": "https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2FInspirational Motivation.mp3",
+      "PlayMode": 1,
+      "ResType": 1,
+      "TimeLength": 123
+   },
+   {
+      "Id": 3,
+      "ItemId": "25",
+      "LocalPath": "Media/InspirationalMotivation",
+      "Name": "Motivation",
+      "Path": "https://cyberverse.hwcloudtest.cn:443/assets-mgr/arcyberverse/hola/filter%2FMusic%2FInspirational Motivation.mp3",
+      "PlayMode": 1,
+      "ResType": 1,
+      "TimeLength": 123
+   }
+]}
