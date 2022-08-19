@@ -94,6 +94,10 @@ public class GOTProfiler : MonoBehaviour
     private ProfilerRecorder drawCallRecord;//dc技术
     private ProfilerRecorder verticesRecord;//顶点数
     private ProfilerRecorder trianglesRecord;//三角面
+
+    //内存
+    private ProfilerRecorder gcRecord;//gc
+
     //private ProfilerRecorder gcMemoryRecord;//gc
     //private ProfilerRecorder mainThreadTimeRecord;
 #endif
@@ -109,6 +113,7 @@ public class GOTProfiler : MonoBehaviour
             drawCallRecord = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Draw Calls Count");
             verticesRecord = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Vertices Count");
             trianglesRecord = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Triangles Count");
+            gcRecord = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Reserved Memory"); 
         }
 #endif
     }
