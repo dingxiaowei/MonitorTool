@@ -572,5 +572,8 @@ class C : MonoBehaviour
 - 生成堆栈调用信息，方便深度定位问题
 - 生成版本对比报告(Word)指出性能问题汇总以及优化建议
 
+## 源码地址
+https://github.com/dingxiaowei/MonitorTool
+
 ## 沟通交流
-有啥好的想法欢迎主页联系沟通交流  wx:AladdinDXW
+有啥好的想法欢迎主页联系沟通交流  wx:AladdinDXW  如果喜欢的话欢迎点个star！
