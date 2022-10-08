@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class HookEditor
 {
-    private const string AssemblyPath = "./Library/ScriptAssemblies/Assembly-CSharp.dll";
+    private static string AssemblyPath = Application.dataPath + "/../Library/ScriptAssemblies/Assembly-CSharp.dll";
 #if ENABLE_ANALYSIS
     [MenuItem("Hook/所有函数性能分析")]
     public static void HookInject()
@@ -42,13 +42,20 @@ public class HookEditor
         AssemblyPostProcessorHookLogRun("Update", "OnGUI");
     }
 
-    [MenuItem("Hook/输出结果")]
-    public static void HookUtilsReport()
+    [MenuItem("Hook/打印函数的执行效率")]
+    public static void ShowFuncAnaysics()
     {
-
+        HookUtil.PrintMethodDatas();
     }
 
-    [PostProcessScene] //打包的时候回自动调用下面的注入方法
+    [MenuItem("Hook/输出函数性能报告结果")]
+    public static void HookUtilsReport()
+    {
+        var lastTestTime = PlayerPrefs.GetString("TestTime", "");
+        HookUtil.MethodAnalysisReport(lastTestTime);
+    }
+
+    [PostProcessScene]
     public static void AssemblyPostProcessorRun()
     {
         try
@@ -60,7 +67,7 @@ public class HookEditor
             }
             EditorApplication.LockReloadAssemblies();
             // 按路径读取程序集
-            var readerParameters = new ReaderParameters { ReadSymbols = false };
+            var readerParameters = new ReaderParameters { ReadSymbols = true, SymbolReaderProvider = new Mono.Cecil.Pdb.PdbReaderProvider() };
             var assembly = AssemblyDefinition.ReadAssembly(AssemblyPath, readerParameters);
             if (assembly == null)
             {
@@ -69,7 +76,7 @@ public class HookEditor
             }
             if (HookEditor.ProcessAssembly(assembly))
             {
-                assembly.Write(AssemblyPath, new WriterParameters { WriteSymbols = true });
+                assembly.Write(AssemblyPath, new WriterParameters { WriteSymbols = true, SymbolWriterProvider = new Mono.Cecil.Pdb.PdbWriterProvider() });
             }
             else
             {
@@ -141,8 +148,15 @@ public class HookEditor
                     if (method.CustomAttributes.Any(typeAttribute => typeAttribute.AttributeType.FullName == hideAnalysisType))
                         continue;
 
+                    if (method.Body == null)
+                        continue;
+
+                    //屏蔽一些Lua相关的
+                    //if (method.Name.Contains("lua") || method.Name.Contains("_Gen") || type.Name.Contains("Lua"))
+                    //  continue;
+
                     //如果注入代码失败，可以打开下面的输出看看卡在了那个方法上。
-                    //Debug.Log(method.Name + "======= " + type.Name + "======= " + type.BaseType.GenericParameters +" ===== "+ module.Name);
+                    //Debug.Log(method.Name + "======= " + type.Name + "======= " + method.Body + "======= " + type.BaseType.GenericParameters + " ===== " + module.Name);
                     var hookUtilBegin = module.ImportReference(typeof(HookUtil).GetMethod("Begin", new[] { typeof(string) }));
                     var hookUtilEnd = module.ImportReference(typeof(HookUtil).GetMethod("End", new[] { typeof(string) }));
                     ILProcessor ilProcessor = method.Body.GetILProcessor();

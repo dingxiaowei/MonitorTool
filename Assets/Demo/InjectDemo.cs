@@ -41,34 +41,31 @@ namespace TestModule
             {
                 btn_ShowFuncAnalysicClick.onClick.AddListener(() =>
                 {
-#if ENABLE_ANALYSIS
-                    HookUtil.PrintProfilerDatas();
+                    //#if ENABLE_ANALYSIS
+                    HookUtil.PrintMethodDatas();
 
-                    var datas = HookUtil.GetFunctionMonitorFileDatas();
-                    if (datas != null && datas.Count > 0)
-                    {
-                        Debug.Log("--------输出所有函数的性能数据-------");
-                        foreach (var data in datas)
-                        {
-                            Debug.Log(data);
-                        }
-                        FunctionAnalysisDatas funcAnalysisData = new FunctionAnalysisDatas();
-                        funcAnalysisData.FunctionAnalysDatas = new System.Collections.Generic.List<FunctionMonitorFileDatas>();
-                        funcAnalysisData.FunctionAnalysDatas.AddRange(datas);
-                        var datasJsonStr = JsonUtility.ToJson(funcAnalysisData);
-                        Debug.Log(datasJsonStr);
-                        EmailManager.Send(datasJsonStr);
-                        var funcAnalysisFile = FileManager.WriteToFile($"{Application.persistentDataPath}/a.txt", datasJsonStr);
-                        if (funcAnalysisFile)
-                        {
-                            //UploadFile(funcAnalysisFilePath);
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("--------没有函数性能监控数据---------");
-                    }
-#endif
+                    //var datas = HookUtil.GetFunctionMonitorFileDatas();
+                    //if (datas != null && datas.Count > 0)
+                    //{
+                    //    Debug.Log("--------输出所有函数的性能数据-------");
+                    //    foreach (var data in datas)
+                    //    {
+                    //        Debug.Log(data);
+                    //    }
+
+                    //    var datasJsonStr = JsonUtility.ToJson();
+                    //    Debug.Log(datasJsonStr);
+                    //    MonitorLib.GOT.Tools.EmailSend(datasJsonStr);
+                    //    var funcAnalysisFile = FileManager.WriteToFile($"{Application.persistentDataPath}/a.txt", datasJsonStr);
+                    //    if (funcAnalysisFile)
+                    //    {
+                    //        //UploadFile(funcAnalysisFilePath);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    Debug.Log("--------没有函数性能监控数据---------");
+                    //}
                 });
             }
         }
@@ -77,12 +74,12 @@ namespace TestModule
         [ProfilerSample]
         public void Test()
         {
-            //Debug.Log("开始循环100次");
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    Debug.Log(i);
-            //}
-            //Debug.Log("结束循环100次");
+            Debug.Log("开始循环100次");
+            for (int i = 0; i < 100; i++)
+            {
+                Debug.Log(i);
+            }
+            Debug.Log("结束循环100次");
         }
         //[ProfilerSampleWithDefineName("-------自定义Sample命名,暂时还没支持")]
         [FunctionAnalysis]

@@ -9,10 +9,54 @@ namespace MonitorLib.GOT
     /// 帧率信息
     /// </summary>
     [Serializable]
-    public struct MonitorFrameInfo
+    public struct MonitorFrameInfo : IBinarySerializable
     {
         public int FrameIndex;
         public int Frame;
+
+        public void DeSerialize(BinaryReader reader)
+        {
+            FrameIndex = reader.ReadInt32();
+            Frame = reader.ReadInt32();
+        }
+
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(FrameIndex);
+            writer.Write(Frame);
+        }
+    }
+
+    public class FrameRates : IBinarySerializable
+    {
+        public List<MonitorFrameInfo> FrameRateList = new List<MonitorFrameInfo>();
+        public void DeSerialize(BinaryReader reader)
+        {
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                MonitorFrameInfo tempData = new MonitorFrameInfo();
+                tempData.DeSerialize(reader);
+                FrameRateList.Add(tempData);
+            }
+        }
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(FrameRateList.Count);
+            for (int i = 0; i < FrameRateList.Count; i++)
+            {
+                FrameRateList[i].Serialize(writer);
+            }
+        }
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < FrameRateList.Count; i++)
+            {
+                sb.Append($"{FrameRateList[i].ToString()}\n");
+            }
+            return sb.ToString();
+        }
     }
 
     /// <summary>
@@ -36,7 +80,7 @@ namespace MonitorLib.GOT
     }
 
     [Serializable]
-    public struct MonitorInfo
+    public struct MonitorInfo : IBinarySerializable
     {
         public int FrameIndex;
         public float BatteryLevel;
@@ -50,7 +94,7 @@ namespace MonitorLib.GOT
         /// Mono堆内存使用大小
         /// </summary>
         public long MonoUsedSize;
-        
+
         public long AllocatedMemoryForGraphicsDriver;
         /// <summary>
         /// Unity分配的内存
@@ -100,7 +144,7 @@ namespace MonitorLib.GOT
     }
 
     [Serializable]
-    public class MonitorInfos
+    public class MonitorInfos : IBinarySerializable
     {
         public List<MonitorInfo> MonitorInfoList = new List<MonitorInfo>();
         public void DeSerialize(BinaryReader reader)

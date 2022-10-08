@@ -34,8 +34,13 @@
     <Reference Include="DOTween">
       <HintPath>..\..\Lib\DOTween.dll</HintPath>
     </Reference>
-    <Reference Include="LitJson">
-      <HintPath>..\..\Lib\LitJson.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.3.3.11, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers">
@@ -290,6 +295,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GOT\CollectDatas.cs" />
+    <Compile Include="GOT\DevicePowerConsumeInfo.cs" />
+    <Compile Include="GOT\FuncAnalysisInfo.cs" />
+    <Compile Include="GOT\GOTProfilerRuntime.cs" />
+    <Compile Include="GOT\IBinarySerialize.cs" />
     <Compile Include="GOT\Config.cs" />
     <Compile Include="GOT\DeviceInfo.cs" />
     <Compile Include="GOT\EnumDefine.cs" />
@@ -297,13 +307,23 @@
     <Compile Include="GOT\FileUploadManager.cs" />
     <Compile Include="GOT\FunctionMonitorDatas.cs" />
     <Compile Include="GOT\HookUtil.cs" />
+    <Compile Include="GOT\LogInfos.cs" />
     <Compile Include="GOT\LogManager.cs" />
+    <Compile Include="GOT\MemoryDatas.cs" />
     <Compile Include="GOT\MonitorAttributes.cs" />
     <Compile Include="GOT\MonitorInfo.cs" />
+    <Compile Include="GOT\RenderInfo.cs" />
     <Compile Include="GOT\ShareDatas.cs" />
     <Compile Include="GOT\Tools.cs" />
     <Compile Include="GOT\Utils\ConverUtils.cs" />
+    <Compile Include="GOT\ZipUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GOT\TestInfo.cs" />
+    <Compile Include="GOT\Utils\Singleton.cs" />
+    <Compile Include="GOT\RecoreInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

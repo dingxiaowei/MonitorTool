@@ -1,9 +1,13 @@
-# Unity监控报表工具
+# 通用性能监控报表工具
+## 工具想法由来
+由于个人在开发一些公共模块对接各个项目中在解bug的时候碰到这样一个困惑，就是问到问题QA会反馈给我怎么这个资源不显示了，但这个是问题的表现，程序这边定位需要知道log到底是什么原因导致的，这时候就需要频繁的QA手机导出log日志，然后发给程序，加上沟通什么的，我就想优化流程，QA直接测完，我这边就知道知道Log日志了
+还有一个场景就是QA现场走测，然后生成性能报告，大冬天现场一个手拿手机一个手拿电脑，一方面是冷，另一方面是不安全，万一摔了，还有一个问题就是时效性有延时，要等QA从万国回到工位整理数据生成数据报告，所以想能只拿一个手机，现场走测玩就能立马看到报告，而且相关研发人员也能立马看到报告结果
+还有一个需求主要是我自己优化和自测，也需要自测性能报告，不能总是依赖QA来测试，毕竟QA从基地到万国来一趟也不容易，所以就有了开发这个工具的想法，一开始主要是为了方便自己自测用，后来做着做着感觉可以做成更通用的工具。
 
 ## 工具初衷
 项目性能问题是一个贯穿项目研发始终的问题，就像研发工程师每天在开发新的功能之后QA每天都会关注是否产生新的bug，同样只要写了新代码就会带来或多或少的新的性能问题，产生的性能问题的大小取决于团队每个开发人员的代码素养和开发能力，每个人都不想写性能差的代码，只是有时候我们无意识的就写出来了，所以就需要有一个性能监控工具来给研发人员或QA做代码自检或者日常的测试检测，这样才能及时发现每天产生的bug或者性能问题，只有日常把性能问题当成跟bug一样的做好检测，才能在最后上线的时候尽可能少的碰到性能问题而要花大量的时间去定位和处理。现在有性能监控工具里面有设置的警戒值，并不是一种标准值，而是一个默许的约束规范，只要超过预警值的函数，每个人自己先去尝试优化自己的代码，优化不是某一两个人的事情，让全员参与其中，只有每个人都尽可能输出高质量高性能的代码，团队的成果才更有可能聚沙成塔，最终形成是一个高性能的聚合产品。
 
-## 问题现状
+## 问题现状(能够解决的问题)
 * 测试测性能报告不方便
 （QA想要出一个现场走测的内存报告，需要一手拿电脑，一手拿手机，非常的不安全，大冬天也非常冷，走测完之后QA需要整理数据然后生成图表，时效性比较低，等报告时间久，然后需要转发给程序,非常的麻烦）目前工具优化之后的流程是，QA在场外走测，只需要点击一下UI上的监控按钮，走测结束后再点击一下按钮结束监控流程，UI上弹出报告URL可以手机上及时查看，同时想关注报告的相关人员同事就会收到此次报告的邮件通知，让相关人员能及时查看到测试报告，开发跟测试同事之间根本不需要转发和通知报告，非常的方便
 
@@ -15,6 +19,16 @@
 
 * 开发人员在每日开发提交前只会自测bug
 (我们开发人员在提交之前可以做到自测自己写的代码流程上是否跑的通，自己的开发模块是否有明显的bug，但不会去关注自己的写的代码是否有严重的性能问题，在没有专门的工具检测之前，写的代码是否优劣也是取决于程序员各自的水平和素养，但有了专门性能检测的工具，我们就通过工具来检测我们写的每一个函数代码它的执行效率和内存开辟的情况，如果问题严重的话就要做到自我优化代码)工具做到的优化之后的流程是，研发人员在写完代码之后不仅可以自测有没有逻辑上的bug，也可以自测代码有没有性能问题，这里的建议是单个函数运行时间不要超过15毫秒和单个函数每帧持续开辟的内存最好不要超过2-3kb，当然指标可以适度调整，视情况和项目而定，在充分自测没问题之后再提交到主仓中，如果有性能问题自己没法解决可以求助相关同事，如果实在不好在优化的话可以向相关负责人说明一下再提交，这样确保主仓上每一笔提交代码尽量都没有严重的性能问题的代码
+
+* 测试报告没有存档
+我在自己做性能优化的时候，想要对比之前QA测试的同比性能报告，但却要不到，或者说不是自己想要的结果，所以有现在这工具，每次的测试报告会在服务器存档，随时方便对比之前测试的报告查看前后对比
+
+## 工具转正原因
+原本初衷是一个方便自己自测的一个工具，做的也比较粗糙，做着做着感觉可以做成一个通用的解决方案，或许会问世面上也有现成的商业化的性能工具解决方案，为什么还要自己去再造轮子？基于这个问题，我思考了一下，据我了解，米哈游也有一个专门的团队在做自己的性能保障工具，关于自研的好处，原因如下
+1.支持高度定制化扩展，自由灵活，满足自己公司项目的需求
+2.安全隐私是最重要的，尤其对于大厂而言，高保密项目都是公司的战略方向，如果你用第三方的工具，且不说第三方的工具后台执行了什么代码你无法预知，而且将项目数据都上传到外网第三方公司，第一、大公司是否允许是一个问题，第二、存在数据泄露的问题，公司的保密项目都无法做到保密。
+3.收费，而且是按照项目使用收费，也是一笔不小的开支
+以上这是我能想到的两点，或许也是米哈游这类大厂要坚持自研的原因
 
 ## 本工具优点
 * 查看报告非常方便（测完能够立马出报告，而且手机端PC端只要浏览器就可以打开查看此次测试报告）
@@ -45,17 +59,16 @@
 		* 设备分辨率
 
 	* 性能指标报表
-		* 渲染相关指标(DrawCall、SetPassCall、三角面、顶点数)
 		* 帧率
 		* 电量
 		* 电池电流、电压、功耗、温度
+		* CPU使用率和温度
 		* 内存使用
-     		* 资源占用内存分类统计
       		* 托管堆内存大小
      		* 堆内存使用大小
       		* Unity分配的内存
       		* Unity保留的总内存
-     		* 当前使用内存、系统内存、未使用的内存等
+        	* 当前使用内存、系统内存、未使用的内存等
 
     * 函数性能分析
     	* 能获取到项目中运行的每个函数的执行时间，以及开辟的内存(有利于对帧率和内存泄漏、内存优化具有指导意义)
@@ -70,7 +83,6 @@
     	* 支持查看对应帧的帧图，用于查看某一帧性能低查看当前屏幕的渲染情况
 
 	* 详细Log信息并猜测标注Log级别
-		* Log分页展示(支持长时间测试，几万条log的展示)
 		* Error（红色）
 		* Warning（黄色）
 		* Log（蓝色）
@@ -78,12 +90,32 @@
 * 添加是否显示Log显示可选项
 由于Log显示会影响帧率，如果不需要查看Log就可以关闭Log选项，那报告就不会显示Log模块报告，也不会搜集Log，如果是开发阶段定位问题可以打开Log模块的追踪
 
+## 体验地址
+[http://116.205.247.142:8080/](http://116.205.247.142:8080/)
+
 ## 效果
-[http://116.205.247.142:8080/Default.aspx](http://116.205.247.142:8080/Default.aspx)
-![](效果图/7.png)
+![](效果图/12.png)
+总的效果图
+![](效果图/资源内存分类统计报告.png)
+资源内存分类统计报告
+![](效果图/渲染报告.png)
+渲染统计报告
+![](效果图/温度报告.png)
+温度统计报告
+![](效果图/功耗报告.png)
+功耗统计报告
+![](效果图/电量报告.png)
+电量统计报告
+![](效果图/11.png)
+http://124.223.54.98/report_2022_1_21_14_33_30.html
+![](效果图/10.jpg)
+支持帧图显示
 ![](效果图/1.png)
 ![](效果图/6.png)
-![](doc/性能监测工具.gif)
+![](效果图/性能监控工具Web效果.gif)
+![](效果图/8.jpg)
+![](效果图/9.jpg)
+![](效果图/10.mp4)
 ## 使用说明
 ### 函数性能阀值约定
 经过调研了解，我们约定如果函数连续帧持续开辟2k以上的内存，单个函数执行超过15毫秒，尤其是高频调用的函数就需要特别关注和优化
@@ -91,6 +123,8 @@
 如果需要打开函数性能分析功能模块代码，需要打开宏定义ENABLE_ANALYSIS，并且勾选GOTProfiler组件的Enable Function Analysis选项
 ##### 函数性能监控特性使用
 ![](效果图/5.png)
+以上函数执行效率Excel报表
+![](效果图/7.png)
 上面是函数性能分析特性的使用范例，下面是每个特性的详细说明
 * ProfilerSample
 我们如果做过Profiler工具的性能分析应该会知道它有一个BeginSample和EndSample的方法，通过这两个方法包起来的逻辑在Profiler里面能够看到这段代码块的性能，但我们需要在代码里写上这两行代码，而且测试完需要删掉，避免影响主代码，为了测试方便，我就加了这个特性标签，只要在要检测的方法上加上特性标签然后再菜单栏点击Hook/特性[ProfilerSample]性能分析就能搜集所有打上该特性标签的方法
@@ -104,456 +138,7 @@
 这样会搜集所有的有这个特性标签的函数进行分析
 * HideAnalysis
 * ProfilerSampleWithDefineName
-这个特性是Profiler.BeginSample("XXX")，支持自定义参数名的profilersample参数分析，这是为了弥补ProfilerSample针对通一个类里面重载方法无法确定分析的是哪一个方法的问题，但目前这个特性由于时间原因没来得及实现
-
-### 代码规范化检测范例
-
-该工具支持自定义语法检查规则，基于Roslyn分析器的监测工具，不好的代码可能会带来性能问题，以下是一些常见的需要避免的代码案例，代码检查工具会不定时的进行检测，提醒我们进行修改，主要就是要注意循环方法里的代码，往往这是造成代码性能问题最常见的地方，当然如果配合着性能监测工具检测代码执行的性能，就能很好的定位耗性能的代码函数以及高频调用函数效果更加，以下是目前支持的语法检测场景：
-
-代码案例场景
----------------------
-##### 1.空的MonoBehaviour生命周期函数
-```
-public class Example : MonoBehaviour
-{
-	void Update()
-    {
-
-    }
-}
-```
-
-##### 2.尽可能少的使用OnGUI
-一般用于测试用例
-```
-void OnGUI()
-{
-
-}
-```
-
-##### 3.尽量不要使用字符串方法
-案例：
-```
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    void Start()
-    {
-        // 尽量少的使用字符串方法，不利于维护和隐含报错的可能性
-        gameObject.SendMessage("ApplyDamage", 5.0);
-    }
-}
-
-public class Example2 : MonoBehaviour
-{
-    public void ApplyDamage(float damage)
-    {
-        print(damage);
-    }
-}
-```
-修改：
-以下方式如果修改了类名或者函数名，会在编译阶段直接报错提醒避免运行时报错的可能，使用SendMessage、SendMessageUpwards、Broadcastmessage、Invoke或InvokeRepeating等字符串方法会导致代码难以维护和隐含报错的可能性，可以考虑使用UnityEvent、C#事件、委托或者直接调用方法
-```
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    void Start()
-    {
-        var obj = GetComponent<Example2>();
-        obj.ApplyDamage(5.0);
-    }
-}
-
-public class Example2 : MonoBehaviour
-{
-    public void ApplyDamage(float damage)
-    {
-        print(damage);
-    }
-}
-```
-
-##### 4.使用CompareTag替代tag直接等
-案例：
-```
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Player")
-        {
-
-        }
-    }
-}
-```
-修改：
-官方推荐的方式，https://docs.unity3d.com/ScriptReference/Component.CompareTag.html， 相比较上面减小开销
-```
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-
-        }
-    }
-}
-```
-
-##### 5.不要在Update这种循环里使用Find方法
-案例：
-```
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    void Update()
-    {
-        GameObject.Find("");
-        或者
-        var xxx = GetComponent<xxx>();
-    }
-}
-```
-修改：
-在循环里Find和GetComponent会造成严重的性能问题，如果要使用可以提前缓存起来
-```
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    GameObject cachedObj;
-    XXX xxxComponent;
-
-    void Start()
-    {
-        cachedObj = GameObject.Find("");
-        或者
-        xxxComponent = GetComponent<XXX>();
-    }
-}
-```
-
-##### 6.不要在循环里使用协程
-案例：
-```
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    void Update()
-    {
-        StartCoroutine("");
-    }
-}
-```
-修改：
-携程会有一定的gc开销，可以通过队列和Update配合使用检测状态的改变
-
-##### 7.InvokeFunction丢失
-案例：
-```
-using UnityEngine;
-
-class CC : MonoBehaviour { }
-
-class C : MonoBehaviour
-{
-    private CC cc;
-    void Start() { cc.InvokeRepeating("DoSomething", 0f, 0f); }
-}
-```
-修改：
-这跟第一个案例一样，就是采用字符串参数的方法编译器监测不出来编译报错，工具会提示这种报错情况
-```
-using UnityEngine;
-
-class CC : MonoBehaviour
-{
-    public void DoSomething() { }
-}
-
-class C : MonoBehaviour
-{
-    private CC cc;
-    void Start() { cc.InvokeRepeating("DoSomething", 0f, 0f); }
-}
-```
-
-##### 8.不要在循环量使用动画的状态名
-案例：
-```
-using UnityEngine;
-
-class Example : MonoBehaviour
-{
-    Animator animator;
-
-    void Update()
-    {
-        animator.SetInteger("Walk", 1);
-    }
-}
-```
-
-修改：
-Update中直接用动画名会造成性能开销，通过hash找会快，在非Update中也尽量通过hash的方式来替代直接使用名字
-```
-using UnityEngine;
-
-class Example : MonoBehaviour
-{
-    Animator animator;
-    int walkHash;
-
-    void Start()
-    {
-        var walkHash = Animator.StringToHash("Walk");
-    }
-
-    void Update()
-    {
-        animator.SetInteger(walkHash, 1);
-    }
-}
-```
-
-##### 9.循环里不要直接使用属性名字符串
-案例：
-```
-class A : MonoBehaviour
-{
-    Shader shader;
-
-    void Update()
-    {
-        shader.GetGlobalFloat("_Speed", 1f);
-    }
-}
-class C : MonoBehaviour
-{
-    Material material;
-
-    void Update()
-    {
-        material.SetVector("_WaveAndDistance", Vector3.one);
-    }
-}
-```
-
-修改：
-```
-using UnityEngine;
-
-class A : MonoBehaviour
-{
-    Shader shader;
-    int speedHash;
-
-    void Start()
-    {
-        speedHash = Shader.PropertyToID("_Speed");
-    }
-
-    void Update()
-    {
-        shader.GetGlobalFloat(speedHash, 1f);
-    }
-}
-using UnityEngine;
-
-class C : MonoBehaviour
-{
-    Material material;
-    int waveAndDistanceHash;
-
-    void Start()
-    {
-        waveAndDistanceHash = Shader.PropertyToID("_WaveAndDistance");
-    }
-
-    void Update()
-    {
-        material.SetVector(waveAndDistanceHash, Vector3.one);
-    }
-}
-```
-
-##### 10.不要在循环里直接使用Camera.main
-案例：
-```
-using UnityEngine;
-
-class Example : MonoBehaviour
-{
-    void Update()
-    {
-        var orthographicSize = Camera.main.orthographicSize;
-    }
-}
-```
-修改：
-预先将主相机先缓存起来，然后在Update中用，不然会造成gc问题
-```
-using UnityEngine;
-
-class Example : MonoBehaviour
-{
-    Camera cachedCamera;
-
-    void Start()
-    {
-        cachedCamera = Camera.main;
-    }
-
-    void Update()
-    {
-        var orthographicSize = cachedCamera.orthographicSize;
-    }
-}
-```
-##### 11.UseNonAllocMethods
-https://www.wenjiangs.com/doc/unity5-physics2d-circlecastnonalloc
-案例：
-```
-using UnityEngine;
-
-class Example : MonoBehaviour
-{
-    void Start()
-    {
-        Physics2D.CircleCastAll(Vector2.zero, 5, Vector2.one);
-    }
-}
-```
-修改：
-对场景内投射一个圆形，把检测到的碰撞器放入提供结果数组，用这样的方式返回投射到碰撞器，这个函数跟CircleCastAll很像，区别在于它把返回结果放在一个事先准备好的数组内，整个返回值(可能为0)就是圆形贯穿的对象的数量，但结果数组将不会重新调整大小，即使他没有足够的空间装下所有的结果(碰撞器)，减少GC，他的意义在于整个过程中不会为结果重新分配内存，使垃圾回收频率降低从而提高性能。
-```
-using UnityEngine;
-
-class Example : MonoBehaviour
-{
-    void Start()
-    {
-        var results = new RaycastHit2D[X];
-        Physics2D.CircleCastNonAlloc(Vector2.zero, 5, Vector2.one, results);
-    }
-}
-```
-
-##### 12.静音采用enable的方式
-案例：
-```
-using UnityEngine;
-
-class Example : MonoBehaviour
-{
-    AudioSource audioSource;
-
-    void Update()
-    {
-        audioSource.mute = true;
-    }
-}
-```
-修改：
-mute的方式直接是静音，但CPU还在执行，直接将组件关闭，节约性能
-```
-using UnityEngine;
-
-class Example : MonoBehaviour
-{
-    AudioSource audioSource;
-
-    void Update()
-    {
-        audioSource.enabled = false;
-    }
-}
-```
-
-##### 13.实例化并设置父节点
-案例：
-```
-using UnityEngine;
-
-class ExampleC : MonoBehaviour
-{
-    GameObject prefabObject;
-    GameObject newParent;
-
-    void Update()
-    {
-        var newGameobject = Instantiate(prefabObject, Vector3.zero, Quaternion.identity);
-        newGameobject.transform.SetParent(newParent.transform, false);
-    }
-}
-```
-修改：
-```
-using UnityEngine;
-
-class ExampleC : MonoBehaviour
-{
-    GameObject prefabObject;
-    GameObject newParent;
-
-    void Update()
-    {
-        var newGameobject = Instantiate(prefabObject, Vector3.zero, Quaternion.identity, newParent.transform);
-    }
-}
-```
-
-##### 14.利用sqrMagnitude代替magnitude
-案例：
-```
-using UnityEngine;
-
-class C : MonoBehaviour
-{
-    public Transform other;
-    private float farDistance = 5.0f;
-
-    void Update()
-    {
-        if ((other.position - transform.position).magnitude > farDistance)
-        {
-
-        }
-    }
-}
-```
-修改：
-在3D中我们经常会计算两点之间的距离是否是在某个范围内，我们通常想到的就是通过magnitude来计算真实的距离，如果这样的计算很频繁，尤其是在update循环中计算，往往可以优化成直接比较sqrMagnitude会省去开方的运算来节省性能，这也是我在做FPS类游戏中的经验，射击类的项目需要大量的这样的运算
-```
-using UnityEngine;
-
-class C : MonoBehaviour
-{
-    public Transform other;
-    private float farDistance = 5.0f;
-
-    void Update()
-    {
-        if ((other.position - transform.position).sqrMagnitude > farDistance * farDistance) 
-        {
-
-        }
-    }
-}
-```
-
+这个特性是Profiler.BeginSample("XXX")，支持自定义参数名的profilersample参数分析，这是为了弥补ProfilerSample针对通一个类里面重载方法无法确定分析的是哪一个方法的问题
 
 ## feature
 - ~~测试信息~~
@@ -570,10 +155,15 @@ class C : MonoBehaviour
 - ~~资源占用内存分类统计(方便定位资源的内存泄漏)~~
 - iOS层获取数据&展示
 - 生成堆栈调用信息，方便深度定位问题
+- 生成overdrall帧图，方便定位渲染问题
 - 生成版本对比报告(Word)指出性能问题汇总以及优化建议
 
-## 源码地址
+## 说明
+* C#代码检查工具需要用.net 6  下载[链接](https://dotnet.microsoft.com/zh-cn/download/visual-studio-sdks?utm_source=getdotnetsdk&utm_medium=referral) ,可以将这个exe工具目录添加到环境变量
+
+## 工程仓库
 https://github.com/dingxiaowei/MonitorTool
 
-## 沟通交流
-有啥好的想法欢迎主页联系沟通交流  wx:AladdinDXW  如果喜欢的话欢迎点个star！
+## 备注
+
+如果还需要支持其他性能报表，欢迎VX讨论：AladdinDXW
