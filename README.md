@@ -162,8 +162,8 @@ http://124.223.54.98/report_2022_1_21_14_33_30.html
 * C#代码检查工具需要用.net 6  下载[链接](https://dotnet.microsoft.com/zh-cn/download/visual-studio-sdks?utm_source=getdotnetsdk&utm_medium=referral) ,可以将这个exe工具目录添加到环境变量
 
 ## 工程仓库
-https://codehub-g.huawei.com/d00605132/MonitorTool/home
+https://github.com/dingxiaowei/MonitorTool
 
 ## 备注
 
-如果还需要支持其他性能报表，欢迎讨论添加
+如果还需要支持其他性能报表，欢迎VX讨论：AladdinDXW

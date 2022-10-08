@@ -63,7 +63,6 @@
     <Compile Include="Assets\Demo\InjectDemo.cs" />
     <Compile Include="Assets\GOT\Scripts\GOTProfiler.cs" />
     <Compile Include="Assets\Demo\UnityAndroidInteract.cs" />
-    <Compile Include="Assets\ExampleScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\link.xml" />
