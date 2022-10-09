@@ -55,7 +55,7 @@ public class HookEditor
         HookUtil.MethodAnalysisReport(lastTestTime);
     }
 
-    [PostProcessScene]
+    //[PostProcessScene]  //ÔÝÊ±ÏÈÆÁ±Î×¢Èë
     public static void AssemblyPostProcessorRun()
     {
         try
