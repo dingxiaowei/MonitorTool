@@ -26,7 +26,7 @@ namespace MonitorLib.GOT
                 //    mail.Attachments.Add(new Attachment(@"D:\\2020-09-15.txt"));
 
                 SmtpClient smtpServer = new SmtpClient("smtp.qq.com");
-                smtpServer.Credentials = new System.Net.NetworkCredential("1213250243@qq.com", "msogfvzadhpbhebh") as ICredentialsByHost;
+                smtpServer.Credentials = new System.Net.NetworkCredential("1213250243@qq.com", "svbfnefvcgluhfig") as ICredentialsByHost;
                 smtpServer.EnableSsl = true;
                 ServicePointManager.ServerCertificateValidationCallback =
                     delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
