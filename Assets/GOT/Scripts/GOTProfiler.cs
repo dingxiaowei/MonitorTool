@@ -2,6 +2,7 @@ using MonitorLib.GOT;
 using System;
 using System.Collections;
 using System.IO;
+using System.Net;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Profiling;
@@ -36,6 +37,7 @@ public class GOTProfiler : MonoBehaviour
     int m_frameIndex = 0;
     Action<bool> MonitorCallback;
     MonitorInfos monitorInfos = null;
+    FrameRateInfos frameRateInfos = null;
     //函数性能分析
     string funcAnalysisFilePath;
     //log日志路径
@@ -44,12 +46,15 @@ public class GOTProfiler : MonoBehaviour
     string deviceFilePath;
     //功耗信息路径
     string powerConsumeFilePath;
+    string frameRateFilePath;
     //测试信息路径
     string testFilePath;
     //性能监控
     string monitorFilePath;
     //文件后缀类型
     string fileExt;
+
+    string FTPHost = "ftp://127.0.0.1:2121/";
 
     void Awake()
     {
@@ -84,6 +89,7 @@ public class GOTProfiler : MonoBehaviour
                 deviceFilePath = $"{Application.persistentDataPath}/{ConstString.DevicePrefix}{m_StartTime}{fileExt}";
                 testFilePath = $"{Application.persistentDataPath}/{ConstString.TestPrefix}{m_StartTime}{fileExt}";
                 monitorFilePath = $"{Application.persistentDataPath}/{ConstString.MonitorPrefix}{m_StartTime}{fileExt}";
+                frameRateFilePath = $"{Application.persistentDataPath}/frameRate_{m_StartTime}{fileExt}";
                 if (EnableMobileConsumptionInfo)
                     powerConsumeFilePath = $"{Application.persistentDataPath}/{ConstString.PowerConsumePrefix}{m_StartTime}{fileExt}";
                 if (EnableLog)
@@ -103,7 +109,7 @@ public class GOTProfiler : MonoBehaviour
                 //测试Log颜色
                 Debug.LogError("测试Error Log");
                 Debug.LogWarning("测试Warning Log");
-                
+
                 StartMonitor();
             }
             else
@@ -120,6 +126,8 @@ public class GOTProfiler : MonoBehaviour
 
                 MonitorInfosReport();
                 FuncAnalysisReport();
+
+                FrameRateReport();
 
                 if (EnableLog)
                 {
@@ -140,19 +148,24 @@ public class GOTProfiler : MonoBehaviour
                     //FileManager.ReplaceContent(logFilePath, "[Warning]", "<font color=\"#FFD700\">[Warning]</font>");
                     UploadFile(logFilePath);
                 }
-                Debug.Log("文件上传完毕");
 
-                HttpGet(string.Format(Config.ReportRecordUpdateRequestUrl, Application.identifier, m_StartTime), (result) =>
+                var ReportRecordUpdateRequestUrl = "http://127.0.0.1:8083/ReceiveDataHandler.ashx?PackageName={0}&TestTime={1}";
+                //Config.IP = "127.0.0.1";
+                var reportUrl = "http://127.0.0.1/report/{0}.html";
+
+
+                HttpGet(string.Format(ReportRecordUpdateRequestUrl, Application.identifier, m_StartTime), (result) =>
                  {
                      if (result)
                      {
                          if (ReportUrl != null)
                          {
                              ReportUrl.gameObject.SetActive(true);
-                             var url = string.Format(ShareDatas.ReportUrl, m_StartTime);
+                             var url = string.Format(reportUrl, m_StartTime);
                              //ReportUrl.text = $"<a href={url}>[{url}]</a>"; //TODO:修改成动态网页的连接
-                             ReportUrl.text = $"<a href={Config.ReportUrl}>[{Config.ReportUrl}]</a>";
+                             ReportUrl.text = $"<a href=http://127.0.0.1:8083/Default.aspx>[http://127.0.0.1:8083/Default.aspx]</a>";
                          }
+                         Debug.Log("文件上传完毕");
                      }
                  });
             }
@@ -240,6 +253,7 @@ public class GOTProfiler : MonoBehaviour
     void StartMonitor()
     {
         monitorInfos = new MonitorInfos();
+        frameRateInfos = new FrameRateInfos();
     }
 
     void FuncAnalysisReport()
@@ -255,6 +269,23 @@ public class GOTProfiler : MonoBehaviour
             {
                 Debug.LogError($"当前函数性能分析报告  {funcAnalysisFilePath}不存在");
             }
+        }
+    }
+
+    void FrameRateReport()
+    {
+        bool writeRes = false;
+        if (!UseBinary)
+        {
+            writeRes = FileManager.WriteToFile(frameRateFilePath, JsonUtility.ToJson(frameRateInfos));
+        }
+        else
+        {
+            writeRes = FileManager.WriteBinaryDataToFile(frameRateFilePath, frameRateInfos);
+        }
+        if (writeRes)
+        {
+            UploadFile(frameRateFilePath);
         }
     }
 
@@ -284,9 +315,21 @@ public class GOTProfiler : MonoBehaviour
         m_TickTime++;
     }
 
+    void UploadFileFunc(string filePath, Action<object, UploadProgressChangedEventArgs> OnFileUploadProgressChanged, Action<object, UploadFileCompletedEventArgs> OnFileUploadCompleted)
+    {
+        if (!string.IsNullOrEmpty(filePath))
+        {
+            WebClient webClient = new WebClient();
+            Uri address = new Uri(FTPHost + new FileInfo(filePath).Name);
+            webClient.UploadProgressChanged += OnFileUploadProgressChanged.Invoke;
+            webClient.UploadFileCompleted += OnFileUploadCompleted.Invoke;
+            webClient.UploadFileAsync(address, "STOR", filePath);
+        }
+    }
+
     void UploadFile(string filePath)
     {
-        FileUploadManager.UploadFile(filePath, (sender, e) =>
+        UploadFileFunc(filePath, (sender, e) =>
         {
             Debug.Log("Uploading Progreess: " + e.ProgressPercentage);
             if (e.ProgressPercentage > 0 && e.ProgressPercentage < 100)
@@ -346,6 +389,8 @@ public class GOTProfiler : MonoBehaviour
             {
                 var monitorInfo = new MonitorInfo() { FrameIndex = m_frameIndex - IgnoreFrameCount, BatteryLevel = SystemInfo.batteryLevel, MemorySize = 0, Frame = m_FPS, MonoHeapSize = Profiler.GetMonoHeapSizeLong(), MonoUsedSize = Profiler.GetMonoUsedSizeLong(), TotalAllocatedMemory = Profiler.GetTotalAllocatedMemoryLong(), TotalUnusedReservedMemory = Profiler.GetTotalUnusedReservedMemoryLong(), UnityTotalReservedMemory = Profiler.GetTotalReservedMemoryLong(), AllocatedMemoryForGraphicsDriver = Profiler.GetAllocatedMemoryForGraphicsDriver() };
                 monitorInfos.MonitorInfoList.Add(monitorInfo);
+                var frameInfo = new FrameRate() { FrameIndex = m_frameIndex - IgnoreFrameCount, Frame = m_FPS };
+                frameRateInfos.FrameRateList.Add(frameInfo);
                 if (EnableFrameTexture)
                 {
                     ScreenCapture.CaptureScreenshot($"{Application.persistentDataPath}/{m_StartTime}/img_{m_StartTime}_{m_frameIndex - IgnoreFrameCount}.png");
