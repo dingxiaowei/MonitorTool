@@ -76,7 +76,7 @@
     	* 支持特性指定需要利用profiler深度分析的函数
 
 	* 支持代码规范检查和自定义检查规则添加
-
+    * 支持帧图显示
 	* 详细Log信息并猜测标注Log级别
 		* Error（红色）
 		* Warning（黄色）
@@ -92,6 +92,7 @@ http://124.223.54.98/report_2022_1_21_14_33_30.html
 ![](doc/性能监测工具.gif)
 ![](效果图/8.jpg)
 ![](效果图/9.jpg)
+![](效果图/12.png)
 ![](效果图/10.mp4)
 ## 使用说明
 ### 函数性能阀值约定
@@ -119,15 +120,18 @@ http://124.223.54.98/report_2022_1_21_14_33_30.html
 
 ## feature
 * 设置报告自动发送邮件通知到想要关注的人(这就不需要测试导出测试报告)
-* 生成每一帧的截图，能够定位哪一帧卡顿当时的渲染情况
-* 生成堆栈调用信息，方便深度定位问题
-* 适配Lua性能监测
-* 内存泄漏定位
-* 生成版本报告(world)以及针对性能问题提出针对性的优化建议
-* 支持overdraw帧图显示
+* 生成堆栈调用信息，方便深度定位问题(捕获System.Environment.StackTrace)
+* 适配Lua性能监测(集成MiKULua，搜集lua信息上报)
+* 内存泄漏定位(例如检测1.Marshal.AllocHGlobal有没有调用对应的Marshal.FreeHGlobal  2.检测idisable接口对象是否使用using或者调用dispose  3.检测开辟内存比较多的方法人肉跟进代码是否释放，例如静态持有的/语法上是否有问题)
+* 生成版本报告(world)以及针对性能问题提出针对性的优化建议(设置各个指标基线值对比以及常规的解决方案)
+* 支持overdraw帧图显示(https://zhuanlan.zhihu.com/p/323421079)
+* 支持抓取crash日志(从原生层捕获到crash的log上传到log模块)
 
 ## 说明
 * C#代码检查工具需要用.net 6  下载[链接](https://dotnet.microsoft.com/zh-cn/download/visual-studio-sdks?utm_source=getdotnetsdk&utm_medium=referral) ,可以将这个exe工具目录添加到环境变量
+* https://blog.csdn.net/qq992817263/article/details/138311483
+* https://docs.unity.cn/cn/2021.1/Manual/roslyn-analyzers.html
+* https://zhuanlan.zhihu.com/p/27915954
 
 ## 工程仓库
 https://codehub-g.huawei.com/d00605132/MonitorTool/home
